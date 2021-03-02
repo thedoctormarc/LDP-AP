@@ -1,0 +1,42 @@
+Idea combina la simulación por ciclos (muy vista en androides que aprenden a hacer 
+X acción tras muchos intentos) con el diseño de nivel. 
+
+Tú le pasarías a la app el personaje y sería capaz de con un frustrum de visión e informacion del entorno, navergar por el mapa y obtener información estilo: 
+
+- Visilidad del entorno, si hay zonas demasiado ocluídas por obstáculos, etc
+- Colisión por el nivel, si hay zonas irregulares muy bruscas 
+- Los enemigos tendrían tag y te diría cuál es el tiempo de detección de un enemigo promedio y por zonas. Simularía el cerebro de una persona con su tiempo de reacción, etc
+- Tiempo de completar el nivel. Se podría simular una IA humana simple que trate de resolver el nivel. 
+- Y en general cualquier elemento que pueda resultar interesante para ajustar el nivel
+
+Cada ciclo haría un recorrido distinto y recopilaría información que se acabaría contrastando y te daría puntuaciones de diseño de nivel sobre cada apartado.  Se podría comparar entre versiones del mismo nivel para ver puntos fuertes de distintas iteraciones. Esta comparación serviría para darle validez a los datos obtenidos pues los humanos somos capaces de detectar mejor estas situaciones complejas que involucran tantas variables y son tan subjetivas. Por su parte, la máquina puede automatizar el proceso. 
+
+Se usaría Unity y un controller.
+
+Otra idea sería hacer más énfasis en desarrollar la IA que simula una persona, por tal de poder ejecutar esta "simulación" de nivel una infinidad de veces, en lugar de tener que playtestear, el cuál es un método arcaico, mucho más lento y difícil de llevar. Esta IA tendría una gran variedad de "tipos de jugador" de modo que simule el target objetivo del juego. 
+
+Desarrollar IA que simule jugadores implicaría que si se quiere lanzar al mercado como un paquete de Unity entonces debe cumplir con el pilar de ser genérico. Preguntas:
+
+- ¿Cómo desarrollas una IA que sea capaz de actuar en función de cualquier juego que le proportionces? 
+
+- ¿Cómo haces el setup? 
+
+- ¿Cómo accede al código de gameplay del juego target?
+
+Está claro que debería de haber un sistema complejo, genérico y a la vez potente que permita al package y al controller poder obtener acceso a la lógica de juego, desde el nivel pasando por información de enemigos hasta el hecho de que es una IA que imita a un jugador y por lo tanto debe actuar como si fuese alguien delante de la pantalla viendo información que una IA no vería (eg la vida actual en el HUD)
+
+La idea de la IA que simula humanos existe dentro de juegos, pero cabe distinguir humano y jugador.  Las primera simula el comportamiento de un humano dentro del juego, mientras que una IA que simule al jugador se pone en la piel de aquel que está jugando, es decir controla al personaje como si fuese tu amigo al lado jugando. 
+
+Por si sólo el concepto se antoja potente, esconde una brutal complejidad de toma de decisiones. Una idea sería centrarse en este concepto con el objetivo de hacer muchas simulaciones dentro de un entorno de juego, pero sin enfocarse necesariamente en el ámbito del diseño de nivel, sino en una o varias situaciones comunes (eg fps y el manejo de un arma). 
+
+Este concepto se puede llevar más allá a temas de UX, de simular una IA que adquiera un reconocimiento de los elementos de la pantalla, algo similar a un eye tracking pero programado de una forma suficientemente fiel como para resultar confiable. 
+
+El objetivo de todas las variantes sería programar una IA que simule comportamiento humano para sustituir (o complementar) el proceso de playtesting humano y así recopilar una gran cantidad de información fiable que pueda ser útil como feeback para el juego.
+
+El medio más práctico y que permite entrar en materia de un modo más accesible es Unity y sus paquetes en la Unity Asset Store, ideales para demos técnicas y utilidades de videojuegos concretas. Es además el entorno más fiable y conservador. 
+
+
+
+
+ 
+
