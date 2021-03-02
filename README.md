@@ -1,6 +1,6 @@
 From the very moment I discovered video games, I have been inevitably attracted to their maps and environments. 
 
-Those maps, as I would discover on my own while creating levels, are crafted by employing vast amounts of design guidelines and all sorts of tricks.
+Those levels, as I would discover on my own while creating them, are crafted by employing vast amounts of design guidelines and all sorts of tricks.
 
 As a map creator, I thus concluded that, in order to speed up the process and better the result, I could apply those techniques by means of an automated workflow. 
 
