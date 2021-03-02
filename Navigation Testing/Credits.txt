@@ -1,0 +1,5 @@
+Character: 
+https://www.mixamo.com/#/?page=1&query=soldier&type=Character 
+
+Pathfinding:
+https://arongranberg.com/astar/
