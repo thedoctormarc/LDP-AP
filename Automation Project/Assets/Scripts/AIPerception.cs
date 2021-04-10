@@ -40,24 +40,43 @@ public class AIPerception : MonoBehaviour
 
                 AIPerception aIPerception = PlayerManager.instance.transform.GetChild(i).GetComponent<AIPerception>();
 
-                if (GeometryUtility.TestPlanesAABB(camPlanes, aIPerception.col.bounds)) // My camera detected another AI's mesh
+                // 1. Enemy Collider inside camera bounds
+                if (GeometryUtility.TestPlanesAABB(camPlanes, aIPerception.col.bounds)) 
                 {
+                    Vector3 waistPosition = (transform.position + transform.up * parameters._waistPositionOffset());
+                    Vector3 enemyWaistPosition = aIPerception.col.gameObject.transform.position 
+                        + aIPerception.col.gameObject.transform.up * parameters._headPositionOffset();
+                    Vector3 dirToEnemy = enemyWaistPosition - waistPosition;
 
-                    foreach (Vector3 targetOffset in raycastTargetOffsets)
+                    // Debug
+                    Debug.DrawRay(waistPosition, transform.TransformDirection(dirToEnemy), Color.blue);
+                    Debug.DrawRay(waistPosition, transform.forward, Color.blue);
+
+
+                    // 2. Enemy within max view angle
+                    float horizontalAngle = Vector3.Angle(transform.forward, dirToEnemy);
+                    if (horizontalAngle <= parameters._maxViewAngle())
                     {
-                        RaycastHit hit;
-                        Vector3 direction = (aIPerception.col.gameObject.transform.position + targetOffset) - (transform.position + new Vector3(0f, parameters._headPositionOffset(), 0f));
-
-                        Debug.DrawRay(transform.position, transform.TransformDirection(direction), Color.red);
-                     
-                        if (Physics.Raycast(transform.position, transform.TransformDirection(direction), out hit, Mathf.Infinity))
+                        foreach (Vector3 targetOffset in raycastTargetOffsets)
                         {
-                            if(hit.transform.parent.gameObject.CompareTag("Player"))
-                            {
-                                Debug.Log("AI Detected Enemy!");
-                                bb.SetValue("aggro", true);
+                            RaycastHit hit;
+                            Vector3 origin = transform.position + transform.up * parameters._headPositionOffset();
+                            Vector3 destination = aIPerception.col.gameObject.transform.position + targetOffset;
+                            Vector3 direction = destination - origin;
 
-                                break;
+                            // Debug
+                            Debug.DrawRay(origin, transform.TransformDirection(direction), Color.red);
+
+                            if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
+                            {
+                                // 3. Direct hit to an enemy part
+                                if (hit.transform.parent.gameObject.CompareTag("Player"))
+                                {
+                                    Debug.Log("AI Detected Enemy!");
+                                    bb.SetValue("aggro", true);
+
+                                    break;
+                                }
                             }
                         }
                     }

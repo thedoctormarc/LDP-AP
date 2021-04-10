@@ -1538,8 +1538,9 @@ MonoBehaviour:
   aimTime: 0.5
   weaponTipOffset: {x: 0, y: 0, z: 0}
   headPositionOffset: 1.65
-  maxViewAngle: 1.65
-  visualRefreshTime: 0.25
+  waistPositionOffset: 0.9
+  maxViewAngle: 137.4
+  visualRefreshTime: 0
 --- !u!114 &844142607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1863,6 +1864,7 @@ MonoBehaviour:
   aimTime: 0.5
   weaponTipOffset: {x: 0, y: 0, z: 0}
   headPositionOffset: 1.65
+  waistPositionOffset: 0.9
   maxViewAngle: 137.4
   visualRefreshTime: 0
 --- !u!114 &1011890233

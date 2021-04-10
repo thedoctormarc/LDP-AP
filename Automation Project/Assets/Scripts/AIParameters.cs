@@ -19,6 +19,9 @@ public class AIParameters : MonoBehaviour
     float headPositionOffset = 1.65f;
 
     [SerializeField]
+    float waistPositionOffset = 0.9f;
+
+    [SerializeField]
     [Range(90f, 180f)]
     float maxViewAngle = 120f;
 
@@ -31,6 +34,7 @@ public class AIParameters : MonoBehaviour
     public float _aimTime() => aimTime;
     public Vector3 _weaponTipOffset() => weaponTipOffset;
     public float _headPositionOffset() => headPositionOffset;
+    public float _waistPositionOffset() => waistPositionOffset;
     public float _maxViewAngle() => maxViewAngle;
     public float _visualRefreshTime() => visualRefreshTime;
 }
