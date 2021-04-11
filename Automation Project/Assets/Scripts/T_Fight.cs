@@ -11,6 +11,9 @@ public class T_Fight : ActionTask
     WeaponParameters weaponParameters;
     float currentFireTime = 0f;
     Vector3 currentAimDir;
+    Vector3 currentAimVector;
+    Vector3 currentDestination;
+    float aimThreshold = 0.05f;
 
     protected override string OnInit()
     {
@@ -67,8 +70,14 @@ public class T_Fight : ActionTask
             newForwadVector.z = newAimDir.z;
             agent.transform.forward = newForwadVector;
 
-            Vector3 longAimVector = currentAimDir * 100f;
-            Debug.DrawRay(origin, longAimVector, Color.cyan);
+            currentAimVector = currentAimDir * targetDir.magnitude;
+            Debug.DrawRay(origin, currentAimVector, Color.cyan);
+
+            currentDestination = origin + currentAimVector;
+            if ((currentDestination - destination).magnitude <= aimThreshold)
+            {
+                return true;
+            }
 
         }
             
@@ -81,10 +90,42 @@ public class T_Fight : ActionTask
         float framesUntilBullet = frameFreq / weaponParameters._roundsPerSec();
         float secondsUntilBullet = framesUntilBullet * Time.deltaTime;
 
-        if((currentFireTime += Time.deltaTime) >= secondsUntilBullet)
+        if ((currentFireTime += Time.deltaTime) >= secondsUntilBullet)
         {
-            currentFireTime = 0f;
-        }
+            Debug.Log("AI is firing!!");
+            aILogic._weaponSlot().GetComponent<AudioSource>().Play();
 
+            currentFireTime = 0f;
+
+            float signedAimSpread = AIParameters._aimSpread() / 2f;
+            float xOffset = Random.Range(-signedAimSpread, signedAimSpread);
+            float yOffset = Random.Range(-signedAimSpread, signedAimSpread);
+            float zOffset = Random.Range(-signedAimSpread, signedAimSpread);
+
+            Vector3 offset = new Vector3(xOffset, yOffset, zOffset);
+
+            RaycastHit hit;
+            Vector3 bulletDestination = currentDestination + offset;
+            Vector3 origin = aILogic._weaponSlot().transform.GetChild(0).Find("Weapon Tip Position").position;
+            Vector3 direction = bulletDestination - origin;
+
+            // TODO: encapsulate in one function in aiperception
+            if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
+            {
+                // 3. Direct hit to an enemy part
+                if (hit.transform.parent.gameObject.CompareTag("Player"))
+                {
+                    // Debug
+                    Debug.DrawRay(origin, direction, Color.green);
+                    Debug.Log("AI Hit an enemy!!");
+                   
+                }
+                else
+                {
+                    // Debug
+                    Debug.DrawRay(origin, direction, Color.red);
+                }
+            }
+        }
     }
 }
