@@ -10,10 +10,8 @@ public class AIParameters : MonoBehaviour
 
     [SerializeField]
     [Range(0f, 1f)]
-    float aimTime = 0.5f;
+    float aimSpeed = 0.5f;
 
-    [SerializeField]
-    Vector3 weaponTipOffset;
 
     [SerializeField]
     float headPositionOffset = 1.65f;
@@ -31,8 +29,7 @@ public class AIParameters : MonoBehaviour
 
 
     public float _aimSpread() => aimSpread;
-    public float _aimTime() => aimTime;
-    public Vector3 _weaponTipOffset() => weaponTipOffset;
+    public float _aimSpeed() => aimSpeed;
     public float _headPositionOffset() => headPositionOffset;
     public float _waistPositionOffset() => waistPositionOffset;
     public float _maxViewAngle() => maxViewAngle;

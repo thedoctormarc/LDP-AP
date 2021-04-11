@@ -3,7 +3,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NodeCanvas.Framework;
 
 public class AIPerception : MonoBehaviour
 {
@@ -13,16 +12,16 @@ public class AIPerception : MonoBehaviour
     [SerializeField]
     Camera cam;
     Plane[] camPlanes;
-    Blackboard bb;
     float currentTime = 0f;
     [SerializeField]
     Vector3[] raycastTargetOffsets;
+    AILogic aILogic;
 
     void Start()
     {
         parameters = gameObject.GetComponent<AIParameters>();
         camPlanes = GeometryUtility.CalculateFrustumPlanes(cam);
-        bb = gameObject.GetComponent<Blackboard>();
+        aILogic = gameObject.GetComponent<AILogic>();
     }
  
     public void VisualPerception()
@@ -49,7 +48,7 @@ public class AIPerception : MonoBehaviour
                     Vector3 dirToEnemy = enemyWaistPosition - waistPosition;
 
                     // Debug
-                    Debug.DrawRay(waistPosition, transform.TransformDirection(dirToEnemy), Color.blue);
+                    Debug.DrawRay(waistPosition, dirToEnemy, Color.blue);
                     Debug.DrawRay(waistPosition, transform.forward, Color.blue);
 
 
@@ -63,19 +62,23 @@ public class AIPerception : MonoBehaviour
                             Vector3 origin = transform.position + transform.up * parameters._headPositionOffset();
                             Vector3 destination = aIPerception.col.gameObject.transform.position + targetOffset;
                             Vector3 direction = destination - origin;
-
-                            // Debug
-                            Debug.DrawRay(origin, transform.TransformDirection(direction), Color.red);
-
+         
                             if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
                             {
                                 // 3. Direct hit to an enemy part
                                 if (hit.transform.parent.gameObject.CompareTag("Player"))
                                 {
-                                    Debug.Log("AI Detected Enemy!");
-                                    bb.SetValue("aggro", true);
+                                    // Debug
+                                    Debug.DrawRay(origin, direction, Color.green);
 
-                                    break;
+                                    aILogic.TriggerAggro(hit.transform.parent.gameObject);
+
+                                //    break; // TODO: uncomment, only commented for debugging 
+                                }
+                                else
+                                {
+                                    // Debug
+                                    Debug.DrawRay(origin, direction, Color.red);
                                 }
                             }
                         }
