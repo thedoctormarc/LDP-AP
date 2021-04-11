@@ -86,14 +86,10 @@ public class T_Fight : ActionTask
 
     void Fire()
     {
-        float frameFreq = 1f / Time.deltaTime;
-        float framesUntilBullet = frameFreq / weaponParameters._roundsPerSec();
-        float secondsUntilBullet = framesUntilBullet * Time.deltaTime;
-
-        if ((currentFireTime += Time.deltaTime) >= secondsUntilBullet)
+        if ((currentFireTime += Time.deltaTime) >= weaponParameters._fireRate() / 1000f)
         {
             Debug.Log("AI is firing!!");
-            aILogic._weaponSlot().GetComponent<AudioSource>().Play();
+            aILogic._weaponSlot().transform.GetChild(0).GetComponent<AudioSource>().Play();
 
             currentFireTime = 0f;
 
