@@ -32,16 +32,23 @@ public class AIPerception : MonoBehaviour
 
             for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
             {
-                if (PlayerManager.instance.transform.GetChild(i).gameObject == gameObject) // TODO: if not enemy, ignore!
+                GameObject child = PlayerManager.instance.transform.GetChild(i).gameObject;
+                if (child.gameObject == gameObject) // TODO: if not enemy, ignore!
                 {
                     continue;
                 }
 
-                AIPerception aIPerception = PlayerManager.instance.transform.GetChild(i).GetComponent<AIPerception>();
+                // 0. Check enemy not dead (TODO: not spawning either)
+                if((child.GetComponent<AILogic>().currentState == AILogic.AI_State.die))
+                {
+                    continue;
+                }
+
+                AIPerception aIPerception = child.GetComponent<AIPerception>();
 
                 // 1. Enemy Collider inside camera bounds
-                if (GeometryUtility.TestPlanesAABB(camPlanes, aIPerception.col.bounds)) 
-                {
+              /*  if (GeometryUtility.TestPlanesAABB(camPlanes, aIPerception.col.bounds)) 
+                {*/
                     Vector3 waistPosition = (transform.position + transform.up * parameters._waistPositionOffset());
                     Vector3 enemyWaistPosition = aIPerception.col.gameObject.transform.position 
                         + aIPerception.col.gameObject.transform.up * parameters._headPositionOffset();
@@ -90,7 +97,7 @@ public class AIPerception : MonoBehaviour
                             }
                         }
                     }
-                }
+          //      }
             }
         }
     }

@@ -992,11 +992,10 @@ Transform:
   m_LocalPosition: {x: 6.7433534, y: 0.47865978, z: 30.54922}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 488047777}
   - {fileID: 1590437999}
   - {fileID: 918022936}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &233618185
 GameObject:
@@ -1989,7 +1988,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 20
-  damage: 0.5
+  damage: 25
 --- !u!1 &449683022
 GameObject:
   m_ObjectHideFlags: 0
@@ -2189,7 +2188,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &488047777
 Transform:
   m_ObjectHideFlags: 0
@@ -2198,15 +2197,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 488047776}
   m_LocalRotation: {x: -0, y: 0.9204327, z: -0, w: -0.39090127}
-  m_LocalPosition: {x: -29.2, y: -0.47865978, z: 68.5}
+  m_LocalPosition: {x: -22.456648, y: 0, z: 99.04922}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 644135000}
   - {fileID: 334043101}
   - {fileID: 1264209169}
   - {fileID: 1100828727}
-  m_Father: {fileID: 229146634}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 226.021, z: 0}
 --- !u!114 &488047778
 MonoBehaviour:
@@ -2220,7 +2219,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c16a1c3c7dc434faf92598e7263f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
   weaponSlot: {fileID: 1100828726}
+  currentHealth: 0
 --- !u!95 &488047779
 Animator:
   serializedVersion: 3
@@ -2282,6 +2283,8 @@ MonoBehaviour:
   waistPositionOffset: 0.9
   maxViewAngle: 180
   visualRefreshTime: 0
+  maxHealth: 75
+  currentHealth: 0
 --- !u!114 &488047782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2295,6 +2298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializedBlackboard: '{"_variables":{"aggro":{"_name":"aggro","_id":"47a03bc5-823f-442d-a044-98a713db9d71","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"dead":{"_name":"dead","_id":"75b26375-842e-496f-88df-d665d653121e","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
   _objectReferences: []
 --- !u!114 &488047783
@@ -4451,8 +4455,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 918022935}
-  m_LocalRotation: {x: -0, y: -0.10235074, z: -0, w: 0.9947484}
-  m_LocalPosition: {x: -37.14, y: -0.47865978, z: 25.1}
+  m_LocalRotation: {x: -0, y: -0.70044947, z: -0, w: 0.71370214}
+  m_LocalPosition: {x: -43.17, y: -0.47865978, z: 44.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1935179146}
@@ -4460,8 +4464,8 @@ Transform:
   - {fileID: 1690982948}
   - {fileID: 59150639}
   m_Father: {fileID: 229146634}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: -11.749, z: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -88.926, z: 0}
 --- !u!114 &918022937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4474,7 +4478,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c16a1c3c7dc434faf92598e7263f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
   weaponSlot: {fileID: 59150638}
+  currentHealth: 0
 --- !u!95 &918022938
 Animator:
   serializedVersion: 3
@@ -4536,6 +4542,8 @@ MonoBehaviour:
   waistPositionOffset: 0.9
   maxViewAngle: 180
   visualRefreshTime: 0
+  maxHealth: 75
+  currentHealth: 0
 --- !u!114 &918022941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4549,6 +4557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializedBlackboard: '{"_variables":{"aggro":{"_name":"aggro","_id":"47a03bc5-823f-442d-a044-98a713db9d71","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"dead":{"_name":"dead","_id":"2dc6aaa8-35b1-4bf0-a505-d783a5ea6f4e","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
   _objectReferences: []
 --- !u!114 &918022942
@@ -6285,7 +6294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 20
-  damage: 0.5
+  damage: 25
 --- !u!1 &1296067726
 GameObject:
   m_ObjectHideFlags: 0
@@ -6831,7 +6840,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 20
-  damage: 0.5
+  damage: 25
 --- !u!1 &1423074739
 GameObject:
   m_ObjectHideFlags: 0
@@ -7854,7 +7863,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1590437998}
   m_LocalRotation: {x: -0, y: 0.6992596, z: -0, w: 0.71486783}
-  m_LocalPosition: {x: -55.99, y: -0.47865978, z: 43.7}
+  m_LocalPosition: {x: -50.73, y: -0.47865978, z: 66.71}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 810515962}
@@ -7862,7 +7871,7 @@ Transform:
   - {fileID: 1509114887}
   - {fileID: 767709499}
   m_Father: {fileID: 229146634}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 88.735, z: 0}
 --- !u!114 &1590438000
 MonoBehaviour:
@@ -7876,7 +7885,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c16a1c3c7dc434faf92598e7263f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
   weaponSlot: {fileID: 767709498}
+  currentHealth: 0
 --- !u!95 &1590438001
 Animator:
   serializedVersion: 3
@@ -7938,6 +7949,8 @@ MonoBehaviour:
   waistPositionOffset: 0.9
   maxViewAngle: 180
   visualRefreshTime: 0
+  maxHealth: 75
+  currentHealth: 0
 --- !u!114 &1590438004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7951,6 +7964,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializedBlackboard: '{"_variables":{"aggro":{"_name":"aggro","_id":"47a03bc5-823f-442d-a044-98a713db9d71","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"dead":{"_name":"dead","_id":"2dc6aaa8-35b1-4bf0-a505-d783a5ea6f4e","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
   _objectReferences: []
 --- !u!114 &1590438005

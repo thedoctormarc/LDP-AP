@@ -14,13 +14,13 @@ public class T_Fight : ActionTask
     Vector3 currentAimVector;
     Vector3 currentDestination;
     float aimThreshold = 0.05f;
+    Blackboard bb;
 
     protected override string OnInit()
     {
         currentAimDir = agent.transform.forward;
         path = agent.gameObject.GetComponent<AIPath>();
-        path.canMove = false;
-        path.canSearch = false;
+        bb = agent.gameObject.GetComponent<Blackboard>();
         aIPerception = agent.gameObject.GetComponent<AIPerception>();
         AIParameters = agent.gameObject.GetComponent<AIParameters>();
         aILogic = agent.gameObject.GetComponent<AILogic>();
@@ -29,8 +29,20 @@ public class T_Fight : ActionTask
         return null;
     }
 
+    protected override void OnExecute()
+    {
+        path.canMove = false;
+        path.canSearch = false;
+        aILogic.currentState = AILogic.AI_State.fire;
+    }
+
     protected override void OnUpdate()  
     {
+        if(bb.GetValue<bool>("dead") == true)
+        {
+            EndAction(true);
+        }
+
         // aIPerception.VisualPerception();
         
         if(Aim()) // TODO: recalculate from time to time if lost sight with target
@@ -43,10 +55,10 @@ public class T_Fight : ActionTask
     {
         // TODO: only loop enemies, and aim at the highest priority!!! (Priority system)
 
-        for (int i = 0; i < aILogic._aggrodEnemiesIndixes().Length; ++i)
+        for (int i = 0; i < aILogic._aggrodEnemiesIndexes().Length; ++i)
         {
 
-            if(aILogic._aggrodEnemiesIndixes()[i] == false)
+            if(aILogic._aggrodEnemiesIndexes()[i] == false)
             {
                 continue;
             }
@@ -111,10 +123,15 @@ public class T_Fight : ActionTask
                 // 3. Direct hit to an enemy part
                 if (hit.transform.parent.gameObject.CompareTag("Player"))
                 {
+
                     // Debug
                     Debug.DrawRay(origin, direction, Color.green);
                     Debug.Log("AI Hit an enemy!!");
-                   
+
+                    if (PlayerManager.instance.DamageAI(weaponParameters._damage(), hit.transform.parent.gameObject, agent.gameObject)) // TODO: dont de-aggro completely, only remove particular threat
+                    {
+                        EndAction(true);
+                    };
                 }
                 else
                 {

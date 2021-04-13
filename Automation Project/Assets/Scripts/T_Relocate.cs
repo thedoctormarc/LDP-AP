@@ -7,17 +7,29 @@ public class T_Relocate : ActionTask
     AIPath path;
     AIPerception aIPerception;
     Animator animator;
+    AILogic aILogic;
 
     protected override string OnInit()
     {
-        path = agent.gameObject.GetComponent<AIPath>();  
+        path = agent.gameObject.GetComponent<AIPath>();
+        path.canMove = true;
+        path.canSearch = true;
         aIPerception = agent.gameObject.GetComponent<AIPerception>();
         animator = agent.gameObject.GetComponent<Animator>();
-
+        aILogic = agent.gameObject.GetComponent<AILogic>();
+     
         Relocate();
 
         return null;
     }
+
+    protected override void OnExecute()
+    {
+        path.canMove = true;
+        path.canSearch = true;
+        aILogic.currentState = AILogic.AI_State.walk;
+    }
+
 
     protected override void OnUpdate()
     {
