@@ -83,7 +83,9 @@ public class AILogic : MonoBehaviour
             aggrodEnemiesIndexes[index] = false;
         }
 
+        Debug.Log("AI " + gameObject.name + " De-aggros");
         bb.SetValue("aggro", false); // for the moment completely de-aggro
+        animator.SetBool("Aggro", false);
     }
 
 }

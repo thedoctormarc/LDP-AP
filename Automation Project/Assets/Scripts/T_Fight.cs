@@ -38,12 +38,12 @@ public class T_Fight : ActionTask
 
     protected override void OnUpdate()  
     {
-        if(bb.GetValue<bool>("dead") == true)
+        // aIPerception.VisualPerception();
+
+        if(bb.GetValue<bool>("dead"))
         {
             EndAction(true);
         }
-
-        // aIPerception.VisualPerception();
         
         if(Aim()) // TODO: recalculate from time to time if lost sight with target
         {

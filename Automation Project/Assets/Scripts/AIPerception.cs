@@ -47,7 +47,7 @@ public class AIPerception : MonoBehaviour
                 AIPerception aIPerception = child.GetComponent<AIPerception>();
 
                 // 1. Enemy Collider inside camera bounds
-              /*  if (GeometryUtility.TestPlanesAABB(camPlanes, aIPerception.col.bounds)) 
+              /*  if (GeometryUtility.TestPlanesAABB(camPlanes, aIPerception.col.bounds)) // bugs???
                 {*/
                     Vector3 waistPosition = (transform.position + transform.up * parameters._waistPositionOffset());
                     Vector3 enemyWaistPosition = aIPerception.col.gameObject.transform.position 
@@ -61,7 +61,7 @@ public class AIPerception : MonoBehaviour
 
                     // 2. Enemy within max view angle
                     float horizontalAngle = Vector3.Angle(transform.forward, dirToEnemy);
-                    if (horizontalAngle <= parameters._maxViewAngle())
+                    if (horizontalAngle <= parameters._maxViewAngle() / 2f)
                     {
                         foreach (Vector3 targetOffset in raycastTargetOffsets)
                         {
@@ -89,11 +89,11 @@ public class AIPerception : MonoBehaviour
 
                                     return;
                                 }
-                                else
+                          /*      else
                                 {
                                     // Debug
                                     Debug.DrawRay(origin, direction, Color.red);
-                                }
+                                }*/
                             }
                         }
                     }

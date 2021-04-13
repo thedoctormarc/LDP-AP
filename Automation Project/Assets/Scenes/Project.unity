@@ -992,10 +992,11 @@ Transform:
   m_LocalPosition: {x: 6.7433534, y: 0.47865978, z: 30.54922}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 488047777}
   - {fileID: 1590437999}
   - {fileID: 918022936}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &233618185
 GameObject:
@@ -2188,7 +2189,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &488047777
 Transform:
   m_ObjectHideFlags: 0
@@ -2197,15 +2198,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 488047776}
   m_LocalRotation: {x: -0, y: 0.9204327, z: -0, w: -0.39090127}
-  m_LocalPosition: {x: -22.456648, y: 0, z: 99.04922}
+  m_LocalPosition: {x: -29.2, y: -0.47865978, z: 68.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 644135000}
   - {fileID: 334043101}
   - {fileID: 1264209169}
   - {fileID: 1100828727}
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 229146634}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 226.021, z: 0}
 --- !u!114 &488047778
 MonoBehaviour:
@@ -2281,7 +2282,7 @@ MonoBehaviour:
   aimSpeed: 0.5
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
-  maxViewAngle: 180
+  maxViewAngle: 90
   visualRefreshTime: 0
   maxHealth: 75
   currentHealth: 0
@@ -4464,7 +4465,7 @@ Transform:
   - {fileID: 1690982948}
   - {fileID: 59150639}
   m_Father: {fileID: 229146634}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -88.926, z: 0}
 --- !u!114 &918022937
 MonoBehaviour:
@@ -4540,7 +4541,7 @@ MonoBehaviour:
   aimSpeed: 0.5
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
-  maxViewAngle: 180
+  maxViewAngle: 90
   visualRefreshTime: 0
   maxHealth: 75
   currentHealth: 0
@@ -7863,7 +7864,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1590437998}
   m_LocalRotation: {x: -0, y: 0.6992596, z: -0, w: 0.71486783}
-  m_LocalPosition: {x: -50.73, y: -0.47865978, z: 66.71}
+  m_LocalPosition: {x: -30.79, y: -0.47865978, z: 25.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 810515962}
@@ -7871,7 +7872,7 @@ Transform:
   - {fileID: 1509114887}
   - {fileID: 767709499}
   m_Father: {fileID: 229146634}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 88.735, z: 0}
 --- !u!114 &1590438000
 MonoBehaviour:
@@ -7947,7 +7948,7 @@ MonoBehaviour:
   aimSpeed: 0.5
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
-  maxViewAngle: 180
+  maxViewAngle: 90
   visualRefreshTime: 0
   maxHealth: 75
   currentHealth: 0

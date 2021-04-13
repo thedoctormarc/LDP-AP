@@ -8,6 +8,7 @@ public class T_Relocate : ActionTask
     AIPerception aIPerception;
     Animator animator;
     AILogic aILogic;
+    Blackboard bb;
 
     protected override string OnInit()
     {
@@ -17,7 +18,7 @@ public class T_Relocate : ActionTask
         aIPerception = agent.gameObject.GetComponent<AIPerception>();
         animator = agent.gameObject.GetComponent<Animator>();
         aILogic = agent.gameObject.GetComponent<AILogic>();
-     
+        bb = agent.gameObject.GetComponent<Blackboard>();
         Relocate();
 
         return null;
@@ -25,6 +26,7 @@ public class T_Relocate : ActionTask
 
     protected override void OnExecute()
     {
+        animator.SetBool("Moving", true);
         path.canMove = true;
         path.canSearch = true;
         aILogic.currentState = AILogic.AI_State.walk;
@@ -33,6 +35,13 @@ public class T_Relocate : ActionTask
 
     protected override void OnUpdate()
     {
+
+        if (bb.GetValue<bool>("dead"))
+        {
+            EndAction(true);
+        }
+
+
         aIPerception.VisualPerception();
 
         if(path.reachedDestination)

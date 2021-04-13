@@ -31,16 +31,16 @@ public class PlayerManager : MonoBehaviour
 
         if ((aIParameters.currentHealth -= damage) <= 0f)  
         {
+            // Die
             aIParameters.currentHealth = 0f;
             receptor.GetComponent<AILogic>().currentState = AILogic.AI_State.die;
-            Animator animator = receptor.GetComponent<Animator>();
-            animator.SetBool("Moving", false);
-            animator.SetBool("Aggro", false);
-            animator.SetBool("Dead", true);
+            Animator rAnimator = receptor.GetComponent<Animator>();
+            rAnimator.SetBool("Moving", false);
+            rAnimator.SetBool("Dead", true);
             Blackboard bb = receptor.GetComponent<Blackboard>();
             bb.SetValue("dead", true);
 
-            // Both De-aggro (TODO: only works 1 vs 1)
+            // de-aggro both
             receptor.GetComponent<AILogic>().DeAggro(GetChildIndex(emitter));
             emitter.GetComponent<AILogic>().DeAggro(GetChildIndex(receptor));
 
