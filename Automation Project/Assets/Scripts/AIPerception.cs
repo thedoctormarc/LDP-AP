@@ -65,15 +65,22 @@ public class AIPerception : MonoBehaviour
          
                             if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
                             {
+                                if (hit.transform.parent.gameObject == gameObject) // TODO: if not enemy, ignore!
+                                {
+                                    continue;
+                                }
+
                                 // 3. Direct hit to an enemy part
                                 if (hit.transform.parent.gameObject.CompareTag("Player"))
                                 {
                                     // Debug
                                     Debug.DrawRay(origin, direction, Color.green);
 
+                                    Debug.Log("AI named " + gameObject.name + "will begin to fire AI named " + hit.transform.parent.gameObject.name);
+
                                     aILogic.TriggerAggro(hit.transform.parent.gameObject);
 
-                                //    break; // TODO: uncomment, only commented for debugging 
+                                    return;
                                 }
                                 else
                                 {

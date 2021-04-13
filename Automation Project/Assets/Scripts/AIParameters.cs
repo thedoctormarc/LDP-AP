@@ -25,7 +25,7 @@ public class AIParameters : MonoBehaviour
     [SerializeField]
     [Range(0f, 0.5f)]
     float visualRefreshTime = 0.25f;
-
+ 
     public float _aimSpread() => aimSpread;
     public float _aimSpeed() => aimSpeed;
     public float _headPositionOffset() => headPositionOffset;
