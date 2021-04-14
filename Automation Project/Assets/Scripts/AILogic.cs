@@ -16,8 +16,9 @@ public class AILogic : MonoBehaviour
     Blackboard bb;
     bool[] aggrodEnemiesIndexes;
     public bool[] _aggrodEnemiesIndexes() => aggrodEnemiesIndexes;
-
     public float currentHealth;
+    int lastAggro;
+    public int _lastAggro() => lastAggro;
 
     void Start()
     {
@@ -28,7 +29,9 @@ public class AILogic : MonoBehaviour
         weaponOffsets = new Dictionary<string, Vector3>()
         {
             { "rifle_idle", new Vector3(0.126f, 1.151f, 0.44f) },
-            { "rifle_fire", new Vector3(0.097f, 1.4f, 0.44f) }
+            { "rifle_walk", new Vector3(0.126f, 1.151f, 0.44f) },
+            { "rifle_fire", new Vector3(0.097f, 1.4f, 0.44f) },
+            { "rifle_die", new Vector3(0f, -10f, 0f) }
 
         };
 
@@ -64,6 +67,7 @@ public class AILogic : MonoBehaviour
             if(PlayerManager.instance.transform.GetChild(i).gameObject == enemy)
             {
                 aggrodEnemiesIndexes[i] = true;
+                lastAggro = i;
                 break;
             }
         }
@@ -86,6 +90,7 @@ public class AILogic : MonoBehaviour
         Debug.Log("AI " + gameObject.name + " De-aggros");
         bb.SetValue("aggro", false); // for the moment completely de-aggro
         animator.SetBool("Aggro", false);
+        RelocateWeapon();
     }
 
 }

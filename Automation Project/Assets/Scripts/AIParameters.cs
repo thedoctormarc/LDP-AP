@@ -30,7 +30,12 @@ public class AIParameters : MonoBehaviour
     [Range(50f, 100f)]
     float maxHealth = 50f;
     public float currentHealth;
+
+    [SerializeField]
+    [Range(0f, 10f)]
+    float respawnTime= 5f;
     
+
     public float _aimSpread() => aimSpread;
     public float _aimSpeed() => aimSpeed;
     public float _headPositionOffset() => headPositionOffset;
@@ -38,8 +43,14 @@ public class AIParameters : MonoBehaviour
     public float _maxViewAngle() => maxViewAngle;
     public float _visualRefreshTime() => visualRefreshTime;
     public float _maxHealth() => maxHealth;
+    public float _respawnTime() => respawnTime;
 
     private void Start()
+    {
+        ResetHealth();
+    }
+
+    public void ResetHealth()
     {
         currentHealth = maxHealth;
     }

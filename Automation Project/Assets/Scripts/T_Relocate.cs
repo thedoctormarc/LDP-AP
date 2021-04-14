@@ -30,6 +30,7 @@ public class T_Relocate : ActionTask
         path.canMove = true;
         path.canSearch = true;
         aILogic.currentState = AILogic.AI_State.walk;
+        aILogic.RelocateWeapon();
     }
 
 
@@ -42,7 +43,7 @@ public class T_Relocate : ActionTask
         }
 
 
-        aIPerception.VisualPerception();
+        aIPerception.SearchTarget();
 
         if(path.reachedDestination)
         {

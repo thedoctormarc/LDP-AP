@@ -18,7 +18,6 @@ public class T_Fight : ActionTask
 
     protected override string OnInit()
     {
-        currentAimDir = agent.transform.forward;
         path = agent.gameObject.GetComponent<AIPath>();
         bb = agent.gameObject.GetComponent<Blackboard>();
         aIPerception = agent.gameObject.GetComponent<AIPerception>();
@@ -34,18 +33,26 @@ public class T_Fight : ActionTask
         path.canMove = false;
         path.canSearch = false;
         aILogic.currentState = AILogic.AI_State.fire;
+        currentAimDir = agent.transform.forward;
     }
 
     protected override void OnUpdate()  
     {
         // aIPerception.VisualPerception();
 
-        if(bb.GetValue<bool>("dead"))
+        if (bb.GetValue<bool>("dead") || !bb.GetValue<bool>("aggro"))
         {
             EndAction(true);
         }
+
+        if (aIPerception.InLineOfFireWithAI(aILogic._lastAggro()) == false)
+        {
+            aILogic.DeAggro(aILogic._lastAggro());
+            EndAction(true);
+        }
+
         
-        if(Aim()) // TODO: recalculate from time to time if lost sight with target
+        if (Aim()) // TODO: recalculate from time to time if lost sight with target
         {
             Fire();
         }
@@ -83,7 +90,11 @@ public class T_Fight : ActionTask
             agent.transform.forward = newForwadVector;
 
             currentAimVector = currentAimDir * targetDir.magnitude;
-            Debug.DrawRay(origin, currentAimVector, Color.cyan);
+
+            if (PlayerManager.instance.debug)
+            {
+                Debug.DrawRay(origin, currentAimVector, Color.cyan);
+            }
 
             currentDestination = origin + currentAimVector;
             if ((currentDestination - destination).magnitude <= aimThreshold)
@@ -125,8 +136,11 @@ public class T_Fight : ActionTask
                 {
 
                     // Debug
-                    Debug.DrawRay(origin, direction, Color.green);
-                    Debug.Log("AI Hit an enemy!!");
+                    if (PlayerManager.instance.debug)
+                    {
+                        Debug.DrawRay(origin, direction, Color.green);
+                        Debug.Log("AI Hit an enemy!!");
+                    }
 
                     if (PlayerManager.instance.DamageAI(weaponParameters._damage(), hit.transform.parent.gameObject, agent.gameObject)) // TODO: dont de-aggro completely, only remove particular threat
                     {
