@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class AppManager : MonoBehaviour
 {
+    [SerializeField]
+    float simulationSeconds = 120f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +16,14 @@ public class AppManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        if (Time.realtimeSinceStartup >= simulationSeconds)
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
     }
 }

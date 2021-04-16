@@ -4,51 +4,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIPerception : MonoBehaviour
+public class AIPerception : AI
 {
     [SerializeField]
     Collider col;
     AIParameters parameters;
-    [SerializeField]
-    Camera cam;
-    Plane[] camPlanes;
-    float currentTime = 0f;
+    float visualTime = 0f;
+    float auditiveTime = 0f;
     [SerializeField]
     Vector3[] raycastTargetOffsets;
     AILogic aILogic;
+    List<GameObject> audioDetected;
 
     void Start()
     {
+        audioDetected = new List<GameObject>();
         parameters = gameObject.GetComponent<AIParameters>();
-        camPlanes = GeometryUtility.CalculateFrustumPlanes(cam);
         aILogic = gameObject.GetComponent<AILogic>();
     }
 
-    public void SearchTarget()
+    public void VisualDetection()
     {
-        if ((currentTime += Time.deltaTime) >= parameters._visualRefreshTime())
+        if ((visualTime += Time.deltaTime) >= parameters._visualRefreshTime())
         {
-            currentTime = 0f;
+            visualTime = 0f;
 
             for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
             {
                 GameObject child = PlayerManager.instance.transform.GetChild(i).gameObject;
-                if (child.gameObject == gameObject) // TODO: if not enemy, ignore!
+
+                if (child.gameObject == gameObject )  
                 {
                     continue;
                 }
 
-                // 0. Check enemy not dead (TODO: not spawning either)
-                if ((child.GetComponent<AILogic>().currentState == AILogic.AI_State.die))
+                AIParameters aIParameters = child.GetComponent<AIParameters>();
+                if (aIParameters._team() == parameters._team())
+                {
+                    continue;
+                }
+
+                AILogic e_aIlogic = child.GetComponent<AILogic>();
+                if (e_aIlogic.currentState == AILogic.AI_State.die)
                 {
                     continue;
                 }
 
                 AIPerception aIPerception = child.GetComponent<AIPerception>();
 
-                // 1. Enemy Collider inside camera bounds
-                /*  if (GeometryUtility.TestPlanesAABB(camPlanes, aIPerception.col.bounds)) // bugs???
-                  {*/
                 Vector3 waistPosition = (transform.position + transform.up * parameters._waistPositionOffset());
                 Vector3 enemyWaistPosition = aIPerception.col.gameObject.transform.position
                     + aIPerception.col.gameObject.transform.up * parameters._headPositionOffset();
@@ -74,36 +77,57 @@ public class AIPerception : MonoBehaviour
 
                         if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
                         {
-                            if (hit.transform.parent.gameObject == gameObject) // TODO: if not enemy, ignore!
+                            if (hit.transform.parent.gameObject == gameObject) 
                             {
                                 continue;
                             }
 
-                            // 3. Direct hit to an enemy part
                             if (hit.transform.parent.gameObject.CompareTag("Player"))
                             {
-                                // Debug
-
                                 if (PlayerManager.instance.debug)
                                 {
                                     Debug.DrawRay(origin, direction, Color.green);
                                     Debug.Log("AI named " + gameObject.name + "will begin to fire AI named " + hit.transform.parent.gameObject.name);
                                 }
-                            
 
                                 aILogic.TriggerAggro(hit.transform.parent.gameObject);
-
                                 return;
                             }
-                            /*      else
-                                  {
-                                      // Debug
-                                      Debug.DrawRay(origin, direction, Color.red);
-                                  }*/
+           
                         }
                     }
                 }
-                //      }
+        
+            }
+        }
+    }
+
+    public void AuditiveDetection()
+    {
+        if ((auditiveTime += Time.deltaTime) >= parameters._auditiveRefreshTime())
+        {
+            auditiveTime = 0f;
+            audioDetected.Clear();
+
+            // Search new enemies inside radius
+            var colliders = Physics.OverlapSphere(transform.position, parameters._audioPerceptionRadius(), 1<<9); // AI layer
+
+            foreach (Collider col in colliders)
+            {
+                GameObject go = col.transform.parent.gameObject;
+
+                if (go.CompareTag("Player"))
+                {
+                    if (go != gameObject)
+                    {
+                        AIParameters aIParameters = go.GetComponent<AIParameters>();
+
+                        if (aIParameters._team() != parameters._team())
+                        {
+                            audioDetected.Add(go);
+                        }
+                    }
+                }
             }
         }
     }
@@ -147,7 +171,13 @@ public class AIPerception : MonoBehaviour
 
                 if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
                 {
-                    if (hit.transform.parent.gameObject == gameObject) // TODO: if not enemy, ignore!
+                    if (hit.transform.parent.gameObject == gameObject )  
+                    {
+                        continue;
+                    }
+
+                    AIParameters aIParameters = child.GetComponent<AIParameters>();
+                    if (aIParameters._team() == parameters._team())
                     {
                         continue;
                     }
@@ -161,5 +191,31 @@ public class AIPerception : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void OnDrawGizmos ()
+    {
+        if (transform != null)
+        {
+            Gizmos.color = (audioDetected.Count > 0) ? Color.green : Color.red;
+            Gizmos.color = new Color(Gizmos.color.r, Gizmos.color.g, Gizmos.color.b, 0.5f);
+            Gizmos.DrawSphere(transform.position, parameters._audioPerceptionRadius());
+        }
+    }
+
+
+    public override void OnDeAggro(GameObject go)
+    {
+        if (audioDetected.Contains(go))
+        {
+            audioDetected.Remove(go);
+        }
+    }
+
+    public override void OnDeath()
+    {
+        audioDetected.Clear();
+        visualTime = 0f;
+        auditiveTime = 0f;
     }
 }

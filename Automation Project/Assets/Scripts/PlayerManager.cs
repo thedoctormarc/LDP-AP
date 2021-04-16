@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NodeCanvas.Framework;
+using Unity.Simulation.Games;
+
 public class PlayerManager : MonoBehaviour
 {
      
     public bool debug;
-
     public static PlayerManager instance;
 
     private void Awake()
@@ -17,7 +18,6 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
-      
     }
 
     // Update is called once per frame
@@ -36,18 +36,17 @@ public class PlayerManager : MonoBehaviour
 
     public bool DamageAI(float damage, GameObject receptor, GameObject emitter) // de-aggro killer, killed and all other players that were aggro-ing the killed
     {
-        AIParameters aIParameters = receptor.GetComponent<AIParameters>();
+        AIParameters r_aIParameters = receptor.GetComponent<AIParameters>();
 
-        if ((aIParameters.currentHealth -= damage) <= 0f)  
+        if ((r_aIParameters.currentHealth -= damage) <= 0f)  
         {
             // Die
-            aIParameters.currentHealth = 0f;
-            receptor.GetComponent<AILogic>().currentState = AILogic.AI_State.die;
-            Animator rAnimator = receptor.GetComponent<Animator>();
-            rAnimator.SetBool("Moving", false);
-            rAnimator.SetBool("Dead", true);
-            Blackboard bb = receptor.GetComponent<Blackboard>();
-            bb.SetValue("dead", true);
+
+            var AIScripts = receptor.GetComponents<AI>();
+            foreach (AI script in AIScripts)
+            {
+                script.OnDeath();
+            }
 
             // de-aggro both
             receptor.GetComponent<AILogic>().DeAggro(GetChildIndex(emitter));
@@ -63,6 +62,13 @@ public class PlayerManager : MonoBehaviour
 
                 go.GetComponent<AILogic>().DeAggro(GetChildIndex(receptor));
             }
+
+            // Unity Game Simulation
+            AIParameters e_aIParameters = emitter.GetComponent<AIParameters>();
+            string killCounter = "T" + e_aIParameters._team().ToString() + " kills";
+            string deathCounter = "T" + r_aIParameters._team().ToString() + " deaths";
+            GameSimManager.Instance.IncrementCounter(killCounter, (long)1);
+            GameSimManager.Instance.IncrementCounter(deathCounter, (long)1);
 
             return true;
         }

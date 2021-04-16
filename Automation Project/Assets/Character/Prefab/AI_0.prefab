@@ -79,7 +79,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4886186840187053282
 Transform:
   m_ObjectHideFlags: 0
@@ -1411,15 +1411,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99577629f1be755489fa6cb46b01be82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: 0
   aimSpread: 0.5
   aimSpeed: 0.5
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
   maxViewAngle: 90
-  visualRefreshTime: 0
+  visualRefreshTime: 0.25
+  auditiveRefreshRate: 0.25
   maxHealth: 75
   currentHealth: 0
   respawnTime: 5
+  audioPerceptionRadius: 10
 --- !u!114 &4886186841083615262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1433,7 +1436,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   col: {fileID: 4886186841033935716}
-  cam: {fileID: 4886186841985208745}
   raycastTargetOffsets:
   - {x: 0, y: 2, z: 0}
   - {x: 0.15, y: 1, z: 0}

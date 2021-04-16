@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using NodeCanvas.Framework;
 
-public class AILogic : MonoBehaviour
+public class AILogic : AI
 {
-    public enum AI_State { idle, walk, fire, die};
+    public enum AI_State { idle, walk, fire, die };
     public AI_State currentState;
     string currentWeapon;
     public Dictionary<string, Vector3> weaponOffsets;
@@ -44,7 +44,7 @@ public class AILogic : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     public void RelocateWeapon()
@@ -64,7 +64,7 @@ public class AILogic : MonoBehaviour
     {
         for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
         {
-            if(PlayerManager.instance.transform.GetChild(i).gameObject == enemy)
+            if (PlayerManager.instance.transform.GetChild(i).gameObject == enemy)
             {
                 aggrodEnemiesIndexes[i] = true;
                 lastAggro = i;
@@ -87,10 +87,24 @@ public class AILogic : MonoBehaviour
             aggrodEnemiesIndexes[index] = false;
         }
 
-        Debug.Log("AI " + gameObject.name + " De-aggros");
-        bb.SetValue("aggro", false); // for the moment completely de-aggro
+        // for the moment completely de-aggro (from all threats)
+        bb.SetValue("aggro", false);  
         animator.SetBool("Aggro", false);
         RelocateWeapon();
+
+        var AIScripts = gameObject.GetComponents<AI>();
+        foreach (AI script in AIScripts)
+        {
+            script.OnDeAggro(PlayerManager.instance.GetChildByIndex(index));
+        }
+    }
+
+    public override void OnDeath()
+    {
+        currentState = AI_State.die;
+        animator.SetBool("Moving", false);
+        animator.SetBool("Dead", true);
+        bb.SetValue("dead", true);
     }
 
 }
