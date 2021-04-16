@@ -25,14 +25,19 @@ public class AILogic : AI
         currentState = AI_State.idle;
         animator = gameObject.GetComponent<Animator>();
         bb = gameObject.GetComponent<Blackboard>();
-        currentWeapon = "rifle";
+        currentWeapon = weaponSlot.transform.GetChild(0).gameObject.name;
         weaponOffsets = new Dictionary<string, Vector3>()
         {
             { "rifle_idle", new Vector3(0.126f, 1.151f, 0.44f) },
             { "rifle_walk", new Vector3(0.126f, 1.151f, 0.44f) },
             { "rifle_run", new Vector3(0.126f, 1.151f, 0.44f) },
             { "rifle_fire", new Vector3(0.097f, 1.4f, 0.44f) },
-            { "rifle_die", new Vector3(0f, -10f, 0f) }
+            { "rifle_die", new Vector3(0f, -10f, 0f) },
+            { "shotgun_idle", new Vector3(0.126f, 1.151f, 0.44f) },
+            { "shotgun_walk", new Vector3(0.126f, 1.151f, 0.44f) },
+            { "shotgun_run", new Vector3(0.126f, 1.151f, 0.44f) },
+            { "shotgun_fire", new Vector3(0.097f, 1.4f, 0.44f) },
+            { "shotgun_die", new Vector3(0f, -10f, 0f) }
 
         };
 

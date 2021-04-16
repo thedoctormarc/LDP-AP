@@ -197,7 +197,7 @@ public class AIPerception : AI
 
     public void OnDrawGizmos ()
     {
-        if (transform != null)
+        if (transform != null && audioDetected != null)
         {
             Gizmos.color = (audioDetected.Count > 0) ? Color.green : Color.red;
             Gizmos.color = new Color(Gizmos.color.r, Gizmos.color.g, Gizmos.color.b, 0.5f);

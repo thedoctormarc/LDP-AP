@@ -10,7 +10,7 @@ public class AIParameters : AI
     int team;
     public int _team() => team;
     [SerializeField]
-    [Range(0f, 1f)]
+    [Range(0f, 0.3f)]
     float aimSpread = 0.5f;
 
     [SerializeField]
