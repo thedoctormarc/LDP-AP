@@ -5,7 +5,7 @@ using NodeCanvas.Framework;
 
 public class AILogic : AI
 {
-    public enum AI_State { idle, walk, fire, die };
+    public enum AI_State { idle, walk, run, fire, die };
     public AI_State currentState;
     string currentWeapon;
     public Dictionary<string, Vector3> weaponOffsets;
@@ -30,6 +30,7 @@ public class AILogic : AI
         {
             { "rifle_idle", new Vector3(0.126f, 1.151f, 0.44f) },
             { "rifle_walk", new Vector3(0.126f, 1.151f, 0.44f) },
+            { "rifle_run", new Vector3(0.126f, 1.151f, 0.44f) },
             { "rifle_fire", new Vector3(0.097f, 1.4f, 0.44f) },
             { "rifle_die", new Vector3(0f, -10f, 0f) }
 
@@ -76,7 +77,7 @@ public class AILogic : AI
         Debug.Log("AI Detected Enemy!");
         bb.SetValue("aggro", true);
         animator.SetBool("Aggro", true);
-        animator.SetBool("Moving", false);
+        animator.SetInteger("Moving", 0);
         RelocateWeapon();
     }
 
@@ -102,7 +103,7 @@ public class AILogic : AI
     public override void OnDeath()
     {
         currentState = AI_State.die;
-        animator.SetBool("Moving", false);
+        animator.SetInteger("Moving", 0);
         animator.SetBool("Dead", true);
         bb.SetValue("dead", true);
     }
