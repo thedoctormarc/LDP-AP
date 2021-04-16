@@ -112,7 +112,7 @@ public class T_Fight : ActionTask
         if ((currentFireTime += Time.deltaTime) >= weaponParameters._fireRate() / 1000f)
         {
             Debug.Log("AI is firing!!");
-            aILogic._weaponSlot().transform.GetChild(0).GetComponent<AudioSource>().Play();
+          //   aILogic._weaponSlot().transform.GetChild(0).GetComponent<AudioSource>().Play(); // TODO: only when human player
 
             currentFireTime = 0f;
 
@@ -129,7 +129,7 @@ public class T_Fight : ActionTask
             Vector3 direction = bulletDestination - origin;
 
             // TODO: encapsulate in one function in aiperception
-            if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
+            if (Physics.Raycast(origin, direction.normalized, out hit, Mathf.Infinity))
             {
                 // 3. Direct hit to an enemy part
                 if (hit.transform.parent.gameObject.CompareTag("Player"))
@@ -138,11 +138,11 @@ public class T_Fight : ActionTask
                     // Debug
                     if (PlayerManager.instance.debug)
                     {
-                        Debug.DrawRay(origin, direction, Color.green);
+                        Debug.DrawRay(origin, direction.normalized, Color.green);
                         Debug.Log("AI Hit an enemy!!");
                     }
 
-                    if (PlayerManager.instance.DamageAI(weaponParameters._damage(), hit.transform.parent.gameObject, agent.gameObject)) // TODO: dont de-aggro completely, only remove particular threat
+                    if (PlayerManager.instance.DamageAI(weaponParameters.GetDamageAtDistance(direction.magnitude), hit.transform.parent.gameObject, agent.gameObject)) // TODO: dont de-aggro completely, only remove particular threat
                     {
                         EndAction(true);
                     };

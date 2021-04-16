@@ -26,7 +26,7 @@ public class T_Relocate : ActionTask
 
     protected override void OnExecute()
     {
-        animator.SetBool("Moving", true);
+        animator.SetInteger("Moving", 1);
         path.canMove = true;
         path.canSearch = true;
         aILogic.currentState = AILogic.AI_State.walk;
@@ -69,7 +69,7 @@ public class T_Relocate : ActionTask
 
 
         path.destination = (Vector3)rNode.position;
-        animator.SetBool("Moving", true);
+        animator.SetInteger("Moving", 1);
     }
  
 }

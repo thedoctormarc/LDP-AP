@@ -91,6 +91,8 @@ public class AIPerception : AI
                                 }
 
                                 aILogic.TriggerAggro(hit.transform.parent.gameObject);
+                                
+                                // TODO: trigger aggro in the other AI
                                 return;
                             }
            

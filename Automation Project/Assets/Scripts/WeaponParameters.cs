@@ -11,4 +11,17 @@ public class WeaponParameters : MonoBehaviour
     [Range(10f, 100f)]
     float damage = 25f;
     public float _damage() => damage;
+
+    [SerializeField]
+    AnimationCurve damageFallOff;
+
+    public float GetDamageAtDistance (float distance)
+    {
+        if (distance > 100f)
+            distance = 100f;
+
+        distance /= 100f; // 100 m = 1 anim unit
+
+        return damage * damageFallOff.Evaluate(distance); 
+    }
 }
