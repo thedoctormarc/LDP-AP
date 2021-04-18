@@ -1,6 +1,8 @@
 ﻿using NodeCanvas.Framework;
 using UnityEngine;
 using Pathfinding;
+using System.Collections;
+using System.Collections.Generic;
 
 public class T_Fight : ActionTask
 {
@@ -15,10 +17,14 @@ public class T_Fight : ActionTask
     Vector3 currentDestination;
     float aimThreshold = 0.05f;
     Blackboard bb;
+    Dictionary<int, float> deAggroCurrentTime;
+    Animator animator;
 
     protected override string OnInit()
     {
+        deAggroCurrentTime = new Dictionary<int, float>();
         path = agent.gameObject.GetComponent<AIPath>();
+        animator = agent.gameObject.GetComponent<Animator>();
         bb = agent.gameObject.GetComponent<Blackboard>();
         aIPerception = agent.gameObject.GetComponent<AIPerception>();
         AIParameters = agent.gameObject.GetComponent<AIParameters>();
@@ -34,6 +40,7 @@ public class T_Fight : ActionTask
         path.canSearch = false;
         aILogic.currentState = AILogic.AI_State.fire;
         currentAimDir = agent.transform.forward;
+        animator.SetInteger("Moving", 0);
     }
 
     protected override void OnUpdate()  
@@ -45,9 +52,8 @@ public class T_Fight : ActionTask
             EndAction(true);
         }
 
-        if (aIPerception.InLineOfFireWithAI(aILogic._lastAggro()) == false)
+        if (aIPerception.LostAggroLOF())
         {
-            aILogic.DeAggro(aILogic._lastAggro());
             EndAction(true);
         }
 
@@ -57,6 +63,7 @@ public class T_Fight : ActionTask
             Fire();
         }
     }
+
 
     bool Aim()
     {

@@ -15,6 +15,11 @@ public class WeaponParameters : MonoBehaviour
     [SerializeField]
     AnimationCurve damageFallOff;
 
+
+    [SerializeField]
+    [Range(10f, 200f)]
+    float maxEffectiveDistance = 200f;
+
     public float GetDamageAtDistance (float distance)
     {
         if (distance > 100f)
@@ -23,5 +28,10 @@ public class WeaponParameters : MonoBehaviour
         distance /= 100f; // 100 m = 1 anim unit
 
         return damage * damageFallOff.Evaluate(distance); 
+    }
+
+    public bool InRange (GameObject from, GameObject to)
+    {
+        return (from.transform.position - to.transform.position).magnitude <= maxEffectiveDistance;
     }
 }

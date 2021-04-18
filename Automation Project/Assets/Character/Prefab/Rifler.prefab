@@ -1331,8 +1331,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
-  aimSpread: 0.1
-  aimSpeed: 0.7
+  aimSpread: 0.5
+  aimSpeed: 0.2
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
   maxViewAngle: 90
@@ -1342,6 +1342,10 @@ MonoBehaviour:
   currentHealth: 0
   respawnTime: 5
   audioPerceptionRadius: 10
+  timeUntilDeAggro: 8
+  shotgunTargetFightDist: 5
+  walkSpeed: 2
+  runSpeed: 3.5
 --- !u!114 &4886186841083615262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3028,6 +3032,11 @@ PrefabInstance:
         type: 3}
       propertyPath: damageFallOff.m_Curve.Array.data[0].outWeight
       value: 0.099755496
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804379326222539114, guid: 1bc54fdb82322e74e9fac78a3eb7fdf8,
+        type: 3}
+      propertyPath: damage
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7804379326222539127, guid: 1bc54fdb82322e74e9fac78a3eb7fdf8,
         type: 3}

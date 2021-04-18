@@ -319,6 +319,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  maxEffectiveDistance: 25
 --- !u!1 &5879194710935490523
 GameObject:
   m_ObjectHideFlags: 0

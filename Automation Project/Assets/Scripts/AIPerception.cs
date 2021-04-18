@@ -15,12 +15,13 @@ public class AIPerception : AI
     Vector3[] raycastTargetOffsets;
     AILogic aILogic;
     List<GameObject> audioDetected;
-
+    AIPerception aIPerception;
     void Start()
     {
         audioDetected = new List<GameObject>();
         parameters = gameObject.GetComponent<AIParameters>();
         aILogic = gameObject.GetComponent<AILogic>();
+        aIPerception = gameObject.GetComponent<AIPerception>();
     }
 
     public void VisualDetection()
@@ -90,10 +91,13 @@ public class AIPerception : AI
                                     Debug.Log("AI named " + gameObject.name + "will begin to fire AI named " + hit.transform.parent.gameObject.name);
                                 }
 
-                                aILogic.TriggerAggro(hit.transform.parent.gameObject);
+                                if (aILogic.TriggerAggro(hit.transform.parent.gameObject))
+                                {
+                                    return;
+                                }
                                 
                                 // TODO: trigger aggro in the other AI
-                                return;
+                           
                             }
            
                         }
@@ -195,7 +199,7 @@ public class AIPerception : AI
         return false;
     }
 
-    public void OnDrawGizmos ()
+    /*public void OnDrawGizmos ()
     {
         if (transform != null && audioDetected != null)
         {
@@ -203,7 +207,7 @@ public class AIPerception : AI
             Gizmos.color = new Color(Gizmos.color.r, Gizmos.color.g, Gizmos.color.b, 0.5f);
             Gizmos.DrawSphere(transform.position, parameters._audioPerceptionRadius());
         }
-    }
+    }*/
 
 
     public override void OnDeAggro(GameObject go)
@@ -219,5 +223,26 @@ public class AIPerception : AI
         audioDetected.Clear();
         visualTime = 0f;
         auditiveTime = 0f;
+    }
+
+    public bool LostAggroLOF()
+    {
+
+        for (int i = 0; i < aILogic._aggrodEnemiesIndexes().Length; ++i)
+        {
+            if (aILogic._aggrodEnemiesIndexes()[i] == false)
+            {
+                continue;
+            }
+
+
+            if (aIPerception.InLineOfFireWithAI(i) == false)
+            {
+                aILogic.DeAggro(i);
+                return true;
+            }
+        }
+
+        return false;
     }
 }

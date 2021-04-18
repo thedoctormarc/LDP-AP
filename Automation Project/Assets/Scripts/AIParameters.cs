@@ -10,7 +10,7 @@ public class AIParameters : AI
     int team;
     public int _team() => team;
     [SerializeField]
-    [Range(0f, 0.3f)]
+    [Range(0f, 0.5f)]
     float aimSpread = 0.5f;
 
     [SerializeField]
@@ -50,6 +50,22 @@ public class AIParameters : AI
     [Range(5f, 15f)]
     float audioPerceptionRadius = 10f;
 
+    [SerializeField]
+    [Range(0f, 10f)]
+    float timeUntilDeAggro = 8f;
+
+    [SerializeField]
+    [Range(3f, 10f)]
+    float shotgunTargetFightDist = 5f;
+
+    [SerializeField]
+    [Range(1f, 2f)]
+    float walkSpeed = 1.5f;
+
+    [SerializeField]
+    [Range(2.5f, 4f)]
+    float runSpeed = 3.5f;
+
     public float _aimSpread() => aimSpread;
     public float _aimSpeed() => aimSpeed;
     public float _headPositionOffset() => headPositionOffset;
@@ -60,7 +76,10 @@ public class AIParameters : AI
     public float _maxHealth() => maxHealth;
     public float _respawnTime() => respawnTime;
     public float _audioPerceptionRadius() => audioPerceptionRadius;
-
+    public float _timeUntilDeAggro() => timeUntilDeAggro;
+    public float _shotgunTargetFightDist() => shotgunTargetFightDist;
+    public float _walkSpeed() => walkSpeed;
+    public float _runSpeed() => runSpeed;
 
     private void Start()
     {

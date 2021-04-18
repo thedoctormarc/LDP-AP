@@ -2,23 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NodeCanvas.Framework;
+using Pathfinding;
 
 public class AILogic : AI
 {
     public enum AI_State { idle, walk, run, fire, die };
+    [HideInInspector]
     public AI_State currentState;
     string currentWeapon;
     public Dictionary<string, Vector3> weaponOffsets;
     [SerializeField]
     GameObject weaponSlot;
+    WeaponParameters weaponParameters;
     public GameObject _weaponSlot() => weaponSlot;
     Animator animator;
     Blackboard bb;
     bool[] aggrodEnemiesIndexes;
     public bool[] _aggrodEnemiesIndexes() => aggrodEnemiesIndexes;
+    [HideInInspector]
     public float currentHealth;
     int lastAggro;
     public int _lastAggro() => lastAggro;
+    AIPath path;
 
     void Start()
     {
@@ -26,6 +31,7 @@ public class AILogic : AI
         animator = gameObject.GetComponent<Animator>();
         bb = gameObject.GetComponent<Blackboard>();
         currentWeapon = weaponSlot.transform.GetChild(0).gameObject.name;
+        path = gameObject.GetComponent<AIPath>();
         weaponOffsets = new Dictionary<string, Vector3>()
         {
             { "rifle_idle", new Vector3(0.126f, 1.151f, 0.44f) },
@@ -40,6 +46,8 @@ public class AILogic : AI
             { "shotgun_die", new Vector3(0f, -10f, 0f) }
 
         };
+
+        weaponParameters = weaponSlot.transform.GetChild(0).GetComponent<WeaponParameters>();
 
         aggrodEnemiesIndexes = new bool[PlayerManager.instance.transform.childCount];
         for (int i = 0; i < aggrodEnemiesIndexes.Length; ++i)
@@ -61,13 +69,13 @@ public class AILogic : AI
         weaponTransform.localPosition += weaponOffsets[locate];
     }
 
-    public void SwitchWeapon(string newWeapon)
+    public bool TriggerAggro(GameObject enemy)
     {
+        if(weaponParameters.InRange(gameObject, enemy) == false)
+        {
+            return false;
+        }
 
-    }
-
-    public void TriggerAggro(GameObject enemy)
-    {
         for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
         {
             if (PlayerManager.instance.transform.GetChild(i).gameObject == enemy)
@@ -82,8 +90,10 @@ public class AILogic : AI
         Debug.Log("AI Detected Enemy!");
         bb.SetValue("aggro", true);
         animator.SetBool("Aggro", true);
-        animator.SetInteger("Moving", 0);
+      //  animator.SetInteger("Moving", 0);
         RelocateWeapon();
+
+        return true;
     }
 
     public void DeAggro(int index)

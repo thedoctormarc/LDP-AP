@@ -1601,7 +1601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableAction: 0
   disableAction: 0
-  _graph: {fileID: 11400000, guid: 07a4013058c318c4d86e8a4b7bf0d8d7, type: 2}
+  _graph: {fileID: 11400000, guid: c70297c2c04b9a6449283416384d45bf, type: 2}
   _blackboard: {fileID: 1474262976624217537}
 --- !u!114 &1474262976624217537
 MonoBehaviour:
@@ -1632,8 +1632,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
-  aimSpread: 0.1
-  aimSpeed: 0.7
+  aimSpread: 0.3
+  aimSpeed: 0.4
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
   maxViewAngle: 90
@@ -1643,6 +1643,10 @@ MonoBehaviour:
   currentHealth: 0
   respawnTime: 5
   audioPerceptionRadius: 10
+  timeUntilDeAggro: 8
+  shotgunTargetFightDist: 10
+  walkSpeed: 2
+  runSpeed: 3.5
 --- !u!114 &1474262976624217539
 MonoBehaviour:
   m_ObjectHideFlags: 0
