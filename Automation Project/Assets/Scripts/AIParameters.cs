@@ -18,6 +18,10 @@ public class AIParameters : AI
     float aimSpeed = 0.5f;
 
     [SerializeField]
+    [Range(1.1f, 2f)]
+    float aimSpeedMultiAaudio = 1.5f;
+
+    [SerializeField]
     float headPositionOffset = 1.65f;
 
     [SerializeField]
@@ -80,10 +84,12 @@ public class AIParameters : AI
     public float _shotgunTargetFightDist() => shotgunTargetFightDist;
     public float _walkSpeed() => walkSpeed;
     public float _runSpeed() => runSpeed;
+    public float _aimSpeedMultiAaudio() => aimSpeedMultiAaudio;
+
 
     private void Start()
     {
-        GameSimManager.Instance.FetchConfig(OnConfigFetched);
+       // GameSimManager.Instance.FetchConfig(OnConfigFetched);
         ResetHealth();
     }
 

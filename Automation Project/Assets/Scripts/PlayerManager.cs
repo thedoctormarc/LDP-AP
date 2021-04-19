@@ -64,11 +64,11 @@ public class PlayerManager : MonoBehaviour
             }
 
             // Unity Game Simulation
-            AIParameters e_aIParameters = emitter.GetComponent<AIParameters>();
+            /*AIParameters e_aIParameters = emitter.GetComponent<AIParameters>();
             string killCounter = "T" + e_aIParameters._team().ToString() + " kills";
             string deathCounter = "T" + r_aIParameters._team().ToString() + " deaths";
             GameSimManager.Instance.IncrementCounter(killCounter, (long)1);
-            GameSimManager.Instance.IncrementCounter(deathCounter, (long)1);
+            GameSimManager.Instance.IncrementCounter(deathCounter, (long)1);*/
 
             return true;
         }

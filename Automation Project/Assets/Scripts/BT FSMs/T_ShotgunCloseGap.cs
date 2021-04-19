@@ -42,13 +42,11 @@ public class T_ShotgunCloseGap : ActionTask
 
         path.canMove = true;
         path.canSearch = true;
-        aILogic.currentState = AILogic.AI_State.fire;
+        aILogic.currentState = AILogic.AI_State.run;
         animator.SetInteger("Moving", 2);
         aILogic.RelocateWeapon();
-
         Vector3 closePosWalkable = AstarPath.active.GetNearest(closePos, NNConstraint.Default).position;
         path.destination = closePosWalkable;
-
         path.maxSpeed = aIParameters._runSpeed();
     }
 

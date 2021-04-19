@@ -130,12 +130,22 @@ public class AIPerception : AI
 
                         if (aIParameters._team() != parameters._team())
                         {
-                            audioDetected.Add(go);
+                            Animator animator = go.GetComponent<Animator>();
+
+                            if (animator.GetInteger("Moving") == 2)
+                            {
+                                audioDetected.Add(go);
+                            }
                         }
                     }
                 }
             }
         }
+    }
+
+    public bool IsAudioDetected (GameObject enemy)
+    {
+        return audioDetected.Contains(enemy);
     }
 
     public bool InLineOfFireWithAI (int index)
@@ -198,6 +208,30 @@ public class AIPerception : AI
 
         return false;
     }
+
+    public bool LOF_FromNodePos(GameObject enemy)
+    {
+        Vector3 nodePos = AstarPath.active.GetNearest(enemy.transform.position).position;
+
+        foreach (Vector3 targetOffset in raycastTargetOffsets)
+        {
+            RaycastHit hit;
+            Vector3 origin = nodePos + transform.up * parameters._headPositionOffset();
+            Vector3 destination = aIPerception.col.gameObject.transform.position + targetOffset;
+            Vector3 direction = destination - origin;
+
+            if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
+            {
+                if (hit.transform.parent.gameObject == enemy)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 
     /*public void OnDrawGizmos ()
     {
