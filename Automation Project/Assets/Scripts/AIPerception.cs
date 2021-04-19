@@ -13,6 +13,7 @@ public class AIPerception : AI
     float auditiveTime = 0f;
     [SerializeField]
     Vector3[] raycastTargetOffsets;
+    public Vector3[] _raycastTargetOffsets() => raycastTargetOffsets;
     AILogic aILogic;
     List<GameObject> audioDetected;
     AIPerception aIPerception;
@@ -209,9 +210,10 @@ public class AIPerception : AI
         return false;
     }
 
-    public bool LOF_FromNodePos(GameObject enemy)
+    public int LOF_FromNodePos(Vector3 nodePos, GameObject enemy)
     {
-        Vector3 nodePos = AstarPath.active.GetNearest(enemy.transform.position).position;
+        int ret = 0;
+        AIPerception aIPerception = enemy.GetComponent<AIPerception>();
 
         foreach (Vector3 targetOffset in raycastTargetOffsets)
         {
@@ -224,12 +226,12 @@ public class AIPerception : AI
             {
                 if (hit.transform.parent.gameObject == enemy)
                 {
-                    return true;
+                    ++ret;
                 }
             }
         }
 
-        return false;
+        return ret;
     }
 
 

@@ -122,5 +122,5 @@ public class AILogic : AI
         animator.SetBool("Dead", true);
         bb.SetValue("dead", true);
     }
-
+ 
 }

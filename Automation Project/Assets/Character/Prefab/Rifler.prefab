@@ -1197,8 +1197,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4886186841083615258}
-  m_LocalRotation: {x: -0, y: 0.9204327, z: -0, w: -0.39090127}
-  m_LocalPosition: {x: -29.2, y: -0.47865978, z: 68.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4886186840187053282}
@@ -1207,7 +1207,7 @@ Transform:
   - {fileID: 4886186841812782221}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 226.021, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4886186841083615248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1300,7 +1300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableAction: 0
   disableAction: 0
-  _graph: {fileID: 11400000, guid: 07a4013058c318c4d86e8a4b7bf0d8d7, type: 2}
+  _graph: {fileID: 11400000, guid: 20bb2da2cb7bdb8459449da88b9b09bf, type: 2}
   _blackboard: {fileID: 4886186841083615260}
 --- !u!114 &4886186841083615260
 MonoBehaviour:
@@ -1331,8 +1331,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
-  aimSpread: 0.5
-  aimSpeed: 0.2
+  aimSpread: 0.8
+  aimSpeed: 0.5
+  aimSpeedMultiAudio: 1.5
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
   maxViewAngle: 90
@@ -1346,6 +1347,8 @@ MonoBehaviour:
   shotgunTargetFightDist: 5
   walkSpeed: 2
   runSpeed: 3.5
+  rifleCoverMinTriggerDist: 15
+  rifleCoverMaxDist: 8
 --- !u!114 &4886186841083615262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3036,7 +3039,7 @@ PrefabInstance:
     - target: {fileID: 7804379326222539114, guid: 1bc54fdb82322e74e9fac78a3eb7fdf8,
         type: 3}
       propertyPath: damage
-      value: 10
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7804379326222539127, guid: 1bc54fdb82322e74e9fac78a3eb7fdf8,
         type: 3}

@@ -336,6 +336,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 6
     m_ConditionEvent: Moving
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Aggro
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1736767535107803842}
   m_Solo: 0

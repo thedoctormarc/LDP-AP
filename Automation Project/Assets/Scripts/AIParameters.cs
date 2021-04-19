@@ -10,8 +10,8 @@ public class AIParameters : AI
     int team;
     public int _team() => team;
     [SerializeField]
-    [Range(0f, 0.5f)]
-    float aimSpread = 0.5f;
+    [Range(0f, 1f)]
+    float aimSpread = 0.8f;
 
     [SerializeField]
     [Range(0f, 1f)]
@@ -19,7 +19,7 @@ public class AIParameters : AI
 
     [SerializeField]
     [Range(1.1f, 2f)]
-    float aimSpeedMultiAaudio = 1.5f;
+    float aimSpeedMultiAudio = 1.5f;
 
     [SerializeField]
     float headPositionOffset = 1.65f;
@@ -70,6 +70,14 @@ public class AIParameters : AI
     [Range(2.5f, 4f)]
     float runSpeed = 3.5f;
 
+    [SerializeField]
+    [Range(10f, 20f)]
+    float rifleCoverMinTriggerDist = 15f;
+
+    [SerializeField]
+    [Range(5f, 10f)]
+    float rifleCoverMaxDist = 8f;
+
     public float _aimSpread() => aimSpread;
     public float _aimSpeed() => aimSpeed;
     public float _headPositionOffset() => headPositionOffset;
@@ -84,8 +92,9 @@ public class AIParameters : AI
     public float _shotgunTargetFightDist() => shotgunTargetFightDist;
     public float _walkSpeed() => walkSpeed;
     public float _runSpeed() => runSpeed;
-    public float _aimSpeedMultiAaudio() => aimSpeedMultiAaudio;
-
+    public float _aimSpeedMultiAudio() => aimSpeedMultiAudio;
+    public float _rifleCoverMinTriggerDist() => rifleCoverMinTriggerDist;
+    public float _rifleCoverMaxDist() => rifleCoverMaxDist;
 
     private void Start()
     {

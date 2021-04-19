@@ -284,7 +284,7 @@ GameObject:
   - component: {fileID: 7804379326222539112}
   - component: {fileID: 7804379326222539114}
   m_Layer: 0
-  m_Name: m16a2
+  m_Name: rifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b34eb8802e67c4d949103122429428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 20
+  fireRate: 10
   damage: 25
   damageFallOff:
     serializedVersion: 2
@@ -329,6 +329,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  maxEffectiveDistance: 200
 --- !u!1 &7804379326250745155
 GameObject:
   m_ObjectHideFlags: 0

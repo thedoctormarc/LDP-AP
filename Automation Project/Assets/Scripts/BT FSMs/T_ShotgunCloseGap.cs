@@ -12,6 +12,8 @@ public class T_ShotgunCloseGap : ActionTask
     AIPerception aIPerception;
     AIParameters aIParameters;
     Blackboard bb;
+    Vector3 target;
+    GameObject enemy;
 
     // Start is called before the first frame update
     protected override string OnInit()
@@ -27,7 +29,9 @@ public class T_ShotgunCloseGap : ActionTask
     }
     // Update is called once per frame
     protected override void OnExecute()
-    {  
+    {
+        enemy = PlayerManager.instance.GetChildByIndex(aILogic._lastAggro());
+
         // search for close position near enemy, run towards it
         Vector3 enemyPos = PlayerManager.instance.GetChildByIndex(aILogic._lastAggro()).transform.position;
         Vector3 dir = (agent.transform.position - enemyPos).normalized;
@@ -52,7 +56,10 @@ public class T_ShotgunCloseGap : ActionTask
 
     protected override void OnUpdate()
     {
-        if (bb.GetValue<bool>("dead") || !bb.GetValue<bool>("aggro") || path.reachedDestination || aIPerception.LostAggroLOF())
+        float distToEnemy = (agent.transform.position - enemy.transform.position).magnitude;
+        float marginalDistance = 5f;
+
+        if (bb.GetValue<bool>("dead") || !bb.GetValue<bool>("aggro") || path.reachedDestination || aIPerception.LostAggroLOF() || distToEnemy <= marginalDistance)
         {
             path.maxSpeed = aIParameters._walkSpeed();
             EndAction(true);

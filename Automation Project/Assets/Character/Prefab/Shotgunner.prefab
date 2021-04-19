@@ -1632,8 +1632,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
-  aimSpread: 0.3
-  aimSpeed: 0.4
+  aimSpread: 0.8
+  aimSpeed: 0.5
+  aimSpeedMultiAudio: 1.5
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
   maxViewAngle: 90
@@ -1647,6 +1648,8 @@ MonoBehaviour:
   shotgunTargetFightDist: 10
   walkSpeed: 2
   runSpeed: 3.5
+  rifleCoverMinTriggerDist: 15
+  rifleCoverMaxDist: 8
 --- !u!114 &1474262976624217539
 MonoBehaviour:
   m_ObjectHideFlags: 0

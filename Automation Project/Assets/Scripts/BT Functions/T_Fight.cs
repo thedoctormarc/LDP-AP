@@ -86,7 +86,7 @@ public class T_Fight : ActionTask
             Vector3 destination = enemy.transform.position + enemy.transform.up * aIParameters._headPositionOffset(); // TODO: if shotgun or sniper, aim at the body
             Vector3 targetDir = destination - origin;
 
-            float aimSpeed = AIParameters._aimSpeed() * ((aIPerception.IsAudioDetected(enemy)) ? AIParameters._aimSpeedMultiAaudio() : 1f) * Time.deltaTime;
+            float aimSpeed = AIParameters._aimSpeed() * ((aIPerception.IsAudioDetected(enemy)) ? AIParameters._aimSpeedMultiAudio() : 1f) * Time.deltaTime;
 
             Vector3 newAimDir = Vector3.RotateTowards(currentAimDir, targetDir, aimSpeed, 0.0f);
             currentAimDir = newAimDir;
@@ -116,7 +116,7 @@ public class T_Fight : ActionTask
 
     void Fire()
     {
-        if ((currentFireTime += Time.deltaTime) >= weaponParameters._fireRate() / 1000f)
+        if ((currentFireTime += Time.deltaTime) >= weaponParameters._fireRate() / 100f)
         {
             Debug.Log("AI is firing!!");
           //   aILogic._weaponSlot().transform.GetChild(0).GetComponent<AudioSource>().Play(); // TODO: only when human player
@@ -138,9 +138,16 @@ public class T_Fight : ActionTask
             // TODO: encapsulate in one function in aiperception
             if (Physics.Raycast(origin, direction.normalized, out hit, Mathf.Infinity))
             {
+
                 // 3. Direct hit to an enemy part
                 if (hit.transform.parent.gameObject.CompareTag("Player"))
                 {
+
+                    AIParameters aIParameters = hit.transform.parent.gameObject.GetComponent<AIParameters>();
+                    if (aIParameters._team() == AIParameters._team())
+                    {
+                        return;
+                    }
 
                     // Debug
                     if (PlayerManager.instance.debug)
