@@ -107,7 +107,14 @@ public class T_UseCover : ActionTask
             return false;
         }
 
-        // Further from enemy than player from enemy
+        // Too close
+        float marginalDistance = 3f;
+        if (nodeToPos < marginalDistance)
+        {
+            return false;
+        }
+
+        // Too far from enemy
         if (nodeToEnemy > distToEnemy)
         {
             return false;
