@@ -1,8 +1,10 @@
 ﻿using NodeCanvas.Framework;
 using UnityEngine;
 using Pathfinding;
+using System.Collections;
+using System.Collections.Generic;
 
-public class T_Relocate : ActionTask
+public class T_WanderCollector : ActionTask
 {
     AIPath path;
     AIPerception aIPerception;
@@ -52,23 +54,30 @@ public class T_Relocate : ActionTask
         }
     }
 
-    void Relocate()
+    // Right now, search a random active point pickup position (TODO: implement precision about the location depending on how many times the AI played the level)
+    void Relocate() // TODO: search visible pickups first! If not, then random
     {
-        var grid = AstarPath.active.data.gridGraph;
-        float minDistance = 10f;
+        GameObject points = GameObject.Find("Points");
+        List<GameObject> activePoints = new List<GameObject>();
 
-        GraphNode cNode = grid.GetNearest(agent.transform.position).node;
-        GraphNode rNode;
-        do
+        for (int i = 0; i < points.transform.childCount; ++i)
         {
-            rNode = grid.nodes[Random.Range(0, grid.nodes.Length)];
+            GameObject child = points.transform.GetChild(i).gameObject;
+            if (child.GetComponent<Pickup>().Active())
+            {
+                activePoints.Add(child);
+            }
         }
-        while (rNode.Walkable == false
-        || PathUtilities.IsPathPossible(cNode, rNode) == false
-        || (rNode.position - cNode.position).magnitude <= minDistance);
 
+        if (activePoints.Count == 0)
+        {
+            // TODO: do something about it??
+        }
 
-        path.destination = (Vector3)rNode.position;
+        int j = Random.Range(0, activePoints.Count - 1);
+        var grid = AstarPath.active.data.gridGraph;
+        GraphNode targetNode = grid.GetNearest(activePoints[j].transform.position).node;
+        path.destination = (Vector3)targetNode.position;
         animator.SetInteger("Moving", 1);
     }
 

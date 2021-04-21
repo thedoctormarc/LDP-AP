@@ -1164,7 +1164,7 @@ GameObject:
   - component: {fileID: 4886186841083615257}
   - component: {fileID: 4886186841083615256}
   m_Layer: 9
-  m_Name: Rifler
+  m_Name: Collector Rifler
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1280,7 +1280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableAction: 0
   disableAction: 0
-  _graph: {fileID: 11400000, guid: 20bb2da2cb7bdb8459449da88b9b09bf, type: 2}
+  _graph: {fileID: 11400000, guid: 15d2daf471ad17e46b6b50b1aacbf910, type: 2}
   _blackboard: {fileID: 4886186841083615260}
 --- !u!114 &4886186841083615260
 MonoBehaviour:

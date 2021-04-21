@@ -78,6 +78,9 @@ public class AIParameters : AI
     [Range(5f, 10f)]
     float rifleCoverMaxDist = 8f;
 
+    [HideInInspector]
+    public int currentPoints = 0;
+
     public float _aimSpread() => aimSpread;
     public float _aimSpeed() => aimSpeed;
     public float _headPositionOffset() => headPositionOffset;
