@@ -34,4 +34,11 @@ public class WeaponParameters : MonoBehaviour
     {
         return (from.transform.position - to.transform.position).magnitude <= maxEffectiveDistance;
     }
+
+
+    virtual public float GetAimMulti()
+    {
+        return 1f;
+    }
+
 }

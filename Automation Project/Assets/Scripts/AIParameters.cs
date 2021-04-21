@@ -6,7 +6,7 @@ using Unity.Simulation.Games;
 public class AIParameters : AI
 {
     [SerializeField]
-    [Range(0, 1)]
+    [Range(0, 2)]
     int team;
     public int _team() => team;
     [SerializeField]

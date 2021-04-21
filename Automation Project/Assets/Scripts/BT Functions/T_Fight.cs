@@ -81,12 +81,16 @@ public class T_Fight : ActionTask
 
             GameObject enemy = PlayerManager.instance.transform.GetChild(i).gameObject;
             AIParameters aIParameters = enemy.GetComponent<AIParameters>();
+            GameObject weapon = aILogic._weaponSlot().transform.GetChild(0).gameObject;
 
-            Vector3 origin = aILogic._weaponSlot().transform.GetChild(0).Find("Weapon Tip Position").position;
+            Vector3 origin = weapon.transform.Find("Weapon Tip Position").position;
             Vector3 destination = enemy.transform.position + enemy.transform.up * aIParameters._headPositionOffset(); // TODO: if shotgun or sniper, aim at the body
             Vector3 targetDir = destination - origin;
 
-            float aimSpeed = AIParameters._aimSpeed() * ((aIPerception.IsAudioDetected(enemy)) ? AIParameters._aimSpeedMultiAudio() : 1f) * Time.deltaTime;
+            float aimSpeed = AIParameters._aimSpeed() *
+                ((aIPerception.IsAudioDetected(enemy)) ? AIParameters._aimSpeedMultiAudio() : 1f)
+                * weapon.GetComponent<WeaponParameters>().GetAimMulti()
+                * Time.deltaTime;
 
             Vector3 newAimDir = Vector3.RotateTowards(currentAimDir, targetDir, aimSpeed, 0.0f);
             currentAimDir = newAimDir;

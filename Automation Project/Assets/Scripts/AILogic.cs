@@ -43,7 +43,12 @@ public class AILogic : AI
             { "shotgun_walk", new Vector3(0.126f, 1.151f, 0.44f) },
             { "shotgun_run", new Vector3(0.126f, 1.351f, 0.44f) },
             { "shotgun_fire", new Vector3(0.097f, 1.4f, 0.44f) },
-            { "shotgun_die", new Vector3(0f, -10f, 0f) }
+            { "shotgun_die", new Vector3(0f, -10f, 0f) },
+            { "sniper_idle", new Vector3(0.126f, 1.151f, 0.44f) },
+            { "sniper_walk", new Vector3(0.126f, 1.151f, 0.44f) },
+            { "sniper_run", new Vector3(0.126f, 1.351f, 0.44f) },
+            { "sniper_fire", new Vector3(0.097f, 1.4f, 0.44f) },
+            { "sniper_die", new Vector3(0f, -10f, 0f) }
 
         };
 
