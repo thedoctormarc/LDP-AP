@@ -43,7 +43,7 @@ public class T_Relocate : ActionTask
         }
 
 
-        aIPerception.VisualDetection();
+        aIPerception.VisualDetection(false);
         aIPerception.AuditiveDetection();
 
         if (path.reachedDestination)

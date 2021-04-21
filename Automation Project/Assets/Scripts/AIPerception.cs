@@ -25,12 +25,15 @@ public class AIPerception : AI
         aIPerception = gameObject.GetComponent<AIPerception>();
     }
 
-    public void VisualDetection()
+    public List<GameObject> VisualDetection(bool detectPickups)
     {
+        List<GameObject> ret = new List<GameObject>();
+
         if ((visualTime += Time.deltaTime) >= parameters._visualRefreshTime())
         {
             visualTime = 0f;
 
+            // Detect enemies
             for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
             {
                 GameObject child = PlayerManager.instance.transform.GetChild(i).gameObject;
@@ -94,7 +97,9 @@ public class AIPerception : AI
 
                                 if (aILogic.TriggerAggro(hit.transform.parent.gameObject))
                                 {
-                                    return;
+
+                                    ret.Add(hit.transform.parent.gameObject);
+                                    return ret;
                                 }
                                 
                                 // TODO: trigger aggro in the other AI
@@ -106,7 +111,36 @@ public class AIPerception : AI
                 }
         
             }
+
+
+            // Detect pickups --> after enemies!! (return), search visible pickups
+            if (detectPickups)
+            {
+                for (int i = 0; i < AppManager.instance._pickups().transform.childCount; ++i)
+                {
+                    GameObject pickup = AppManager.instance._pickups().transform.GetChild(i).gameObject;
+                    Vector3 origin = transform.position + transform.up * parameters._headPositionOffset();
+                    Vector3 dir  = pickup.transform.position - origin;
+                    float horizontalAngle = Vector3.Angle(transform.forward, dir);
+
+                    if (horizontalAngle <= parameters._maxViewAngle() / 2f)
+                    {
+                        if (pickup.GetComponent<Pickup>().Active() == false)
+                        {
+                            continue;
+                        }
+
+                        if (LOF_ToObjectPos(pickup))
+                        {
+                            ret.Add(pickup);
+                        }
+                    }
+
+                }
+            }
         }
+
+        return ret;
     }
 
     public void AuditiveDetection()
@@ -244,6 +278,23 @@ public class AIPerception : AI
             Gizmos.DrawSphere(transform.position, parameters._audioPerceptionRadius());
         }
     }*/
+
+    public bool LOF_ToObjectPos (GameObject go)
+    {
+        RaycastHit hit;
+        Vector3 origin = gameObject.transform.position + transform.up * parameters._headPositionOffset();
+        Vector3 direction = go.transform.position - origin;
+
+        if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
+        {
+            if (hit.transform.gameObject == go)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 
     public override void OnDeAggro(GameObject go)

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
+    public enum Type { HEALTH, POINTS}
+    public Type pickupType;
     [SerializeField]
     [Range(5f, 15f)]
     float cooldown = 10f;

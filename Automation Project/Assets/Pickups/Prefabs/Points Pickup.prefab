@@ -109,6 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4fd28d67729e334ab4057e9f46e6a1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupType: 1
   cooldown: 10
   points: 10
 --- !u!54 &569308010374898424

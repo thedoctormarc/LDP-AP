@@ -21,7 +21,7 @@ public class T_WanderCollector : ActionTask
         animator = agent.gameObject.GetComponent<Animator>();
         aILogic = agent.gameObject.GetComponent<AILogic>();
         bb = agent.gameObject.GetComponent<Blackboard>();
-        Relocate();
+        SearchRandomPickup();
 
         return null;
     }
@@ -45,25 +45,58 @@ public class T_WanderCollector : ActionTask
         }
 
 
-        aIPerception.VisualDetection();
+        List<GameObject> detected = aIPerception.VisualDetection(true);
+        int closestIndex = 0;
+        float nearDist = float.MaxValue;
+        bool targetFound = false;
+
+        if (detected.Count > 0)
+        {
+            for (int i = 0; i < detected.Count; ++i)
+            {
+                GameObject go = detected[i];
+
+                if (go.CompareTag("pickup"))
+                {
+                    if (go.GetComponent<Pickup>().pickupType == Pickup.Type.POINTS)
+                    {
+                        targetFound = true;
+                        float dist = (go.transform.position - agent.transform.position).magnitude;
+
+                        if (dist < nearDist)
+                        {
+                            closestIndex = i;
+                        }
+                    }
+                }
+            }
+
+            if (targetFound)
+            {
+                path.destination = (Vector3)AstarPath.active.data.gridGraph.GetNearest(detected[closestIndex].transform.position).node.position;
+            }
+        }
+
         aIPerception.AuditiveDetection();
 
         if (path.reachedDestination)
         {
-            Relocate();
+            SearchRandomPickup();
         }
     }
 
     // Right now, search a random active point pickup position (TODO: implement precision about the location depending on how many times the AI played the level)
-    void Relocate() // TODO: search visible pickups first! If not, then random
+    void SearchRandomPickup() // TODO: search visible pickups first! If not, then random
     {
-        GameObject points = GameObject.Find("Points");
+        GameObject pickups = AppManager.instance._pickups();
         List<GameObject> activePoints = new List<GameObject>();
 
-        for (int i = 0; i < points.transform.childCount; ++i)
+        for (int i = 0; i < pickups.transform.childCount; ++i)
         {
-            GameObject child = points.transform.GetChild(i).gameObject;
-            if (child.GetComponent<Pickup>().Active())
+            GameObject child = pickups.transform.GetChild(i).gameObject;
+
+            Pickup p = child.GetComponent<Pickup>();
+            if (p.pickupType == Pickup.Type.POINTS && p.Active())
             {
                 activePoints.Add(child);
             }
