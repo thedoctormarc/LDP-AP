@@ -1323,13 +1323,14 @@ MonoBehaviour:
   maxHealth: 75
   currentHealth: 0
   respawnTime: 5
-  audioPerceptionRadius: 10
+  audioPerceptionRadius: 15
   timeUntilDeAggro: 8
   shotgunTargetFightDist: 5
   walkSpeed: 2
   runSpeed: 3.5
   rifleCoverMinTriggerDist: 15
   rifleCoverMaxDist: 8
+  killerInspectTime: 2
   currentPoints: 0
 --- !u!114 &4886186841083615262
 MonoBehaviour:

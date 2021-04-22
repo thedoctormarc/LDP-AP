@@ -98,7 +98,7 @@ public class T_Fight : ActionTask
             // TODO: check this does not mess up right and up vectors
             Vector3 newForwadVector = agent.transform.forward;
             newForwadVector.z = newAimDir.z;
-            agent.transform.forward = newForwadVector;
+            agent.transform.rotation = Quaternion.LookRotation(newForwadVector);
 
             currentAimVector = currentAimDir * targetDir.magnitude;
 

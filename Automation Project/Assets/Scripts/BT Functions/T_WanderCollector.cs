@@ -8,6 +8,7 @@ public class T_WanderCollector : ActionTask
 {
     AIPath path;
     AIPerception aIPerception;
+    AIParameters aIParameters;
     Animator animator;
     AILogic aILogic;
     Blackboard bb;
@@ -18,6 +19,7 @@ public class T_WanderCollector : ActionTask
         path.canMove = true;
         path.canSearch = true;
         aIPerception = agent.gameObject.GetComponent<AIPerception>();
+        aIParameters = agent.gameObject.GetComponent<AIParameters>();
         animator = agent.gameObject.GetComponent<Animator>();
         aILogic = agent.gameObject.GetComponent<AILogic>();
         bb = agent.gameObject.GetComponent<Blackboard>();
@@ -49,6 +51,7 @@ public class T_WanderCollector : ActionTask
 
         if (bb.GetValue<bool>("dead"))
         {
+            path.maxSpeed = aIParameters._walkSpeed();
             EndAction(true);
         }
 
@@ -73,6 +76,7 @@ public class T_WanderCollector : ActionTask
 
                         if (dist < nearDist)
                         {
+                            nearDist = dist;
                             closestIndex = i;
                         }
                     }
@@ -89,8 +93,21 @@ public class T_WanderCollector : ActionTask
 
         if (path.reachedDestination)
         {
+            animator.SetInteger("Moving", 1);
+            path.maxSpeed = aIParameters._walkSpeed();
             SearchRandomPickup();
         }
+        else
+        {
+            float closeDistance = 20f;
+            float current = (path.destination - agent.transform.position).magnitude;
+            if (current <= closeDistance && current > path.endReachedDistance)
+            {
+                animator.SetInteger("Moving", 2);
+                path.maxSpeed = aIParameters._runSpeed();
+            }
+        }
+
     }
 
     // Right now, search a random active point pickup position (TODO: implement precision about the location depending on how many times the AI played the level)

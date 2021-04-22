@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Simulation.Games;
 
-public class AIParameters : AI
+public class AIParameters : AI // TODO: child classes depending on weapon and psychology
 {
     [SerializeField]
     [Range(0, 2)]
@@ -51,8 +51,8 @@ public class AIParameters : AI
     float respawnTime = 5f;
 
     [SerializeField]
-    [Range(5f, 15f)]
-    float audioPerceptionRadius = 10f;
+    [Range(10f, 20f)]
+    float audioPerceptionRadius = 15f;
 
     [SerializeField]
     [Range(0f, 10f)]
@@ -78,6 +78,10 @@ public class AIParameters : AI
     [Range(5f, 10f)]
     float rifleCoverMaxDist = 8f;
 
+    [SerializeField]
+    [Range(0f, 5f)]
+    float killerInspectTime = 2f;
+
     [HideInInspector]
     public int currentPoints = 0;
 
@@ -98,6 +102,7 @@ public class AIParameters : AI
     public float _aimSpeedMultiAudio() => aimSpeedMultiAudio;
     public float _rifleCoverMinTriggerDist() => rifleCoverMinTriggerDist;
     public float _rifleCoverMaxDist() => rifleCoverMaxDist;
+    public float _killerInspectTime() => killerInspectTime;
 
     private void Start()
     {

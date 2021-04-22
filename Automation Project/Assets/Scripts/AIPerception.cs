@@ -16,6 +16,7 @@ public class AIPerception : AI
     public Vector3[] _raycastTargetOffsets() => raycastTargetOffsets;
     AILogic aILogic;
     List<GameObject> audioDetected;
+    public List<GameObject> _audioDetected() => audioDetected;
     AIPerception aIPerception;
     void Start()
     {
@@ -183,6 +184,7 @@ public class AIPerception : AI
         return audioDetected.Contains(enemy);
     }
 
+    // To an enemy with index
     public bool InLineOfFireWithAI (int index)
     {
         GameObject go = PlayerManager.instance.GetChildByIndex(aILogic._lastAggro());
@@ -206,6 +208,28 @@ public class AIPerception : AI
         return false;
     }
 
+    // Enemy visually detected at all
+    public bool EnemyVisuallyDetected(GameObject enemy) => LOF_FromNodePos(transform.position, enemy) != 0 && EnemyWithinViewAngle(enemy);
+
+    // Enemy within horizontal view Angle
+    public bool EnemyWithinViewAngle (GameObject enemy)
+    {
+        AIPerception aIPerception = enemy.GetComponent<AIPerception>();
+        Vector3 waistPosition = (transform.position + transform.up * parameters._waistPositionOffset());
+        Vector3 enemyWaistPosition = aIPerception.col.gameObject.transform.position
+            + aIPerception.col.gameObject.transform.up * parameters._headPositionOffset();
+        Vector3 dirToEnemy = enemyWaistPosition - waistPosition;
+
+        float horizontalAngle = Vector3.Angle(transform.forward, dirToEnemy);
+        if (horizontalAngle <= parameters._maxViewAngle() / 2f)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    // To all enemies from postion
     public bool LOF_FromNodePos(Vector3 nodePos)
     {
         for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
@@ -244,6 +268,8 @@ public class AIPerception : AI
         return false;
     }
 
+
+    // To an enemy from position
     public int LOF_FromNodePos(Vector3 nodePos, GameObject enemy)
     {
         int ret = 0;
@@ -268,8 +294,7 @@ public class AIPerception : AI
         return ret;
     }
 
-
-    /*public void OnDrawGizmos ()
+   /* public void OnDrawGizmos ()
     {
         if (transform != null && audioDetected != null)
         {

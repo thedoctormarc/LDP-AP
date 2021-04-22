@@ -1280,7 +1280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableAction: 0
   disableAction: 0
-  _graph: {fileID: 11400000, guid: 15d2daf471ad17e46b6b50b1aacbf910, type: 2}
+  _graph: {fileID: 11400000, guid: f5445fd8d49830a4ea7db3f2aa4aac0f, type: 2}
   _blackboard: {fileID: 4886186841083615260}
 --- !u!114 &4886186841083615260
 MonoBehaviour:
@@ -1323,13 +1323,14 @@ MonoBehaviour:
   maxHealth: 75
   currentHealth: 0
   respawnTime: 5
-  audioPerceptionRadius: 10
+  audioPerceptionRadius: 15
   timeUntilDeAggro: 8
   shotgunTargetFightDist: 5
   walkSpeed: 2
   runSpeed: 3.5
   rifleCoverMinTriggerDist: 15
   rifleCoverMaxDist: 8
+  killerInspectTime: 2
   currentPoints: 0
 --- !u!114 &4886186841083615262
 MonoBehaviour:
