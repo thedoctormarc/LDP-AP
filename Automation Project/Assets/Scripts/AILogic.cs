@@ -23,7 +23,11 @@ public class AILogic : AI
     public float currentHealth;
     int lastAggro;
     public int _lastAggro() => lastAggro;
-    AIPath path;
+
+    private void Awake()
+    {
+         
+    }
 
     void Start()
     {
@@ -31,7 +35,6 @@ public class AILogic : AI
         animator = gameObject.GetComponent<Animator>();
         bb = gameObject.GetComponent<Blackboard>();
         currentWeapon = weaponSlot.transform.GetChild(0).gameObject.name;
-        path = gameObject.GetComponent<AIPath>();
         weaponOffsets = new Dictionary<string, Vector3>()
         {
             { "rifle_idle", new Vector3(0.126f, 1.151f, 0.44f) },
@@ -126,6 +129,8 @@ public class AILogic : AI
         animator.SetInteger("Moving", 0);
         animator.SetBool("Dead", true);
         bb.SetValue("dead", true);
+        Vector3 max = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        bb.SetValue("lastTarget", max);
     }
 
  

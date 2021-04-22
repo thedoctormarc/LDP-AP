@@ -21,7 +21,8 @@ public class T_WanderCollector : ActionTask
         animator = agent.gameObject.GetComponent<Animator>();
         aILogic = agent.gameObject.GetComponent<AILogic>();
         bb = agent.gameObject.GetComponent<Blackboard>();
-        SearchRandomPickup();
+        Vector3 max = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        bb.SetValue("lastTarget", max);
 
         return null;
     }
@@ -33,6 +34,13 @@ public class T_WanderCollector : ActionTask
         path.canSearch = true;
         aILogic.currentState = AILogic.AI_State.walk;
         aILogic.RelocateWeapon();
+
+        Vector3 lastTarget = bb.GetValue<Vector3>("lastTarget");
+        if (lastTarget.x == float.MaxValue) // search new target if I didnt have one previous to a fight
+        {
+            SearchRandomPickup();
+        }
+     
     }
 
 
@@ -111,6 +119,7 @@ public class T_WanderCollector : ActionTask
         var grid = AstarPath.active.data.gridGraph;
         GraphNode targetNode = grid.GetNearest(activePoints[j].transform.position).node;
         path.destination = (Vector3)targetNode.position;
+        bb.SetValue("lastTarget", path.destination);
         animator.SetInteger("Moving", 1);
     }
 

@@ -69,6 +69,7 @@ public class T_Relocate : ActionTask
 
 
         path.destination = (Vector3)rNode.position;
+        bb.SetValue("lastTarget", path.destination);
         animator.SetInteger("Moving", 1);
     }
 

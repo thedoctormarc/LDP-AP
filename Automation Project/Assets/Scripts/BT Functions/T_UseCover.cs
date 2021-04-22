@@ -72,6 +72,7 @@ public class T_UseCover : ActionTask
         }
 
         path.destination = (Vector3)rNode.position;
+        bb.SetValue("lastTarget", path.destination);
 
         return true;
     }

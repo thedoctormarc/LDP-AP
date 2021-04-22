@@ -51,6 +51,7 @@ public class T_ShotgunCloseGap : ActionTask
         aILogic.RelocateWeapon();
         Vector3 closePosWalkable = AstarPath.active.GetNearest(closePos, NNConstraint.Default).position;
         path.destination = closePosWalkable;
+        bb.SetValue("lastTarget", path.destination);
         path.maxSpeed = aIParameters._runSpeed();
     }
 
