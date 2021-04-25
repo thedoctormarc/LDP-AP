@@ -12,6 +12,7 @@ public class T_WanderCollector : ActionTask
     Animator animator;
     AILogic aILogic;
     Blackboard bb;
+    Pickup.Type lastSearched;
 
     protected override string OnInit()
     {
@@ -40,7 +41,7 @@ public class T_WanderCollector : ActionTask
         Vector3 lastTarget = bb.GetValue<Vector3>("lastTarget");
         if (lastTarget.x == float.MaxValue) // search new target if I didnt have one previous to a fight
         {
-            SearchRandomPickup();
+            SearchRandomPickup((aIParameters.NeedHealth()) ? Pickup.Type.HEALTH : Pickup.Type.POINTS);
         }
      
     }
@@ -55,6 +56,13 @@ public class T_WanderCollector : ActionTask
             EndAction(true);
         }
 
+        if (aIParameters.NeedHealth())
+        {
+            if (lastSearched != Pickup.Type.HEALTH)
+            {
+                SearchRandomPickup(Pickup.Type.HEALTH);
+            }
+        }
 
         List<GameObject> detected = aIPerception.VisualDetection(true);
         int closestIndex = 0;
@@ -69,7 +77,7 @@ public class T_WanderCollector : ActionTask
 
                 if (go.CompareTag("pickup"))
                 {
-                    if (go.GetComponent<Pickup>().pickupType == Pickup.Type.POINTS)
+                    if (go.GetComponent<Pickup>().pickupType == lastSearched)
                     {
                         targetFound = true;
                         float dist = (go.transform.position - agent.transform.position).magnitude;
@@ -95,7 +103,7 @@ public class T_WanderCollector : ActionTask
         {
             animator.SetInteger("Moving", 1);
             path.maxSpeed = aIParameters._walkSpeed();
-            SearchRandomPickup();
+            SearchRandomPickup((aIParameters.NeedHealth()) ? Pickup.Type.HEALTH : Pickup.Type.POINTS);
         }
         else
         {
@@ -106,38 +114,45 @@ public class T_WanderCollector : ActionTask
                 animator.SetInteger("Moving", 2);
                 path.maxSpeed = aIParameters._runSpeed();
             }
+            else
+            {
+                animator.SetInteger("Moving", 1);
+                path.maxSpeed = aIParameters._walkSpeed();
+            }
         }
 
     }
 
     // Right now, search a random active point pickup position (TODO: implement precision about the location depending on how many times the AI played the level)
-    void SearchRandomPickup() // TODO: search visible pickups first! If not, then random
+    void SearchRandomPickup(Pickup.Type type) // TODO: search visible pickups first! If not, then random
     {
         GameObject pickups = AppManager.instance._pickups();
-        List<GameObject> activePoints = new List<GameObject>();
+        List<GameObject> active = new List<GameObject>();
 
         for (int i = 0; i < pickups.transform.childCount; ++i)
         {
             GameObject child = pickups.transform.GetChild(i).gameObject;
 
             Pickup p = child.GetComponent<Pickup>();
-            if (p.pickupType == Pickup.Type.POINTS && p.Active())
+            if (p.pickupType == type && p.Active())
             {
-                activePoints.Add(child);
+                active.Add(child);
             }
         }
 
-        if (activePoints.Count == 0)
+        if (active.Count == 0)
         {
             // TODO: do something about it??
         }
 
-        int j = Random.Range(0, activePoints.Count - 1);
+        int j = Random.Range(0, active.Count - 1);
         var grid = AstarPath.active.data.gridGraph;
-        GraphNode targetNode = grid.GetNearest(activePoints[j].transform.position).node;
+        GraphNode targetNode = grid.GetNearest(active[j].transform.position).node;
         path.destination = (Vector3)targetNode.position;
         bb.SetValue("lastTarget", path.destination);
         animator.SetInteger("Moving", 1);
+
+        lastSearched = type;
     }
 
 

@@ -43,6 +43,10 @@ public class AIParameters : AI // TODO: child classes depending on weapon and ps
     [Range(50f, 100f)]
     float maxHealth = 50f;
 
+    [SerializeField]
+    [Range(10f, 25f)]
+    float searchPickupHealth = 20f;
+
     [HideInInspector]
     public float currentHealth;
 
@@ -125,4 +129,6 @@ public class AIParameters : AI // TODO: child classes depending on weapon and ps
     {
         ResetHealth();
     }
+
+    public bool NeedHealth() => currentHealth <= searchPickupHealth;
 }
