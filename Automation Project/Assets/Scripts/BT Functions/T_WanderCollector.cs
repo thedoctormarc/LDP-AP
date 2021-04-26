@@ -64,7 +64,8 @@ public class T_WanderCollector : ActionTask
             }
         }
 
-        List<GameObject> detected = aIPerception.VisualDetection(true);
+        aIPerception.VisualDetection(true);
+        List<GameObject> detected = aIPerception._visuallyDetected();
         int closestIndex = 0;
         float nearDist = float.MaxValue;
         bool targetFound = false;

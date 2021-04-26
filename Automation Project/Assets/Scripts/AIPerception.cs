@@ -17,22 +17,25 @@ public class AIPerception : AI
     AILogic aILogic;
     List<GameObject> audioDetected;
     public List<GameObject> _audioDetected() => audioDetected;
+    List<GameObject> visuallyDetected;
+    public List<GameObject> _visuallyDetected() => visuallyDetected;
     AIPerception aIPerception;
     void Start()
     {
         audioDetected = new List<GameObject>();
+        visuallyDetected = new List<GameObject>();
         parameters = gameObject.GetComponent<AIParameters>();
         aILogic = gameObject.GetComponent<AILogic>();
         aIPerception = gameObject.GetComponent<AIPerception>();
     }
 
-    public List<GameObject> VisualDetection(bool detectPickups)
+    public void VisualDetection(bool detectPickups = false, bool detectAllies = false)
     {
-        List<GameObject> ret = new List<GameObject>();
 
         if ((visualTime += Time.deltaTime) >= parameters._visualRefreshTime())
         {
             visualTime = 0f;
+            visuallyDetected.Clear();
 
             // Detect enemies
             for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
@@ -45,7 +48,7 @@ public class AIPerception : AI
                 }
 
                 AIParameters aIParameters = child.GetComponent<AIParameters>();
-                if (aIParameters._team() == parameters._team())
+                if (aIParameters._team() == parameters._team() && detectAllies == false)
                 {
                     continue;
                 }
@@ -99,8 +102,13 @@ public class AIPerception : AI
                                 if (aILogic.TriggerAggro(hit.transform.parent.gameObject))
                                 {
 
-                                    ret.Add(hit.transform.parent.gameObject);
-                                    return ret;
+                                    visuallyDetected.Add(hit.transform.parent.gameObject);
+
+                                    // For agents like the killer, once an enemy is detected, just return
+                                    if (detectAllies == false)
+                                    {
+                                        return;
+                                    }
                                 }
                                 
                                 // TODO: trigger aggro in the other AI
@@ -133,7 +141,7 @@ public class AIPerception : AI
 
                         if (LOF_ToObjectPos(pickup))
                         {
-                            ret.Add(pickup);
+                            visuallyDetected.Add(pickup);
                         }
                     }
 
@@ -141,10 +149,9 @@ public class AIPerception : AI
             }
         }
 
-        return ret;
     }
 
-    public void AuditiveDetection()
+    public void AuditiveDetection(bool detectAllies = false)
     {
         if ((auditiveTime += Time.deltaTime) >= parameters._auditiveRefreshTime())
         {
@@ -164,7 +171,7 @@ public class AIPerception : AI
                     {
                         AIParameters aIParameters = go.GetComponent<AIParameters>();
 
-                        if (aIParameters._team() != parameters._team())
+                        if (aIParameters._team() != parameters._team() || detectAllies)
                         {
                             Animator animator = go.GetComponent<Animator>();
 

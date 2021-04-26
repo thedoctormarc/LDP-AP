@@ -4,7 +4,7 @@ using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 
-public class T_WanderKiller : ActionTask
+public class T_WanderSocializer : ActionTask
 {
     AIPath path;
     AIPerception aIPerception;
@@ -54,36 +54,83 @@ public class T_WanderKiller : ActionTask
             EndAction(true);
         }
 
-        aIPerception.VisualDetection(false);
-        aIPerception.AuditiveDetection();
 
         if (path.reachedDestination)
         {
             RandomRelocate();
         }
 
+        aIPerception.VisualDetection(false, true);
+        aIPerception.AuditiveDetection(true);
+
+        GameObject closestAudio = agent.gameObject;
+        GameObject closestVisual = agent.gameObject;
+
         if (aIPerception._audioDetected().Count > 0)
         {
-            float closest = float.MaxValue;
-            int index = 0;
-            for (int i = 0; i < aIPerception._audioDetected().Count; ++i)
+            closestAudio = FindClosestTarget(aIPerception._audioDetected());
+        }
+  
+        if (aIPerception._visuallyDetected().Count > 0)
+        {
+            closestVisual = FindClosestTarget(aIPerception._visuallyDetected());
+        }
+
+        GameObject closest = agent.gameObject;
+
+        if (closestAudio != agent.gameObject || closestVisual != agent.gameObject)
+        {
+            if (closestAudio == agent.gameObject)
             {
-                GameObject go = aIPerception._audioDetected()[i];
-                float dist = (go.transform.position - agent.transform.position).magnitude;
-                if (dist < closest)
-                {
-                    closest = dist;
-                    index = i;
-                }
+                closest = closestVisual;
             }
 
-          
-            GameObject detected = aIPerception._audioDetected()[index];
+            else if (closestVisual == agent.gameObject)
+            {
+                closest = closestAudio;
+            }
 
-            path.destination = detected.transform.position;
+            else
+            {
+                float distAudio = (closestAudio.transform.position - agent.transform.position).magnitude;
+                float distVisual = (closestVisual.transform.position - agent.transform.position).magnitude;
+
+                closest = (distAudio < distVisual) ? closestAudio : closestVisual;
+            }
+
+            // For the moment, go to the ally's position
+
+            path.destination = closest.transform.position;
             bb.SetValue("lastTarget", path.destination);
         }
 
+    }
+
+    // find closest ally detected (visual or audio) that is aggroing an enemy
+    GameObject FindClosestTarget(List<GameObject> detected)
+    {
+        GameObject ret = agent.gameObject;
+        float closest = float.MaxValue;
+
+        for (int i = 0; i < detected.Count; ++i)
+        {
+            GameObject go = detected[i];
+
+            if (go.GetComponent<Blackboard>().GetValue<bool>("aggro") == false)
+            {
+                continue;
+            }
+
+            float dist = (go.transform.position - agent.transform.position).magnitude;
+
+            if (dist < closest)
+            {
+                closest = dist;
+                ret = go;
+            }
+        }
+
+        return ret;
     }
 
 
