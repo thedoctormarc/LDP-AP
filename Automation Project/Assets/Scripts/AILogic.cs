@@ -4,6 +4,7 @@ using UnityEngine;
 using NodeCanvas.Framework;
 using Pathfinding;
 
+
 public class AILogic : AI
 {
     public enum AI_State { idle, walk, run, fire, die };
@@ -62,6 +63,8 @@ public class AILogic : AI
         {
             aggrodEnemiesIndexes[i] = false;
         }
+
+    
     }
 
     void Update()

@@ -110,14 +110,15 @@ public class AIParameters : AI // TODO: child classes depending on weapon and ps
 
     private void Start()
     {
-       // GameSimManager.Instance.FetchConfig(OnConfigFetched);
         ResetHealth();
+        GameSimManager.Instance.FetchConfig(OnConfigFetched);
     }
 
     void OnConfigFetched(GameSimConfigResponse config)
     {
-        aimSpread = config.GetFloat("T" + team.ToString() + " aimSpread");
-        maxViewAngle = config.GetFloat("T" + team.ToString() + " maxViewAngle");
+        aimSpread = config.GetFloat("aimSpread");
+        respawnTime = config.GetFloat("respawnTime");
+        maxViewAngle = config.GetFloat("maxViewAngle");
     }
 
     public void ResetHealth()
