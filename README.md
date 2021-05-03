@@ -9,3 +9,7 @@ Said workflow would permit level designers analyze their work by using AI capabl
 Finally, I decided to delimit my thesis inside the 3D action genre provided that therein lie a series of subgenres with substantial map differences that can share level design variables/principles, albeit with some singularities.
 
 ![Preview](/Media/LOF.PNG?raw=true "Title")
+
+![Preview](/Media/Dust2 Replica 2.PNG?raw=true "Title")
+
+![Preview](/Media/Astar.PNG?raw=true "Title")
