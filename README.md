@@ -7,3 +7,5 @@ As a map creator, I thus concluded that, in order to speed up the process and be
 Said workflow would permit level designers analyze their work by using AI capable of translating those design guidelines into map navigation and feedback. 
 
 Finally, I decided to delimit my thesis inside the 3D action genre provided that therein lie a series of subgenres with substantial map differences that can share level design variables/principles, albeit with some singularities.
+
+![Preview](media/LOF.PNG?raw=true "Title")
