@@ -10,6 +10,6 @@ Finally, I decided to delimit my thesis inside the 3D action genre provided that
 
 ![Preview](/Media/LOF.PNG?raw=true "Title")
 
-![Preview](/Media/Dust2%20Replica%202.?raw=true "Title")
+![Preview](/Media/Dust2Replica.PNG?raw=true "Title")
 
 ![Preview](/Media/Astar.PNG?raw=true "Title")
