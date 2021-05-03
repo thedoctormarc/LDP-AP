@@ -28,10 +28,6 @@ public class PlayerManager : MonoBehaviour
             debug = !debug;
         }
 
-       if (Input.GetKeyDown(KeyCode.RightArrow) == true)
-        {
-
-        }
     }
 
     public bool DamageAI(float damage, GameObject receptor, GameObject emitter) // de-aggro killer, killed and all other players that were aggro-ing the killed

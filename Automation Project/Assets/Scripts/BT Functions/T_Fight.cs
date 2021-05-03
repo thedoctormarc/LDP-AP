@@ -67,8 +67,6 @@ public class T_Fight : ActionTask
 
     bool Aim()
     {
-        // TODO: only loop enemies, and aim at the highest priority!!! (Priority system)
-
         for (int i = 0; i < aILogic._aggrodEnemiesIndexes().Length; ++i)
         {
 
@@ -77,14 +75,12 @@ public class T_Fight : ActionTask
                 continue;
             }
 
-            // Reference: https://docs.unity3d.com/ScriptReference/Vector3.RotateTowards.html
-
             GameObject enemy = PlayerManager.instance.transform.GetChild(i).gameObject;
             AIParameters aIParameters = enemy.GetComponent<AIParameters>();
             GameObject weapon = aILogic._weaponSlot().transform.GetChild(0).gameObject;
 
             Vector3 origin = weapon.transform.Find("Weapon Tip Position").position;
-            Vector3 destination = enemy.transform.position + enemy.transform.up * aIParameters._headPositionOffset(); // TODO: if shotgun or sniper, aim at the body
+            Vector3 destination = enemy.transform.position + enemy.transform.up * aIParameters._headPositionOffset();  
             Vector3 targetDir = destination - origin;
 
             float aimSpeed = AIParameters._aimSpeed() *
@@ -95,17 +91,11 @@ public class T_Fight : ActionTask
             Vector3 newAimDir = Vector3.RotateTowards(currentAimDir, targetDir, aimSpeed, 0.0f);
             currentAimDir = newAimDir;
 
-            // TODO: check this does not mess up right and up vectors
             Vector3 newForwadVector = agent.transform.forward;
             newForwadVector.z = newAimDir.z;
             agent.transform.rotation = Quaternion.LookRotation(newForwadVector);
 
             currentAimVector = currentAimDir * targetDir.magnitude;
-
-            if (PlayerManager.instance.debug)
-            {
-                Debug.DrawRay(origin, currentAimVector, Color.cyan);
-            }
 
             currentDestination = origin + currentAimVector;
             if ((currentDestination - destination).magnitude <= aimThreshold)
@@ -122,9 +112,6 @@ public class T_Fight : ActionTask
     {
         if ((currentFireTime += Time.deltaTime) >= weaponParameters._fireRate() / 100f)
         {
-            Debug.Log("AI is firing!!");
-          //   aILogic._weaponSlot().transform.GetChild(0).GetComponent<AudioSource>().Play(); // TODO: only when human player
-
             currentFireTime = 0f;
 
             float signedAimSpread = AIParameters._aimSpread() / 2f;
@@ -139,11 +126,9 @@ public class T_Fight : ActionTask
             Vector3 origin = aILogic._weaponSlot().transform.GetChild(0).Find("Weapon Tip Position").position;
             Vector3 direction = bulletDestination - origin;
 
-            // TODO: encapsulate in one function in aiperception
             if (Physics.Raycast(origin, direction.normalized, out hit, Mathf.Infinity))
             {
 
-                // 3. Direct hit to an enemy part
                 if (hit.transform.parent.gameObject.CompareTag("Player"))
                 {
 
@@ -153,22 +138,10 @@ public class T_Fight : ActionTask
                         return;
                     }
 
-                    // Debug
-                    if (PlayerManager.instance.debug)
-                    {
-                        Debug.DrawRay(origin, direction.normalized, Color.green);
-                        Debug.Log("AI Hit an enemy!!");
-                    }
-
-                    if (PlayerManager.instance.DamageAI(weaponParameters.GetDamageAtDistance(direction.magnitude), hit.transform.parent.gameObject, agent.gameObject)) // TODO: dont de-aggro completely, only remove particular threat
+                    if (PlayerManager.instance.DamageAI(weaponParameters.GetDamageAtDistance(direction.magnitude), hit.transform.parent.gameObject, agent.gameObject))  
                     {
                         EndAction(true);
                     };
-                }
-                else
-                {
-                    // Debug
-                    Debug.DrawRay(origin, direction, Color.red);
                 }
             }
         }

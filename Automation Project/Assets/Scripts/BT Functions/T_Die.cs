@@ -63,7 +63,6 @@ public class T_Die : ActionTask
         agent.transform.position = (Vector3)rNode.position;
 
         // Reset
-        //     gus.tag = gusTag;
         animator.SetBool("Dead", false);
         bb.SetValue("dead", false);
         aILogic.currentState = AILogic.AI_State.idle;
