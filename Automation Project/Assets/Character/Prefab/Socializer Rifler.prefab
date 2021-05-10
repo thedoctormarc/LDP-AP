@@ -1388,6 +1388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+  pType: 2
   weaponSlot: {fileID: 4886186841812782220}
   currentHealth: 0
 --- !u!1 &4886186841091751728

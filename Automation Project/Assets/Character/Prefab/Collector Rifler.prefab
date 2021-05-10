@@ -1321,6 +1321,7 @@ MonoBehaviour:
   visualRefreshTime: 0.25
   auditiveRefreshTime: 0.25
   maxHealth: 75
+  searchPickupHealth: 20
   currentHealth: 0
   respawnTime: 5
   audioPerceptionRadius: 15
@@ -1387,6 +1388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+  pType: 1
   weaponSlot: {fileID: 4886186841812782220}
   currentHealth: 0
 --- !u!1 &4886186841091751728

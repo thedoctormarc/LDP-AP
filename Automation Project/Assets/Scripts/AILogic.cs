@@ -8,8 +8,10 @@ using Pathfinding;
 public class AILogic : AI
 {
     public enum AI_State { idle, walk, run, fire, die };
+    public enum Player_Type { killer, collector, socializer}
     [HideInInspector]
     public AI_State currentState;
+    public Player_Type pType;
     string currentWeapon;
     public Dictionary<string, Vector3> weaponOffsets;
     [SerializeField]
@@ -24,13 +26,9 @@ public class AILogic : AI
     public float currentHealth;
     int lastAggro;
     public int _lastAggro() => lastAggro;
+    public string _weapon() => currentWeapon;
 
     private void Awake()
-    {
-         
-    }
-
-    void Start()
     {
         currentState = AI_State.idle;
         animator = gameObject.GetComponent<Animator>();
@@ -64,6 +62,11 @@ public class AILogic : AI
             aggrodEnemiesIndexes[i] = false;
         }
 
+    }
+
+    void Start()
+    {
+        
     
     }
 
