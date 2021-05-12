@@ -29,7 +29,13 @@ public class T_UseCover : ActionTask
 
     protected override void OnExecute()
     {
-        enemy = PlayerManager.instance.GetChildByIndex(aILogic._lastAggro());
+        enemy = aILogic._lastAggro();
+
+        if (enemy == null)
+        {
+            EndAction(true);
+            return;
+        }
 
 
         // search new position. If not found, just fight
@@ -50,18 +56,27 @@ public class T_UseCover : ActionTask
     bool SearchSuitablePosition(bool doEndAction)
     {
         var grid = AstarPath.active.data.gridGraph;
-     
-        int i = 0;
-        GraphNode rNode;
-        do
+        int threshold = 150;
+
+        GraphNode rNode = grid.GetNearest(agent.transform.position).node;
+
+        // Try to find a position suitable for fighting
+        bool found = false;
+
+        for (int i = 0; i < threshold; ++i)
         {
             rNode = grid.nodes[Random.Range(0, grid.nodes.Length)];
-            ++i;
+
+            if (rNode.Walkable == true && PositionSuitable(rNode, enemy) == true)
+            {
+                found = true;
+                break;
+            }
         }
-        while (PositionSuitable(rNode, enemy) == false && i <= grid.nodes.Length);
+
 
         // no position found
-        if (i >= grid.nodes.Length)
+        if (found == false)
         {
             if (doEndAction)
             {

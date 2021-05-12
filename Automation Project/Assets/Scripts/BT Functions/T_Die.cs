@@ -10,8 +10,6 @@ public class T_Die : ActionTask
     AIPerception aIPerception;
     Blackboard bb;
     Animator animator;
-    GraphUpdateScene gus;
-    string gusTag;
     float currentTime;
 
     protected override string OnInit()
@@ -22,8 +20,6 @@ public class T_Die : ActionTask
         animator = agent.gameObject.GetComponent<Animator>();
         bb = agent.gameObject.GetComponent<Blackboard>();
         aIParameters = agent.gameObject.GetComponent<AIParameters>();
-        gus = agent.transform.Find("GUS").GetComponent<GraphUpdateScene>();
-     //   gusTag = gus.tag;
 
         return null;
     }
@@ -34,7 +30,6 @@ public class T_Die : ActionTask
         path.canMove = false;
         path.canSearch = false;
         aILogic.currentState = AILogic.AI_State.die;
-    //    gus.tag = "Basic Ground"; // TODO: on respawn, set to previous tag
 
     }
 
@@ -51,14 +46,37 @@ public class T_Die : ActionTask
     {
         // Reposition
         var grid = AstarPath.active.data.gridGraph;
+        int threshold = 150;
 
-        GraphNode rNode;
-        do
+        GraphNode rNode = grid.GetNearest(agent.transform.position).node;
+
+        // Try to find a position without line of sight to enemy
+        bool found = false;
+
+        for (int i = 0; i < threshold; ++i)
         {
             rNode = grid.nodes[Random.Range(0, grid.nodes.Length)];
+
+            if (rNode.Walkable == true && aIPerception.LOF_FromNodePos((Vector3)rNode.position) == false)
+            {
+                found = true;
+                break;
+            }
         }
-        while (rNode.Walkable == false
-        || aIPerception.LOF_FromNodePos((Vector3)rNode.position));
+
+        // If not found just try to find a walkable position
+        if (found == false)
+        {
+            for (int i = 0; i < threshold; ++i)
+            {
+                rNode = grid.nodes[Random.Range(0, grid.nodes.Length)];
+
+                if (rNode.Walkable == true)
+                {
+                    break;
+                }
+            }
+        }
 
         agent.transform.position = (Vector3)rNode.position;
 

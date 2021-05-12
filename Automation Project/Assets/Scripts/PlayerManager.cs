@@ -45,8 +45,8 @@ public class PlayerManager : MonoBehaviour
             }
 
             // de-aggro both
-            receptor.GetComponent<AILogic>().DeAggro(GetChildIndex(emitter));
-            emitter.GetComponent<AILogic>().DeAggro(GetChildIndex(receptor));
+            receptor.GetComponent<AILogic>().DeAggro();
+            emitter.GetComponent<AILogic>().DeAggro();
 
             for (int i = 0; i < transform.childCount; ++i) // instantly de-aggro all AIs from the killer. TODO: de-aggro but not completely if more threats 
             {
@@ -56,7 +56,7 @@ public class PlayerManager : MonoBehaviour
                     continue;
                 }
 
-                go.GetComponent<AILogic>().DeAggro(GetChildIndex(receptor));
+                go.GetComponent<AILogic>().DeAggro();
             }
 
             // Unity Game Simulation

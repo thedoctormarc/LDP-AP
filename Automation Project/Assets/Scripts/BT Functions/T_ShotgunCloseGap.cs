@@ -30,10 +30,18 @@ public class T_ShotgunCloseGap : ActionTask
     // Update is called once per frame
     protected override void OnExecute()
     {
-        enemy = PlayerManager.instance.GetChildByIndex(aILogic._lastAggro());
+        enemy = aILogic._lastAggro();
+
+        if (enemy == null)
+        {
+            EndAction(true);
+            return;
+        }
+
+
 
         // search for close position near enemy, run towards it
-        Vector3 enemyPos = PlayerManager.instance.GetChildByIndex(aILogic._lastAggro()).transform.position;
+        Vector3 enemyPos = enemy.transform.position;
         Vector3 dir = (agent.transform.position - enemyPos).normalized;
         Vector3 closePos = enemyPos + dir * aIParameters._shotgunTargetFightDist();
 

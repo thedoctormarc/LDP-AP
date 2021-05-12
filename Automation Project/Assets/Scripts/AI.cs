@@ -21,7 +21,7 @@ public class AI : MonoBehaviour
 
     }
 
-    virtual public void OnDeAggro(GameObject go)
+    virtual public void OnDeAggro()
     {
 
     }

@@ -99,20 +99,15 @@ public class AIPerception : AI
                                     Debug.Log("AI named " + gameObject.name + "will begin to fire AI named " + hit.transform.parent.gameObject.name);
                                 }
 
-                                if (aILogic.TriggerAggro(hit.transform.parent.gameObject))
+
+                                // Add to visually detected, but only aggro other teams!
+                                visuallyDetected.Add(hit.transform.parent.gameObject);
+
+                                if (hit.transform.parent.gameObject.GetComponent<AIParameters>()._team() != parameters._team())
                                 {
-
-                                    visuallyDetected.Add(hit.transform.parent.gameObject);
-
-                                    // For agents like the killer, once an enemy is detected, just return
-                                    if (detectAllies == false)
-                                    {
-                                        return;
-                                    }
+                                    aILogic.TriggerAggro(hit.transform.parent.gameObject);
                                 }
-                                
-                                // TODO: trigger aggro in the other AI
-                           
+
                             }
            
                         }
@@ -122,7 +117,7 @@ public class AIPerception : AI
             }
 
 
-            // Detect pickups --> after enemies!! (return), search visible pickups
+            // Detect pickups 
             if (detectPickups)
             {
                 for (int i = 0; i < AppManager.instance._pickups().transform.childCount; ++i)
@@ -191,11 +186,9 @@ public class AIPerception : AI
         return audioDetected.Contains(enemy);
     }
 
-    // To an enemy with index
-    public bool InLineOfFireWithAI (int index)
+    // To an enemy 
+    public bool InLineOfFireWithAI (GameObject go)
     {
-        GameObject go = PlayerManager.instance.GetChildByIndex(aILogic._lastAggro());
-
         foreach (Vector3 targetOffset in raycastTargetOffsets)
         {
             RaycastHit hit;
@@ -329,12 +322,9 @@ public class AIPerception : AI
     }
 
 
-    public override void OnDeAggro(GameObject go)
+    public override void OnDeAggro()
     {
-        if (audioDetected.Contains(go))
-        {
-            audioDetected.Remove(go);
-        }
+        audioDetected.Remove(aILogic._lastAggro());
     }
 
     public override void OnDeath()
@@ -346,20 +336,11 @@ public class AIPerception : AI
 
     public bool LostAggroLOF()
     {
-
-        for (int i = 0; i < aILogic._aggrodEnemiesIndexes().Length; ++i)
+ 
+        if (aILogic._lastAggro() == null || aIPerception.InLineOfFireWithAI(aILogic._lastAggro()) == false)
         {
-            if (aILogic._aggrodEnemiesIndexes()[i] == false)
-            {
-                continue;
-            }
-
-
-            if (aIPerception.InLineOfFireWithAI(i) == false)
-            {
-                aILogic.DeAggro(i);
-                return true;
-            }
+            aILogic.DeAggro();
+            return true;
         }
 
         return false;

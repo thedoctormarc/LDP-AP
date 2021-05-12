@@ -8,10 +8,9 @@ using Pathfinding;
 public class AILogic : AI
 {
     public enum AI_State { idle, walk, run, fire, die };
-    public enum Player_Type { killer, collector, socializer}
+
     [HideInInspector]
     public AI_State currentState;
-    public Player_Type pType;
     string currentWeapon;
     public Dictionary<string, Vector3> weaponOffsets;
     [SerializeField]
@@ -20,12 +19,10 @@ public class AILogic : AI
     public GameObject _weaponSlot() => weaponSlot;
     Animator animator;
     Blackboard bb;
-    bool[] aggrodEnemiesIndexes;
-    public bool[] _aggrodEnemiesIndexes() => aggrodEnemiesIndexes;
     [HideInInspector]
     public float currentHealth;
-    int lastAggro;
-    public int _lastAggro() => lastAggro;
+    GameObject lastAggro;
+    public GameObject _lastAggro() => lastAggro;
     public string _weapon() => currentWeapon;
 
     private void Awake()
@@ -56,12 +53,6 @@ public class AILogic : AI
 
         weaponParameters = weaponSlot.transform.GetChild(0).GetComponent<WeaponParameters>();
 
-        aggrodEnemiesIndexes = new bool[PlayerManager.instance.transform.childCount];
-        for (int i = 0; i < aggrodEnemiesIndexes.Length; ++i)
-        {
-            aggrodEnemiesIndexes[i] = false;
-        }
-
     }
 
     void Start()
@@ -90,34 +81,17 @@ public class AILogic : AI
             return false;
         }
 
-        for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
-        {
-            if (PlayerManager.instance.transform.GetChild(i).gameObject == enemy)
-            {
-                aggrodEnemiesIndexes[i] = true;
-                lastAggro = i;
-                break;
-            }
-        }
-
+        lastAggro = enemy;
         currentState = AI_State.fire;
-        Debug.Log("AI Detected Enemy!");
         bb.SetValue("aggro", true);
         animator.SetBool("Aggro", true);
-      //  animator.SetInteger("Moving", 0);
         RelocateWeapon();
 
         return true;
     }
 
-    public void DeAggro(int index)
+    public void DeAggro()
     {
-        if (index >= 0 && index < aggrodEnemiesIndexes.Length)
-        {
-            aggrodEnemiesIndexes[index] = false;
-        }
-
-        // for the moment completely de-aggro (from all threats)
         bb.SetValue("aggro", false);  
         animator.SetBool("Aggro", false);
         RelocateWeapon();
@@ -125,8 +99,10 @@ public class AILogic : AI
         var AIScripts = gameObject.GetComponents<AI>();
         foreach (AI script in AIScripts)
         {
-            script.OnDeAggro(PlayerManager.instance.GetChildByIndex(index));
+            script.OnDeAggro();
         }
+
+        lastAggro = null;
     }
 
     public override void OnDeath()

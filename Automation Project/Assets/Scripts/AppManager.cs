@@ -29,13 +29,13 @@ public class AppManager : MonoBehaviour
     void Update()
     {
 
-        if (Time.realtimeSinceStartup >= simulationSeconds)
+    /*    if (Time.realtimeSinceStartup >= simulationSeconds)
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
             Application.Quit();
 #endif
-        }
+        }*/
     }
 }

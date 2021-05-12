@@ -5,6 +5,11 @@ using Unity.Simulation.Games;
 
 public class AIParameters : AI // TODO: child classes depending on weapon and psychology
 {
+    public enum Player_Type { killer, collector, socializer }
+
+    [SerializeField]
+    Player_Type pType;
+
     [SerializeField]
     [Range(0, 2)]
     int team;
@@ -89,6 +94,7 @@ public class AIParameters : AI // TODO: child classes depending on weapon and ps
     [HideInInspector]
     public int currentPoints = 0;
 
+    public Player_Type _pType() => pType;
     public float _aimSpread() => aimSpread;
     public float _aimSpeed() => aimSpeed;
     public float _headPositionOffset() => headPositionOffset;

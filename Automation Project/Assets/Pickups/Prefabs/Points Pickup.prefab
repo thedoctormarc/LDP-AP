@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupType: 1
-  cooldown: 10
+  cooldown: 15
   points: 10
 --- !u!54 &569308010374898424
 Rigidbody:

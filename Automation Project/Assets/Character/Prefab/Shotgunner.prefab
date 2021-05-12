@@ -1632,6 +1632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99577629f1be755489fa6cb46b01be82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pType: 0
   team: 1
   aimSpread: 0.8
   aimSpeed: 0.5
@@ -1642,6 +1643,7 @@ MonoBehaviour:
   visualRefreshTime: 0.25
   auditiveRefreshTime: 0.25
   maxHealth: 75
+  searchPickupHealth: 20
   currentHealth: 0
   respawnTime: 5
   audioPerceptionRadius: 15

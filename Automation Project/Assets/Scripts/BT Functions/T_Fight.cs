@@ -45,20 +45,21 @@ public class T_Fight : ActionTask
 
     protected override void OnUpdate()  
     {
-        // aIPerception.VisualPerception();
 
         if (bb.GetValue<bool>("dead") || !bb.GetValue<bool>("aggro"))
         {
             EndAction(true);
+            return;
         }
 
         if (aIPerception.LostAggroLOF())
         {
             EndAction(true);
+            return;
         }
 
         
-        if (Aim()) // TODO: recalculate from time to time if lost sight with target
+        if (Aim())  
         {
             Fire();
         }
@@ -67,44 +68,34 @@ public class T_Fight : ActionTask
 
     bool Aim()
     {
-        for (int i = 0; i < aILogic._aggrodEnemiesIndexes().Length; ++i)
+        GameObject enemy = aILogic._lastAggro();
+        AIParameters aIParameters = enemy.GetComponent<AIParameters>();
+        GameObject weapon = aILogic._weaponSlot().transform.GetChild(0).gameObject;
+
+        Vector3 origin = weapon.transform.Find("Weapon Tip Position").position;
+        Vector3 destination = enemy.transform.position + enemy.transform.up * aIParameters._headPositionOffset();
+        Vector3 targetDir = destination - origin;
+
+        float aimSpeed = AIParameters._aimSpeed() *
+            ((aIPerception.IsAudioDetected(enemy)) ? AIParameters._aimSpeedMultiAudio() : 1f)
+            * weapon.GetComponent<WeaponParameters>().GetAimMulti()
+            * Time.deltaTime;
+
+        Vector3 newAimDir = Vector3.RotateTowards(currentAimDir, targetDir, aimSpeed, 0.0f);
+        currentAimDir = newAimDir;
+
+        Vector3 newForwadVector = agent.transform.forward;
+        newForwadVector.z = newAimDir.z;
+        agent.transform.rotation = Quaternion.LookRotation(newForwadVector);
+
+        currentAimVector = currentAimDir * targetDir.magnitude;
+
+        currentDestination = origin + currentAimVector;
+        if ((currentDestination - destination).magnitude <= aimThreshold)
         {
-
-            if(aILogic._aggrodEnemiesIndexes()[i] == false)
-            {
-                continue;
-            }
-
-            GameObject enemy = PlayerManager.instance.transform.GetChild(i).gameObject;
-            AIParameters aIParameters = enemy.GetComponent<AIParameters>();
-            GameObject weapon = aILogic._weaponSlot().transform.GetChild(0).gameObject;
-
-            Vector3 origin = weapon.transform.Find("Weapon Tip Position").position;
-            Vector3 destination = enemy.transform.position + enemy.transform.up * aIParameters._headPositionOffset();  
-            Vector3 targetDir = destination - origin;
-
-            float aimSpeed = AIParameters._aimSpeed() *
-                ((aIPerception.IsAudioDetected(enemy)) ? AIParameters._aimSpeedMultiAudio() : 1f)
-                * weapon.GetComponent<WeaponParameters>().GetAimMulti()
-                * Time.deltaTime;
-
-            Vector3 newAimDir = Vector3.RotateTowards(currentAimDir, targetDir, aimSpeed, 0.0f);
-            currentAimDir = newAimDir;
-
-            Vector3 newForwadVector = agent.transform.forward;
-            newForwadVector.z = newAimDir.z;
-            agent.transform.rotation = Quaternion.LookRotation(newForwadVector);
-
-            currentAimVector = currentAimDir * targetDir.magnitude;
-
-            currentDestination = origin + currentAimVector;
-            if ((currentDestination - destination).magnitude <= aimThreshold)
-            {
-                return true;
-            }
-
+            return true;
         }
-            
+
         return false;
     }
 
