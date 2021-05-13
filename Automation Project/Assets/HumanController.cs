@@ -14,6 +14,7 @@ public class HumanController : MonoBehaviour
     private Parameters parameters;
     private float currentFireTime = 0f;
     private AILogic aILogic;
+    private AudioSource aS;
     //  public float Gravity = 9.8f;
     //  private float velocity = 0;
 
@@ -25,6 +26,7 @@ public class HumanController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         parameters = GetComponent<Parameters>();
         aILogic = GetComponent<AILogic>();
+        aS = transform.Find("Weapon Slot").GetChild(0).GetComponent<AudioSource>();
         wParameters = aILogic._weaponSlot().transform.GetChild(0).GetComponent<WeaponParameters>();
     }
 
@@ -80,6 +82,7 @@ public class HumanController : MonoBehaviour
             if ((currentFireTime += Time.deltaTime) >= wParameters._fireRate() / 100f)
             {
                 currentFireTime = 0f;
+                aS.Play();
                 RaycastHit hit;
                 bool collide = Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, Mathf.Infinity);
         
