@@ -20,7 +20,7 @@ public class Parameters : MonoBehaviour
     protected float respawnTime = 5f;
 
     [SerializeField]
-    [Range(1f, 2f)]
+    [Range(2.5f, 4f)]
     protected float walkSpeed = 1.5f;
 
     [SerializeField]
@@ -30,13 +30,20 @@ public class Parameters : MonoBehaviour
     [HideInInspector]
     public int currentPoints = 0;
 
+    [SerializeField]
+    float headPositionOffset = 1.65f;
+
+    [SerializeField]
+    float waistPositionOffset = 0.9f;
+
     public int _team() => team;
     public float _maxHealth() => maxHealth;
     public float _respawnTime() => respawnTime;
     public float _walkSpeed() => walkSpeed;
     public float _runSpeed() => runSpeed;
-
     public float _currentHealth() => currentHealth;
+    public float _headPositionOffset() => headPositionOffset;
+    public float _waistPositionOffset() => waistPositionOffset;
 
     // Start is called before the first frame update
     void Start()

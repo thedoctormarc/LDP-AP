@@ -69,11 +69,10 @@ public class T_Fight : ActionTask
     bool Aim()
     {
         GameObject enemy = aILogic._lastAggro();
-        AIParameters aIParameters = enemy.GetComponent<AIParameters>();
         GameObject weapon = aILogic._weaponSlot().transform.GetChild(0).gameObject;
 
         Vector3 origin = weapon.transform.Find("Weapon Tip Position").position;
-        Vector3 destination = enemy.transform.position + enemy.transform.up * aIParameters._headPositionOffset();
+        Vector3 destination = enemy.transform.position + enemy.transform.up * this.AIParameters._headPositionOffset();
         Vector3 targetDir = destination - origin;
 
         float aimSpeed = AIParameters._aimSpeed() *
@@ -123,8 +122,8 @@ public class T_Fight : ActionTask
                 if (hit.transform.parent.gameObject.CompareTag("Player"))
                 {
 
-                    AIParameters aIParameters = hit.transform.parent.gameObject.GetComponent<AIParameters>();
-                    if (aIParameters._team() == AIParameters._team())
+                    Parameters parameters = hit.transform.parent.gameObject.GetComponent<Parameters>();
+                    if (parameters._team() == AIParameters._team())
                     {
                         return;
                     }

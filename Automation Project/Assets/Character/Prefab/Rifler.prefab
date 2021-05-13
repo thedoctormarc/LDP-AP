@@ -1233,27 +1233,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
+  maxHealth: 75
+  respawnTime: 5
+  walkSpeed: 2
+  runSpeed: 3.5
+  currentPoints: 0
+  headPositionOffset: 1.65
+  waistPositionOffset: 0.9
+  pType: 0
   aimSpread: 0.8
   aimSpeed: 0.5
   aimSpeedMultiAudio: 1.5
-  headPositionOffset: 1.65
-  waistPositionOffset: 0.9
   maxViewAngle: 90
   visualRefreshTime: 0.25
   auditiveRefreshTime: 0.25
-  maxHealth: 75
   searchPickupHealth: 20
-  currentHealth: 0
-  respawnTime: 5
   audioPerceptionRadius: 15
   timeUntilDeAggro: 8
   shotgunTargetFightDist: 5
-  walkSpeed: 2
-  runSpeed: 3.5
   rifleCoverMinTriggerDist: 15
   rifleCoverMaxDist: 8
   killerInspectTime: 2
-  currentPoints: 0
 --- !u!114 &4886186841083615262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1266,7 +1266,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d38a3566c5304b41a76d359b6b0fee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  col: {fileID: 4886186841033935716}
   raycastTargetOffsets:
   - {x: 0, y: 2, z: 0}
   - {x: 0.15, y: 1, z: 0}
@@ -1308,6 +1307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c16a1c3c7dc434faf92598e7263f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 4886186841033935716}
   currentState: 0
   weaponSlot: {fileID: 4886186841812782220}
   currentHealth: 0

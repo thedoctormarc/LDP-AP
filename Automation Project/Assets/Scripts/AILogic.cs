@@ -8,7 +8,9 @@ using Pathfinding;
 public class AILogic : AI
 {
     public enum AI_State { idle, walk, run, fire, die };
-
+    [SerializeField]
+    Collider col;
+    public Collider _col() => col;
     [HideInInspector]
     public AI_State currentState;
     string currentWeapon;
@@ -114,10 +116,17 @@ public class AILogic : AI
         currentState = AI_State.die;
         animator.SetInteger("Moving", 0);
         animator.SetBool("Dead", true);
-        bb.SetValue("dead", true);
-        Vector3 max = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-        bb.SetValue("lastTarget", max);
+
+        if (IsHuman() == false)
+        {
+            bb.SetValue("dead", true);
+            Vector3 max = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            bb.SetValue("lastTarget", max);
+
+        }
+
     }
 
+    bool IsHuman() => GetComponent<HumanController>() != null;
  
 }

@@ -6,13 +6,19 @@ public class AppManager : MonoBehaviour
 {
     public static AppManager instance;
 
+    public enum gameMode { AI, Human}
+
     [SerializeField]
     float simulationSeconds = 120f;
 
     [SerializeField]
     GameObject pickups;
 
+    [SerializeField]
+    gameMode gMode;
+
     public GameObject _pickups () => pickups;
+    public gameMode _gMode() => gMode;
 
     private void Awake()
     {

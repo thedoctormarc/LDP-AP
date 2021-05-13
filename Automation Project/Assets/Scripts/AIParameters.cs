@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Simulation.Games;
 
-public class AIParameters : Parameters  // TODO: child classes depending on weapon and psychology
+public class AIParameters : Parameters  
 {
     public enum Player_Type { killer, collector, socializer }
 
@@ -21,12 +21,6 @@ public class AIParameters : Parameters  // TODO: child classes depending on weap
     [SerializeField]
     [Range(1.1f, 2f)]
     float aimSpeedMultiAudio = 1.5f;
-
-    [SerializeField]
-    float headPositionOffset = 1.65f;
-
-    [SerializeField]
-    float waistPositionOffset = 0.9f;
 
     [SerializeField]
     [Range(90f, 180f)]
@@ -72,8 +66,6 @@ public class AIParameters : Parameters  // TODO: child classes depending on weap
     public Player_Type _pType() => pType;
     public float _aimSpread() => aimSpread;
     public float _aimSpeed() => aimSpeed;
-    public float _headPositionOffset() => headPositionOffset;
-    public float _waistPositionOffset() => waistPositionOffset;
     public float _maxViewAngle() => maxViewAngle;
     public float _visualRefreshTime() => visualRefreshTime;
     public float _auditiveRefreshTime() => auditiveRefreshTime;

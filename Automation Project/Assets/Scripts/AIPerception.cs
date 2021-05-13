@@ -1,13 +1,9 @@
-﻿// Reference: https://docs.unity3d.com/ScriptReference/GeometryUtility.TestPlanesAABB.html
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AIPerception : AI
 {
-    [SerializeField]
-    Collider col;
     AIParameters parameters;
     float visualTime = 0f;
     float auditiveTime = 0f;
@@ -19,14 +15,12 @@ public class AIPerception : AI
     public List<GameObject> _audioDetected() => audioDetected;
     List<GameObject> visuallyDetected;
     public List<GameObject> _visuallyDetected() => visuallyDetected;
-    AIPerception aIPerception;
     void Start()
     {
         audioDetected = new List<GameObject>();
         visuallyDetected = new List<GameObject>();
         parameters = gameObject.GetComponent<AIParameters>();
         aILogic = gameObject.GetComponent<AILogic>();
-        aIPerception = gameObject.GetComponent<AIPerception>();
     }
 
     public void VisualDetection(bool detectPickups = false, bool detectAllies = false)
@@ -47,7 +41,7 @@ public class AIPerception : AI
                     continue;
                 }
 
-                AIParameters aIParameters = child.GetComponent<AIParameters>();
+                Parameters aIParameters = child.GetComponent<Parameters>();
                 if (aIParameters._team() == parameters._team() && detectAllies == false)
                 {
                     continue;
@@ -59,11 +53,11 @@ public class AIPerception : AI
                     continue;
                 }
 
-                AIPerception aIPerception = child.GetComponent<AIPerception>();
+                AILogic e_aILogic = child.GetComponent<AILogic>();
 
                 Vector3 waistPosition = (transform.position + transform.up * parameters._waistPositionOffset());
-                Vector3 enemyWaistPosition = aIPerception.col.gameObject.transform.position
-                    + aIPerception.col.gameObject.transform.up * parameters._headPositionOffset();
+                Vector3 enemyWaistPosition = e_aILogic._col().gameObject.transform.position
+                    + e_aILogic._col().gameObject.transform.up * parameters._headPositionOffset();
                 Vector3 dirToEnemy = enemyWaistPosition - waistPosition;
 
                 // Debug
@@ -81,7 +75,7 @@ public class AIPerception : AI
                     {
                         RaycastHit hit;
                         Vector3 origin = transform.position + transform.up * parameters._headPositionOffset();
-                        Vector3 destination = aIPerception.col.gameObject.transform.position + targetOffset;
+                        Vector3 destination = e_aILogic._col().gameObject.transform.position + targetOffset;
                         Vector3 direction = destination - origin;
 
                         if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
@@ -103,7 +97,7 @@ public class AIPerception : AI
                                 // Add to visually detected, but only aggro other teams!
                                 visuallyDetected.Add(hit.transform.parent.gameObject);
 
-                                if (hit.transform.parent.gameObject.GetComponent<AIParameters>()._team() != parameters._team())
+                                if (hit.transform.parent.gameObject.GetComponent<Parameters>()._team() != parameters._team())
                                 {
                                     aILogic.TriggerAggro(hit.transform.parent.gameObject);
                                 }
@@ -164,7 +158,7 @@ public class AIPerception : AI
                 {
                     if (go != gameObject)
                     {
-                        AIParameters aIParameters = go.GetComponent<AIParameters>();
+                        Parameters aIParameters = go.GetComponent<Parameters>();
 
                         if (aIParameters._team() != parameters._team() || detectAllies)
                         {
@@ -193,7 +187,7 @@ public class AIPerception : AI
         {
             RaycastHit hit;
             Vector3 origin = transform.position + transform.up * parameters._headPositionOffset();
-            Vector3 destination = go.GetComponent<AIPerception>().col.gameObject.transform.position + targetOffset;
+            Vector3 destination = go.GetComponent<AILogic>()._col().gameObject.transform.position + targetOffset;
             Vector3 direction = destination - origin;
 
             if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
@@ -214,10 +208,10 @@ public class AIPerception : AI
     // Enemy within horizontal view Angle
     public bool EnemyWithinViewAngle (GameObject enemy)
     {
-        AIPerception aIPerception = enemy.GetComponent<AIPerception>();
+        AILogic aiLogic = enemy.GetComponent<AILogic>();
         Vector3 waistPosition = (transform.position + transform.up * parameters._waistPositionOffset());
-        Vector3 enemyWaistPosition = aIPerception.col.gameObject.transform.position
-            + aIPerception.col.gameObject.transform.up * parameters._headPositionOffset();
+        Vector3 enemyWaistPosition = aiLogic._col().gameObject.transform.position
+            + aiLogic._col().gameObject.transform.up * parameters._headPositionOffset();
         Vector3 dirToEnemy = enemyWaistPosition - waistPosition;
 
         float horizontalAngle = Vector3.Angle(transform.forward, dirToEnemy);
@@ -235,13 +229,13 @@ public class AIPerception : AI
         for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
         {
             GameObject child = PlayerManager.instance.transform.GetChild(i).gameObject;
-            AIPerception aIPerception = child.GetComponent<AIPerception>();
+            AILogic aILogic = child.GetComponent<AILogic>();
 
             foreach (Vector3 targetOffset in raycastTargetOffsets)
             {
                 RaycastHit hit;
                 Vector3 origin = nodePos + transform.up * parameters._headPositionOffset();
-                Vector3 destination = aIPerception.col.gameObject.transform.position + targetOffset;
+                Vector3 destination = aILogic._col().gameObject.transform.position + targetOffset;
                 Vector3 direction = destination - origin;
 
                 if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
@@ -251,7 +245,7 @@ public class AIPerception : AI
                         continue;
                     }
 
-                    AIParameters aIParameters = child.GetComponent<AIParameters>();
+                    Parameters aIParameters = child.GetComponent<Parameters>();
                     if (aIParameters._team() == parameters._team())
                     {
                         continue;
@@ -273,13 +267,13 @@ public class AIPerception : AI
     public int LOF_FromNodePos(Vector3 nodePos, GameObject enemy)
     {
         int ret = 0;
-        AIPerception aIPerception = enemy.GetComponent<AIPerception>();
+        AILogic aILogic = enemy.GetComponent<AILogic>();
 
         foreach (Vector3 targetOffset in raycastTargetOffsets)
         {
             RaycastHit hit;
             Vector3 origin = nodePos + transform.up * parameters._headPositionOffset();
-            Vector3 destination = aIPerception.col.gameObject.transform.position + targetOffset;
+            Vector3 destination = aILogic._col().gameObject.transform.position + targetOffset;
             Vector3 direction = destination - origin;
 
             if (Physics.Raycast(origin, direction, out hit, Mathf.Infinity))
@@ -337,7 +331,7 @@ public class AIPerception : AI
     public bool LostAggroLOF()
     {
  
-        if (aILogic._lastAggro() == null || aIPerception.InLineOfFireWithAI(aILogic._lastAggro()) == false)
+        if (aILogic._lastAggro() == null || InLineOfFireWithAI(aILogic._lastAggro()) == false)
         {
             aILogic.DeAggro();
             return true;

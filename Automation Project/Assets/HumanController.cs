@@ -15,11 +15,8 @@ public class HumanController : MonoBehaviour
     private float currentFireTime = 0f;
     private AILogic aILogic;
     private AudioSource aS;
-    //  public float Gravity = 9.8f;
-    //  private float velocity = 0;
+    private float currentVel = 0f;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         camera = transform.Find("Line Of Sight").GetComponent<Camera>();
@@ -30,10 +27,14 @@ public class HumanController : MonoBehaviour
         wParameters = aILogic._weaponSlot().transform.GetChild(0).GetComponent<WeaponParameters>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Debug.DrawRay(camera.transform.position, camera.transform.forward * 100f, Color.white);
+
+        if (aILogic.currentState == AILogic.AI_State.die)
+        {
+            return;
+        }
 
         MovementInput();
         AimInput();
@@ -47,16 +48,16 @@ public class HumanController : MonoBehaviour
         float y = Input.GetAxis("Vertical") * parameters._walkSpeed();
         controller.Move((transform.right * x + transform.forward * y) * Time.deltaTime);
 
-        /*// Gravity
+        // Gravity
         if (controller.isGrounded)
         {
-            velocity = 0;
+            currentVel = 0;
         }
         else
         {
-            velocity -= Gravity * Time.deltaTime;
-            controller.Move(new Vector3(0, velocity, 0));
-        }*/
+            currentVel -= Physics.gravity.magnitude * Time.deltaTime;
+            controller.Move(new Vector3(0, currentVel, 0));
+        }
     }
 
     void AimInput()
@@ -90,20 +91,17 @@ public class HumanController : MonoBehaviour
                 if (collide)
                 {
 
-                    /*if (hit.transform.parent.gameObject.CompareTag("Player"))
+                    if (hit.transform.parent.gameObject.CompareTag("Player"))
                     {
 
-                        AIParameters aIParameters = hit.transform.parent.gameObject.GetComponent<AIParameters>();
-                        if (aIParameters._team() == AIParameters._team())
+                        Parameters aIParameters = hit.transform.parent.gameObject.GetComponent<Parameters>();
+                        if (aIParameters._team() == parameters._team())
                         {
                             return;
                         }
 
-                        if (PlayerManager.instance.DamageAI(weaponParameters.GetDamageAtDistance(direction.magnitude), hit.transform.parent.gameObject, agent.gameObject))
-                        {
-                            EndAction(true);
-                        };
-                    }*/
+                        PlayerManager.instance.DamageAI(wParameters.GetDamageAtDistance((hit.point - transform.position).magnitude), hit.transform.parent.gameObject, gameObject);
+                    }
                 }
             }
         }

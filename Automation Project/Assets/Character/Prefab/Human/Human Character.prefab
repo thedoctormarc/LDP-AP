@@ -1076,7 +1076,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4886186841083615259}
-  - component: {fileID: 4886186841083615262}
   - component: {fileID: 4886186841083615257}
   - component: {fileID: 4886186841083615256}
   - component: {fileID: 8825965575175787476}
@@ -1107,29 +1106,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4886186841083615262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4886186841083615258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d38a3566c5304b41a76d359b6b0fee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  col: {fileID: 4886186841033935716}
-  raycastTargetOffsets:
-  - {x: 0, y: 2, z: 0}
-  - {x: 0.15, y: 1, z: 0}
-  - {x: -0.15, y: 1, z: 0}
-  - {x: 0, y: 1, z: 0.15}
-  - {x: 0, y: 1, z: -0.15}
-  - {x: 0.15, y: 0, z: 0}
-  - {x: -0.15, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0.15}
-  - {x: 0, y: 0, z: -0.15}
 --- !u!95 &4886186841083615257
 Animator:
   serializedVersion: 3
@@ -1161,6 +1137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c16a1c3c7dc434faf92598e7263f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 4886186841033935716}
   currentState: 0
   weaponSlot: {fileID: 4886186841812782220}
   currentHealth: 0
@@ -1192,9 +1169,11 @@ MonoBehaviour:
   team: 0
   maxHealth: 50
   respawnTime: 5
-  walkSpeed: 1.5
+  walkSpeed: 4
   runSpeed: 3.5
   currentPoints: 0
+  headPositionOffset: 1.65
+  waistPositionOffset: 0.9
 --- !u!143 &-3206789622403465787
 CharacterController:
   m_ObjectHideFlags: 0

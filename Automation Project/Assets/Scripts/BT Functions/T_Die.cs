@@ -6,7 +6,7 @@ public class T_Die : ActionTask
 {
     AIPath path;
     AILogic aILogic;
-    AIParameters aIParameters;
+    Parameters aIParameters;
     AIPerception aIPerception;
     Blackboard bb;
     Animator animator;
@@ -19,7 +19,7 @@ public class T_Die : ActionTask
         aIPerception = agent.gameObject.GetComponent<AIPerception>();
         animator = agent.gameObject.GetComponent<Animator>();
         bb = agent.gameObject.GetComponent<Blackboard>();
-        aIParameters = agent.gameObject.GetComponent<AIParameters>();
+        aIParameters = agent.gameObject.GetComponent<Parameters>();
 
         return null;
     }

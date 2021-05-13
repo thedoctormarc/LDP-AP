@@ -9,7 +9,7 @@ public class PointsPickup : Pickup
 
     public override void Disappear(GameObject player)
     {
-        player.GetComponent<AIParameters>().currentPoints += points;
+        player.GetComponent<Parameters>().currentPoints += points;
         mRenderer.enabled = false;
     }
 }
