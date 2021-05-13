@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class HumanController : MonoBehaviour
 {
@@ -16,9 +17,12 @@ public class HumanController : MonoBehaviour
     private AILogic aILogic;
     private AudioSource aS;
     private float currentVel = 0f;
+    private float currentRespawnTime = 0f;
+    private Animator animator;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         camera = transform.Find("Line Of Sight").GetComponent<Camera>();
         controller = GetComponent<CharacterController>();
         parameters = GetComponent<Parameters>();
@@ -31,9 +35,17 @@ public class HumanController : MonoBehaviour
     {
         Debug.DrawRay(camera.transform.position, camera.transform.forward * 100f, Color.white);
 
-        if (aILogic.currentState == AILogic.AI_State.die)
+        switch(aILogic.currentState)
         {
-            return;
+            case AILogic.AI_State.die:
+            {
+                    if ((currentRespawnTime += Time.deltaTime) >= parameters._respawnTime())
+                    {
+                        currentRespawnTime = 0f;
+                        Respawn();
+                    }
+                    return; 
+            }
         }
 
         MovementInput();
@@ -106,5 +118,34 @@ public class HumanController : MonoBehaviour
             }
         }
        
+    }
+
+    // Same as AI
+    void Respawn()
+    {
+        // Reposition
+        var grid = AstarPath.active.data.gridGraph;
+        int threshold = 250;
+
+        GraphNode rNode = grid.GetNearest(transform.position).node;
+
+
+        // Find a walkable position
+        for (int i = 0; i < threshold; ++i)
+        {
+            rNode = grid.nodes[Random.Range(0, grid.nodes.Length)];
+
+            if (rNode.Walkable == true)
+            {
+                break;
+            }
+        }
+        
+        transform.position = (Vector3)rNode.position;
+
+        // Reset
+        animator.SetBool("Dead", false);
+        aILogic.currentState = AILogic.AI_State.idle;
+        parameters.ResetHealth();
     }
 }
