@@ -101,14 +101,29 @@ public class T_WanderPriorities : ActionTask
 
         if (bb.GetValue<bool>("dead"))
         {
+            path.maxSpeed = aIParameters._walkSpeed();
             EndAction(true);
         }
 
 
         if (path.reachedDestination)
         {
+            if (currentPriority == priorities[taskType.HEALTH] || currentPriority == priorities[taskType.POINTS])
+            {
+                animator.SetInteger("Moving", 1);
+                path.maxSpeed = aIParameters._walkSpeed();
+            }
+
             RemoveLastTarget();
             SearchNewTarget();
+        }
+        else
+        {
+            if (currentPriority == priorities[taskType.HEALTH] || currentPriority == priorities[taskType.POINTS])
+            {
+                PickupSpeed();
+            }
+           
         }
 
         aIPerception.VisualDetection(true, true);
@@ -120,6 +135,24 @@ public class T_WanderPriorities : ActionTask
         VisualScan(visuallyDetected);
         AuditiveScan(audioDetected);
     }
+
+    void PickupSpeed()
+    {
+        float closeDistance = 20f;
+        float current = (path.destination - agent.transform.position).magnitude;
+        if (current <= closeDistance && current > path.endReachedDistance)
+        {
+            animator.SetInteger("Moving", 2);
+            path.maxSpeed = aIParameters._runSpeed();
+        }
+        else
+        {
+            animator.SetInteger("Moving", 1);
+            path.maxSpeed = aIParameters._walkSpeed();
+        }
+    }
+
+   
 
     void RemoveLastTarget()
     {
@@ -153,6 +186,14 @@ public class T_WanderPriorities : ActionTask
             if (go.CompareTag("pickup"))
             {
                 go_TaskType = (taskType)System.Enum.Parse(typeof(taskType), go.GetComponent<Pickup>().pickupType.ToString());
+
+                if (aIParameters.NeedHealth() == false && go_TaskType == taskType.HEALTH)
+                {
+                    go_TaskType = taskType.NO_TYPE;
+                }
+
+                animator.SetInteger("Moving", 2);
+                path.maxSpeed = aIParameters._runSpeed();
             }
             else if (go.transform.parent.gameObject.CompareTag("Player"))
             {
@@ -275,6 +316,7 @@ public class T_WanderPriorities : ActionTask
         GraphNode node = grid.GetNearest(targetStack[index].Item2, NNConstraint.Default).node;
         path.destination = (Vector3)node.position;
         bb.SetValue("lastTarget", path.destination);
+        animator.SetInteger("Moving", 1);
 
         // Set new current target and priority 
         currentPriority = priority;
