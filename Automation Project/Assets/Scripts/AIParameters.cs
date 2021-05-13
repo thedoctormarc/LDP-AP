@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Simulation.Games;
 
-public class AIParameters : AI // TODO: child classes depending on weapon and psychology
+public class AIParameters : Parameters  // TODO: child classes depending on weapon and psychology
 {
     public enum Player_Type { killer, collector, socializer }
 
     [SerializeField]
     Player_Type pType;
 
-    [SerializeField]
-    [Range(0, 2)]
-    int team;
-    public int _team() => team;
     [SerializeField]
     [Range(0f, 1f)]
     float aimSpread = 0.8f;
@@ -45,19 +41,8 @@ public class AIParameters : AI // TODO: child classes depending on weapon and ps
     float auditiveRefreshTime = 0.25f;
 
     [SerializeField]
-    [Range(50f, 100f)]
-    float maxHealth = 50f;
-
-    [SerializeField]
     [Range(10f, 25f)]
     float searchPickupHealth = 20f;
-
-    [HideInInspector]
-    public float currentHealth;
-
-    [SerializeField]
-    [Range(0f, 10f)]
-    float respawnTime = 5f;
 
     [SerializeField]
     [Range(10f, 20f)]
@@ -72,14 +57,6 @@ public class AIParameters : AI // TODO: child classes depending on weapon and ps
     float shotgunTargetFightDist = 5f;
 
     [SerializeField]
-    [Range(1f, 2f)]
-    float walkSpeed = 1.5f;
-
-    [SerializeField]
-    [Range(2.5f, 4f)]
-    float runSpeed = 3.5f;
-
-    [SerializeField]
     [Range(10f, 20f)]
     float rifleCoverMinTriggerDist = 15f;
 
@@ -91,8 +68,6 @@ public class AIParameters : AI // TODO: child classes depending on weapon and ps
     [Range(0f, 5f)]
     float killerInspectTime = 2f;
 
-    [HideInInspector]
-    public int currentPoints = 0;
 
     public Player_Type _pType() => pType;
     public float _aimSpread() => aimSpread;
@@ -102,13 +77,9 @@ public class AIParameters : AI // TODO: child classes depending on weapon and ps
     public float _maxViewAngle() => maxViewAngle;
     public float _visualRefreshTime() => visualRefreshTime;
     public float _auditiveRefreshTime() => auditiveRefreshTime;
-    public float _maxHealth() => maxHealth;
-    public float _respawnTime() => respawnTime;
     public float _audioPerceptionRadius() => audioPerceptionRadius;
     public float _timeUntilDeAggro() => timeUntilDeAggro;
     public float _shotgunTargetFightDist() => shotgunTargetFightDist;
-    public float _walkSpeed() => walkSpeed;
-    public float _runSpeed() => runSpeed;
     public float _aimSpeedMultiAudio() => aimSpeedMultiAudio;
     public float _rifleCoverMinTriggerDist() => rifleCoverMinTriggerDist;
     public float _rifleCoverMaxDist() => rifleCoverMaxDist;
@@ -125,16 +96,6 @@ public class AIParameters : AI // TODO: child classes depending on weapon and ps
         aimSpread = config.GetFloat("aimSpread");
         respawnTime = config.GetFloat("respawnTime");
         maxViewAngle = config.GetFloat("maxViewAngle");
-    }
-
-    public void ResetHealth()
-    {
-        currentHealth = maxHealth;
-    }
-
-    public override void OnDeath()
-    {
-        ResetHealth();
     }
 
     public bool NeedHealth() => currentHealth <= searchPickupHealth;

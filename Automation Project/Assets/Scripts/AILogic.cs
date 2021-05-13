@@ -24,6 +24,7 @@ public class AILogic : AI
     GameObject lastAggro;
     public GameObject _lastAggro() => lastAggro;
     public string _weapon() => currentWeapon;
+    Parameters parameters;
 
     private void Awake()
     {
@@ -52,6 +53,7 @@ public class AILogic : AI
         };
 
         weaponParameters = weaponSlot.transform.GetChild(0).GetComponent<WeaponParameters>();
+        parameters = gameObject.GetComponent<Parameters>();
 
     }
 
@@ -107,6 +109,8 @@ public class AILogic : AI
 
     public override void OnDeath()
     {
+        parameters.OnDeath();
+ 
         currentState = AI_State.die;
         animator.SetInteger("Moving", 0);
         animator.SetBool("Dead", true);

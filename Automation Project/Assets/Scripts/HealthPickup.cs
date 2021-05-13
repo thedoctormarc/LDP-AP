@@ -9,15 +9,15 @@ public class HealthPickup : Pickup
 
     public override void Disappear(GameObject player)
     {
-        AIParameters aIParameters = player.GetComponent<AIParameters>();
+        Parameters aIParameters = player.GetComponent<Parameters>();
         float maxHealth = aIParameters._maxHealth();
-        float currentHealth = aIParameters.currentHealth;
+        float currentHealth = aIParameters._currentHealth();
         currentHealth += health;
         if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
         }
-        player.GetComponent<AIParameters>().currentHealth = currentHealth;
+        aIParameters.UpdateHealth(currentHealth);
         mRenderer.enabled = false;
     }
 }

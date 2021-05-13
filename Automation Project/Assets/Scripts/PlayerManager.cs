@@ -32,9 +32,11 @@ public class PlayerManager : MonoBehaviour
 
     public bool DamageAI(float damage, GameObject receptor, GameObject emitter) // de-aggro killer, killed and all other players that were aggro-ing the killed
     {
-        AIParameters r_aIParameters = receptor.GetComponent<AIParameters>();
+        Parameters r_aIParameters = receptor.GetComponent<Parameters>();
 
-        if ((r_aIParameters.currentHealth -= damage) <= 0f)  
+        r_aIParameters.UpdateHealth(r_aIParameters._currentHealth() - damage);
+
+        if (r_aIParameters ._currentHealth() <= 0f)  
         {
             // Die
 
@@ -60,7 +62,7 @@ public class PlayerManager : MonoBehaviour
             }
 
             // Unity Game Simulation
-            AIParameters e_aIParameters = emitter.GetComponent<AIParameters>();
+            Parameters e_aIParameters = emitter.GetComponent<Parameters>();
             string killCounter = "T" + e_aIParameters._team().ToString() + " kills";
             string deathCounter = "T" + r_aIParameters._team().ToString() + " deaths";
             GameSimManager.Instance.IncrementCounter(killCounter, (long)1);
