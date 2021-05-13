@@ -13,8 +13,6 @@ public class HumanController : MonoBehaviour
     private WeaponParameters wParameters;
     private Parameters parameters;
     private float currentFireTime = 0f;
-    private GameObject firePositionGo;
-    private Vector3 firePosition;
     private AILogic aILogic;
     //  public float Gravity = 9.8f;
     //  private float velocity = 0;
@@ -27,15 +25,13 @@ public class HumanController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         parameters = GetComponent<Parameters>();
         aILogic = GetComponent<AILogic>();
-        firePositionGo = aILogic._weaponSlot().transform.GetChild(0).Find("Weapon Tip Position").gameObject;
         wParameters = aILogic._weaponSlot().transform.GetChild(0).GetComponent<WeaponParameters>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        firePosition = firePositionGo.transform.position;
-        Debug.DrawRay(firePosition, firePositionGo.transform.forward, Color.white);
+        Debug.DrawRay(camera.transform.position, camera.transform.forward * 100f, Color.white);
 
         MovementInput();
         AimInput();
@@ -73,6 +69,8 @@ public class HumanController : MonoBehaviour
 
         camera.transform.eulerAngles = new Vector3(xRot, yRot, 0.0f);
         transform.eulerAngles = new Vector3(0.0f, yRot, 0.0f);
+
+
     }
 
     void FireInput()
@@ -83,7 +81,7 @@ public class HumanController : MonoBehaviour
             {
                 currentFireTime = 0f;
                 RaycastHit hit;
-                bool collide = Physics.Raycast(firePosition, firePositionGo.transform.forward, out hit, Mathf.Infinity);
+                bool collide = Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, Mathf.Infinity);
         
 
                 if (collide)
