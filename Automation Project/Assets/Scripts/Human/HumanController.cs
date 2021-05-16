@@ -98,7 +98,7 @@ public class HumanController : MonoBehaviour
         // Cooldown
         if (fireReady == false)
         {
-            if ((currentFireTime += Time.deltaTime) >= wParameters._fireRate())
+            if ((currentFireTime += Time.deltaTime) >= wParameters._fireTime())
             {
                 currentFireTime = 0f;
                 fireReady = true;
@@ -127,7 +127,8 @@ public class HumanController : MonoBehaviour
                             return;
                         }
 
-                        PlayerManager.instance.DamageAI(wParameters.GetDamageAtDistance((hit.point - transform.position).magnitude), hit.transform.parent.gameObject, gameObject);
+                        float damage = wParameters.GetDamageAtDistance((hit.point - transform.position).magnitude);
+                        PlayerManager.instance.DamageAI(damage, hit.transform.parent.gameObject, gameObject); 
                     }
                 }
                

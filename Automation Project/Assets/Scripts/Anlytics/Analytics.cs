@@ -6,6 +6,8 @@ using System.IO;
 public class Analytics : MonoBehaviour
 {
     [SerializeField]
+    [Range(1, 30)]
+    int deathMapPixelRadius = 14;
 
     public static Analytics instance;
 
@@ -73,6 +75,20 @@ public class Analytics : MonoBehaviour
         {
             Vector2 pixelPos = new Vector2(position.x + (float)width / 2f, position.z + (float)height / 2f);
             tex.SetPixel((int)pixelPos.x, (int)pixelPos.y, Color.red);
+
+            for (int y = -deathMapPixelRadius; y <= deathMapPixelRadius; ++y)
+            {
+                for (int x = -deathMapPixelRadius; x <= deathMapPixelRadius; ++x)
+                {
+                    if (x * x + y * y <= deathMapPixelRadius * deathMapPixelRadius)
+                    {
+                        if (PixelWithinLimits(width, height, (int)pixelPos.x + x, (int)pixelPos.y + y))
+                        {
+                            tex.SetPixel((int)pixelPos.x + x, (int)pixelPos.y + y, Color.red);
+                        }
+                    }
+                }
+            }    
         }
 
         tex.Apply();
@@ -86,5 +102,11 @@ public class Analytics : MonoBehaviour
 
         return true;
     }
+
+    bool PixelWithinLimits (float width, float height, int x, int y)
+    {
+        return x >= 0 && y >= 0 && x <= width && y <= height;
+    }
+
 
 }

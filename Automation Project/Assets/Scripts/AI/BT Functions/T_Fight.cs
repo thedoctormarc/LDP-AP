@@ -100,7 +100,7 @@ public class T_Fight : ActionTask
 
     void Fire()
     {
-        if ((currentFireTime += Time.deltaTime) >= weaponParameters._fireRate() / 100f)
+        if ((currentFireTime += Time.deltaTime) >= weaponParameters._fireTime())
         {
             currentFireTime = 0f;
 

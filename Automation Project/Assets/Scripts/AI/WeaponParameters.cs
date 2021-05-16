@@ -5,8 +5,8 @@ using UnityEngine;
 public class WeaponParameters : MonoBehaviour
 {
     [SerializeField]
-    float fireRate = 13.3f;
-    public float _fireRate() => fireRate;
+    float fireTime = 0.15f;
+    public float _fireTime() => fireTime;
     [SerializeField]
     [Range(10f, 100f)]
     float damage = 25f;
@@ -26,8 +26,9 @@ public class WeaponParameters : MonoBehaviour
             distance = 100f;
 
         distance /= 100f; // 100 m = 1 anim unit
+        float percentage = damageFallOff.Evaluate(distance);
 
-        return damage * damageFallOff.Evaluate(distance); 
+        return damage * percentage; 
     }
 
     public bool InRange (GameObject from, GameObject to)
