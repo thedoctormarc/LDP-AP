@@ -67,5 +67,15 @@ public class Parameters : MonoBehaviour
         ResetHealth();
     }
 
-    public void UpdateHealth(float health) => currentHealth = (health > 0f) ? health : 0f;
+    public void UpdateHealth(float health)
+    {
+        currentHealth = (health > 0f) ? health : 0f;
+
+        HumanController h = gameObject.GetComponent<HumanController>();
+
+        if (h)
+        {
+            h.UpdateHealthBar();
+        }
+    }
 }

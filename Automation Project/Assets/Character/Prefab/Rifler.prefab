@@ -1235,14 +1235,14 @@ MonoBehaviour:
   team: 0
   maxHealth: 75
   respawnTime: 5
-  walkSpeed: 2
-  runSpeed: 3.5
+  walkSpeed: 2.5
+  runSpeed: 4
   currentPoints: 0
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
   pType: 0
   aimSpread: 0.8
-  aimSpeed: 0.5
+  aimSpeed: 1
   aimSpeedMultiAudio: 1.5
   maxViewAngle: 90
   visualRefreshTime: 0.25

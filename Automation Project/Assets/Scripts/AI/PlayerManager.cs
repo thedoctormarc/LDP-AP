@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
      
     public bool debug;
     public static PlayerManager instance;
+  
 
     private void Awake()
     {
@@ -77,6 +78,9 @@ public class PlayerManager : MonoBehaviour
             string deathCounter = "T" + r_aIParameters._team().ToString() + " deaths";
             GameSimManager.Instance.IncrementCounter(killCounter, (long)1);
             GameSimManager.Instance.IncrementCounter(deathCounter, (long)1);
+
+            // Analytics
+            Analytics.instance.OnDeath(receptor);
 
             return true;
         }
