@@ -5,6 +5,10 @@ using UnityEngine;
 public class Parameters : MonoBehaviour
 {
     [SerializeField]
+    [Range(0.3f, 1.5f)]
+    float runningSpread = 0.8f;
+
+    [SerializeField]
     [Range(0, 2)]
     protected int team;
 
@@ -44,6 +48,8 @@ public class Parameters : MonoBehaviour
     public float _currentHealth() => currentHealth;
     public float _headPositionOffset() => headPositionOffset;
     public float _waistPositionOffset() => waistPositionOffset;
+
+    public float _runningSpread() => runningSpread;
 
     // Start is called before the first frame update
     void Start()

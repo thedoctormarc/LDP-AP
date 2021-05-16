@@ -22,6 +22,10 @@ public class HumanController : MonoBehaviour
     private Animator animator;
     [SerializeField]
     Image healthBar;
+    [SerializeField]
+    Image crosshair;
+    [SerializeField]
+    Image crossHairInnaccurate;
     bool fireReady = true;
 
     void Start()
@@ -60,10 +64,13 @@ public class HumanController : MonoBehaviour
 
     void MovementInput()
     {
-        bool running = Input.GetKey(KeyCode.LeftShift);
+        bool running = Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKey(KeyCode.LeftShift);
         float x = Input.GetAxis("Horizontal") * ((running) ? parameters._runSpeed() : parameters._walkSpeed());
         float y = Input.GetAxis("Vertical") * ((running) ? parameters._runSpeed() : parameters._walkSpeed());
         controller.Move((transform.right * x + transform.forward * y) * Time.deltaTime);
+
+        crosshair.enabled = !running;
+        crossHairInnaccurate.enabled = running;
 
         // Gravity
         if (controller.isGrounded)
@@ -112,7 +119,22 @@ public class HumanController : MonoBehaviour
             {
                 aS.Play();
                 RaycastHit hit;
-                bool collide = Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, Mathf.Infinity);
+
+                Vector3 offset = new Vector3();
+
+                // Running innaccuracy
+                if (crossHairInnaccurate.enabled)
+                {
+                    float signedAimSpread = parameters._runningSpread() / 2f;
+                    float xOffset = Random.Range(-signedAimSpread, signedAimSpread);
+                    float yOffset = Random.Range(-signedAimSpread, signedAimSpread);
+                    float zOffset = Random.Range(-signedAimSpread, signedAimSpread);
+
+                    offset = new Vector3(xOffset, yOffset, zOffset);
+
+                }
+
+                bool collide = Physics.Raycast(camera.transform.position + offset, camera.transform.forward, out hit, Mathf.Infinity);
 
 
                 if (collide)
