@@ -1,18 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Unity.Simulation.Games;
+using Pathfinding;
 
 public class Analytics : MonoBehaviour
 {
     [SerializeField]
     [Range(1, 30)]
-    int deathMapPixelRadius = 14;
+    int deathMapPixelRadius = 1;
 
     public static Analytics instance;
 
     Dictionary<GameObject, List<Vector3>> deaths;
+    Dictionary<GameObject, List<Vector3>> positions;
 
+    public float positionIntervalSec = 0f;
 
     private void Awake()
     {
@@ -22,13 +27,13 @@ public class Analytics : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        positions = new Dictionary<GameObject, List<Vector3>>();
         deaths = new Dictionary<GameObject, List<Vector3>>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void OnDeath(GameObject go)
@@ -49,31 +54,70 @@ public class Analytics : MonoBehaviour
         {
             GenerateDeathmap(element);
         }
+
+        foreach (KeyValuePair<GameObject, List<Vector3>> element in positions)
+        {
+            GenerateHeatmap(element);
+        }
     }
 
-
-    // Map needs to be located at position (0,0,0)
-    bool GenerateDeathmap(KeyValuePair<GameObject, List<Vector3>> deaths) // https://docs.unity3d.com/ScriptReference/ImageConversion.EncodeToPNG.html
+    public void OnPositionChange (GameObject go)
     {
-        // Create a texture 
-        GameObject map = GameObject.FindGameObjectWithTag("map");
-        int width = (int)(map.transform.localScale.x * 1000f);
-        int height = (int)(map.transform.localScale.z * 1000f);
-        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-
-        // Convert deathmap to pixel colors
-        Color[] colors = new Color[width * height];
-
-        for (int i = 0; i < width; ++i)
+        if (positions.ContainsKey(go))
         {
-            colors[i] = Color.black;
+            positions[go].Add(go.transform.position);
+        }
+        else
+        {
+            positions.Add(go, new List<Vector3> { go.transform.position });
+        }
+    }
+
+    Texture2D GenerateMapTexture()
+    {
+        int width = (int)AstarPath.active.data.gridGraph.width;
+        int height = (int)AstarPath.active.data.gridGraph.depth;
+        return new Texture2D(width, height, TextureFormat.RGB24, false);
+    }
+
+    void SaveTexture (Texture2D tex, string name)
+    {
+        TextureScale.Point(tex, tex.width * 5, tex.height * 5);
+
+        // Encode texture into PNG
+        byte[] bytes = tex.EncodeToPNG();
+        UnityEngine.Object.Destroy(tex);
+
+        // Save as an image file
+        string folderName = DateTime.Now.ToString() + "_" + AppManager.instance._gMode().ToString();
+        string folderNameFormated = folderName.Replace("/", " ");
+        string folderNameFormated2 = folderNameFormated.Replace(":", " ");
+        string path = Application.dataPath + "/../" + "Analytics/" + folderNameFormated2;
+        Directory.CreateDirectory(path);
+        File.WriteAllBytes(path + name, bytes);
+    }
+
+    void InitializeTexture (Texture2D tex, Color c)
+    {
+        Color[] colors = new Color[tex.width * tex.height];
+
+        for (int i = 0; i < tex.width; ++i)
+        {
+            colors[i] = c;
         }
 
         tex.SetPixels(colors);
+    }
+
+    // Map needs to be located at position (0,0,0)
+    void GenerateDeathmap(KeyValuePair<GameObject, List<Vector3>> deaths) // https://docs.unity3d.com/ScriptReference/ImageConversion.EncodeToPNG.html
+    {
+        Texture2D tex = GenerateMapTexture();
+        InitializeTexture(tex, Color.black);
 
         foreach (Vector3 position in deaths.Value)
         {
-            Vector2 pixelPos = new Vector2(position.x + (float)width / 2f, position.z + (float)height / 2f);
+            Vector2 pixelPos = new Vector2(position.x + (float)tex.width / 2f, position.z + (float)tex.height / 2f);
             tex.SetPixel((int)pixelPos.x, (int)pixelPos.y, Color.red);
 
             for (int y = -deathMapPixelRadius; y <= deathMapPixelRadius; ++y)
@@ -82,7 +126,7 @@ public class Analytics : MonoBehaviour
                 {
                     if (x * x + y * y <= deathMapPixelRadius * deathMapPixelRadius)
                     {
-                        if (PixelWithinLimits(width, height, (int)pixelPos.x + x, (int)pixelPos.y + y))
+                        if (PixelWithinLimits(tex.width, tex.height, (int)pixelPos.x + x, (int)pixelPos.y + y))
                         {
                             tex.SetPixel((int)pixelPos.x + x, (int)pixelPos.y + y, Color.red);
                         }
@@ -93,14 +137,63 @@ public class Analytics : MonoBehaviour
 
         tex.Apply();
 
-        // Encode texture into PNG
-        byte[] bytes = tex.EncodeToPNG();
-        Object.Destroy(tex);
+        SaveTexture(tex, "/ " + deaths.Key.name + "_deathmap.png");
 
-        // Save as an image file
-        File.WriteAllBytes(Application.dataPath + "/Analytics" + deaths.Key.name + " deathmap.png", bytes);
+    }
 
-        return true;
+    void GenerateHeatmap(KeyValuePair<GameObject, List<Vector3>> positions)
+    {
+        Texture2D tex = GenerateMapTexture();
+        InitializeTexture(tex, Color.black);
+
+        Dictionary<Vector2, int> pixelPosRepetitions = new Dictionary<Vector2, int>();
+
+        foreach (Vector3 position in positions.Value)
+        {
+            Vector3 nodePos = (Vector3)AstarPath.active.data.gridGraph.GetNearest(position).node.position;
+            Vector2 pixelPos = new Vector2(nodePos.x + (float)tex.width / 2f, nodePos.z + (float)tex.height / 2f);
+
+            if (pixelPosRepetitions.ContainsKey(pixelPos) == false)
+            {
+                pixelPosRepetitions.Add(pixelPos, 1);
+            }
+            else
+            {
+                ++pixelPosRepetitions[pixelPos];
+            }
+           
+        }
+
+        // Search for most repeated position that will have a certain color
+        int max = 0;
+        int min = int.MaxValue;
+
+        foreach (var pos in pixelPosRepetitions)
+        {
+            if (pos.Value > max)
+            {
+                max = pos.Value;
+            }
+            else if (pos.Value < min)
+            {
+                min = pos.Value;
+            }
+        }
+
+        // Tint pixels using a 1 to max scale
+
+        foreach (var pos in pixelPosRepetitions)
+        {
+            Color c = Color.black;
+
+            float value = ((((float)pos.Value - (float)min) * (1f - 0f)) / ((float)max - (float)min)) + 0f;
+            c.r = value;
+            c.g = 1f - value;
+            tex.SetPixel((int)pos.Key.x, (int)pos.Key.y, c);
+        }
+
+
+        SaveTexture(tex, "/ " + positions.Key.name + "_heatmap.png");
     }
 
     bool PixelWithinLimits (float width, float height, int x, int y)

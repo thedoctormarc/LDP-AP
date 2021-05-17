@@ -27,6 +27,7 @@ public class AILogic : AI
     public GameObject _lastAggro() => lastAggro;
     public string _weapon() => currentWeapon;
     Parameters parameters;
+    float sendPosTime;
 
     private void Awake()
     {
@@ -67,7 +68,12 @@ public class AILogic : AI
 
     void Update()
     {
+        if ((sendPosTime += Time.deltaTime) >= Analytics.instance.positionIntervalSec)
+        {
+            sendPosTime = 0f;
 
+            Analytics.instance.OnPositionChange(gameObject);
+        }
     }
 
     public void RelocateWeapon()
