@@ -8,8 +8,7 @@ public class PlayerManager : MonoBehaviour
 {
      
     public bool debug;
-    public static PlayerManager instance;
-  
+    public static PlayerManager instance; 
 
     private void Awake()
     {
@@ -80,7 +79,7 @@ public class PlayerManager : MonoBehaviour
             GameSimManager.Instance.IncrementCounter(deathCounter, (long)1);
 
             // Analytics
-            Analytics.instance.OnDeath(receptor);
+            Analytics.instance.OnDeath(receptor, emitter);
 
             return true;
         }

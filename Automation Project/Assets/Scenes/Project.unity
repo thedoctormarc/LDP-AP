@@ -1043,7 +1043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 795dd45c6561a8c48824599aab7cad0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simulationSeconds: 10
+  simulationSeconds: 60
   pickups: {fileID: 1395444864}
   gMode: 1
 --- !u!1001 &872989236

@@ -6,6 +6,7 @@ using System.IO;
 using Unity.Simulation.Games;
 using Pathfinding;
 
+
 public class Analytics : MonoBehaviour
 {
     [SerializeField]
@@ -16,6 +17,7 @@ public class Analytics : MonoBehaviour
 
     Dictionary<GameObject, List<Vector3>> deaths;
     Dictionary<GameObject, List<Vector3>> positions;
+    Dictionary<GameObject, System.Tuple<float, List<float>>> ttk;
 
     public float positionIntervalSec = 0f;
 
@@ -29,23 +31,34 @@ public class Analytics : MonoBehaviour
     {
         positions = new Dictionary<GameObject, List<Vector3>>();
         deaths = new Dictionary<GameObject, List<Vector3>>();
+        ttk = new Dictionary<GameObject, System.Tuple<float, List<float>>>();
+
+        for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
+        {
+            ttk.Add(PlayerManager.instance.transform.GetChild(i).gameObject, new System.Tuple<float, List<float>>(0, new List<float>()));
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        UpdateTTK();
     }
 
-    public void OnDeath(GameObject go)
+    public void OnDeath(GameObject dead, GameObject killer)
     {
-        if (deaths.ContainsKey(go))
+        // Track deathmap
+        if (deaths.ContainsKey(dead))
         {
-            deaths[go].Add(go.transform.position);
+            deaths[dead].Add(dead.transform.position);
         }
         else
         {
-            deaths.Add(go, new List<Vector3> { go.transform.position } );
+            deaths.Add(dead, new List<Vector3> { dead.transform.position } );
         }
+
+        InputTTK(killer);
     }
 
     public void OnAppShutdown()
@@ -59,8 +72,11 @@ public class Analytics : MonoBehaviour
         {
             GenerateHeatmap(element);
         }
-    }
 
+        ComputeTTK();
+
+       
+    }
     public void OnPositionChange (GameObject go)
     {
         if (positions.ContainsKey(go))
@@ -71,6 +87,100 @@ public class Analytics : MonoBehaviour
         {
             positions.Add(go, new List<Vector3> { go.transform.position });
         }
+    }
+
+    void InputTTK(GameObject go)
+    {
+        // Add a new time to the ttk list, set as the current time
+        var tuple = ttk[go];
+        var times = tuple.Item2;
+        times.Add(tuple.Item1);
+        
+        // Reset current time
+        ttk[go] = new System.Tuple<float, List<float>>(0f, times);
+    }
+
+    void UpdateTTK ()
+    {
+        var copy = new Dictionary<GameObject, System.Tuple<float, List<float>>>(ttk);
+
+        foreach (var element in copy)
+        {
+            // Current time is incremented by app delta time
+            var time = element.Value.Item1;
+            time += Time.deltaTime;
+            var tuple = new System.Tuple<float, List<float>>(time, new List<float>(element.Value.Item2));
+            ttk[element.Key] = tuple;
+        }
+    }
+
+    void ComputeTTK() // time to kill, fore each team!!
+    {
+        // Compute ttk for each gameObject --> store team and ttk
+        List<System.Tuple<int, float>> ttk_computed = new List<System.Tuple<int, float>>();
+
+        foreach (var element in ttk)
+        {
+            var list = element.Value.Item2;
+            float median = 0f;
+
+            if (list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    median += item;
+                }
+                median /= list.Count;
+            }
+           else
+            {
+                median = 0f;
+            }
+
+            ttk_computed.Add(new System.Tuple<int, float>(element.Key.GetComponent<Parameters>()._team(), median));
+        }
+
+        // For each team --> calculate median per team,
+        Dictionary<int, float> ttk_team = new Dictionary<int, float>();
+        Dictionary<int, int> ttk_times = new Dictionary<int, int>();
+
+        foreach (var element in ttk_computed)
+        {
+            //  skip players with no ttk(no kills)
+            if (element.Item2 == 0f)
+            {
+                continue;
+            }
+
+            if (ttk_team.ContainsKey(element.Item1))
+            {
+                ttk_team[element.Item1] += element.Item2;
+                ttk_times[element.Item1]++;
+            }
+            else
+            {
+                ttk_team.Add(element.Item1, element.Item2);
+                ttk_times.Add(element.Item1, 1);
+            }
+        }
+
+        // Actual Median
+
+        var copy = new Dictionary<int, float>(ttk_team);
+        foreach (var element in copy)
+        {
+            // Crashes, can't modify within foreach
+            ttk_team[element.Key] /= (float)ttk_times[element.Key];
+
+            // Game Simulation 
+            string ttk_name = "T" + element.Key.ToString() + " TTK";
+            GameSimManager.Instance.SetCounter(ttk_name, (long)ttk_team[element.Key]);
+
+            // Debug
+            Debug.Log(ttk_name + " has been " + ttk_team[element.Key].ToString() + " seconds!!");
+        }
+
+      
     }
 
     Texture2D GenerateMapTexture()
