@@ -8,6 +8,21 @@ public class HumanController : MonoBehaviour
 {
     [SerializeField]
     float aimSpeed = 3f;
+    [SerializeField]
+    [Range(5, 30)]
+    int magazine = 15;
+    [SerializeField]
+    float reloadTime = 2f;
+    [SerializeField]
+    Image healthBar;
+    [SerializeField]
+    Image crosshair;
+    [SerializeField]
+    Image crossHairInnaccurate;
+    [SerializeField]
+    Text magazineText;
+
+    private int currentMagazine;
     private float xRot = 0.0f;
     private float yRot = 0.0f;
     private Camera camera;
@@ -20,16 +35,12 @@ public class HumanController : MonoBehaviour
     private float currentVel = 0f;
     private float currentRespawnTime = 0f;
     private Animator animator;
-    [SerializeField]
-    Image healthBar;
-    [SerializeField]
-    Image crosshair;
-    [SerializeField]
-    Image crossHairInnaccurate;
-    bool fireReady = true;
+    private AudioSource audioSource;
+    private bool fireReady = true;
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         camera = transform.Find("Line Of Sight").GetComponent<Camera>();
         controller = GetComponent<CharacterController>();
@@ -37,6 +48,9 @@ public class HumanController : MonoBehaviour
         aILogic = GetComponent<AILogic>();
         aS = transform.Find("Weapon Slot").GetChild(0).GetComponent<AudioSource>();
         wParameters = aILogic._weaponSlot().transform.GetChild(0).GetComponent<WeaponParameters>();
+        currentMagazine = magazine;
+        magazineText.text = magazine.ToString() + "/" + magazine.ToString();
+
     }
 
     void Update()
@@ -107,6 +121,11 @@ public class HumanController : MonoBehaviour
         {
             if ((currentFireTime += Time.deltaTime) >= wParameters._fireTime())
             {
+                if (currentMagazine == 0)
+                {
+                    currentMagazine = magazine;
+                    magazineText.text = currentMagazine.ToString() + "/" + magazine.ToString();
+                }
                 currentFireTime = 0f;
                 fireReady = true;
             }
@@ -153,6 +172,14 @@ public class HumanController : MonoBehaviour
                         PlayerManager.instance.DamageAI(damage, hit.transform.parent.gameObject, gameObject); 
                     }
                 }
+
+                if ((--currentMagazine) == 0)
+                {
+                    audioSource.Play();
+                    currentFireTime = -reloadTime + wParameters._fireTime();
+                }
+
+                magazineText.text = currentMagazine.ToString() + "/" + magazine.ToString();
                
                 fireReady = false;
             }
