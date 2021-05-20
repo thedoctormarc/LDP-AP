@@ -1454,7 +1454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c734eef1a5cef941a8ede4c97beb4b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathMapPixelRadius: 14
+  pixelRadius: 3
   positionIntervalSec: 0
 --- !u!1001 &1288516845
 PrefabInstance:

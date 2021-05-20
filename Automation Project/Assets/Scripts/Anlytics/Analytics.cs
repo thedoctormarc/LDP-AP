@@ -10,14 +10,14 @@ using Pathfinding;
 public class Analytics : MonoBehaviour
 {
     [SerializeField]
-    [Range(1, 30)]
-    int deathMapPixelRadius = 1;
+    int pixelRadius = 1;
 
     public static Analytics instance;
 
     Dictionary<GameObject, List<Vector3>> deaths;
     Dictionary<GameObject, List<Vector3>> positions;
     Dictionary<GameObject, System.Tuple<float, List<float>>> ttk;
+    Dictionary<GameObject, int> pickups;
 
     public float positionIntervalSec = 0f;
 
@@ -31,7 +31,9 @@ public class Analytics : MonoBehaviour
     {
         positions = new Dictionary<GameObject, List<Vector3>>();
         deaths = new Dictionary<GameObject, List<Vector3>>();
+        pickups = new Dictionary<GameObject, int>();
         ttk = new Dictionary<GameObject, System.Tuple<float, List<float>>>();
+   
 
         for (int i = 0; i < PlayerManager.instance.transform.childCount; ++i)
         {
@@ -48,17 +50,37 @@ public class Analytics : MonoBehaviour
 
     public void OnDeath(GameObject dead, GameObject killer)
     {
-        // Track deathmap
-        if (deaths.ContainsKey(dead))
+        AddEntry_Pos(deaths, dead);
+        InputTTK(killer);
+    }
+
+    public void OnPositionChange(GameObject go)
+    {
+        AddEntry_Pos(positions, go);
+    }
+
+    void AddEntry_Pos(Dictionary<GameObject, List<Vector3>> dict, GameObject go)
+    {
+        if (dict.ContainsKey(go))
         {
-            deaths[dead].Add(dead.transform.position);
+            dict[go].Add(go.transform.position);
         }
         else
         {
-            deaths.Add(dead, new List<Vector3> { dead.transform.position } );
+            dict.Add(go, new List<Vector3> { go.transform.position });
         }
+    }
 
-        InputTTK(killer);
+    public void OnPickup(GameObject pickup)
+    {
+        if (pickups.ContainsKey(pickup))
+        {
+            ++pickups[pickup];
+        }
+        else
+        {
+            pickups.Add(pickup, 1);
+        }
     }
 
     public void OnAppShutdown()
@@ -74,20 +96,10 @@ public class Analytics : MonoBehaviour
         }
 
         ComputeTTK();
-
+        GeneratePickupMap();
        
     }
-    public void OnPositionChange (GameObject go)
-    {
-        if (positions.ContainsKey(go))
-        {
-            positions[go].Add(go.transform.position);
-        }
-        else
-        {
-            positions.Add(go, new List<Vector3> { go.transform.position });
-        }
-    }
+
 
     void InputTTK(GameObject go)
     {
@@ -183,6 +195,27 @@ public class Analytics : MonoBehaviour
       
     }
 
+    void DrawCircle(Texture2D tex, Color c, int radius, Vector2 pixelPos)
+    {
+        tex.SetPixel((int)pixelPos.x, (int)pixelPos.y, c);
+
+        for (int y = -radius; y <= radius; ++y)
+        {
+            for (int x = -radius; x <= radius; ++x)
+            {
+                if (x * x + y * y <= radius * radius)
+                {
+                    if (PixelWithinLimits(tex.width, tex.height, (int)pixelPos.x + x, (int)pixelPos.y + y))
+                    {
+                        tex.SetPixel((int)pixelPos.x + x, (int)pixelPos.y + y, c);
+                    }
+                }
+            }
+        }
+
+        tex.Apply();
+    }
+
     Texture2D GenerateMapTexture()
     {
         int width = (int)AstarPath.active.data.gridGraph.width;
@@ -192,18 +225,23 @@ public class Analytics : MonoBehaviour
 
     void SaveTexture (Texture2D tex, string name)
     {
-        TextureScale.Point(tex, tex.width * 5, tex.height * 5);
+        TextureScale.Bilinear(tex, tex.width * 5, tex.height * 5);
 
         // Encode texture into PNG
         byte[] bytes = tex.EncodeToPNG();
-        UnityEngine.Object.Destroy(tex);
+        Destroy(tex);
 
         // Save as an image file
         string folderName = DateTime.Now.ToString() + "_" + AppManager.instance._gMode().ToString();
         string folderNameFormated = folderName.Replace("/", " ");
         string folderNameFormated2 = folderNameFormated.Replace(":", " ");
         string path = Application.dataPath + "/../" + "Analytics/" + folderNameFormated2;
-        Directory.CreateDirectory(path);
+
+        if (Directory.Exists(path) == false)
+        {
+            Directory.CreateDirectory(path);
+        }
+
         File.WriteAllBytes(path + name, bytes);
     }
 
@@ -219,6 +257,8 @@ public class Analytics : MonoBehaviour
         tex.SetPixels(colors);
     }
 
+
+
     // Map needs to be located at position (0,0,0)
     void GenerateDeathmap(KeyValuePair<GameObject, List<Vector3>> deaths) // https://docs.unity3d.com/ScriptReference/ImageConversion.EncodeToPNG.html
     {
@@ -228,24 +268,8 @@ public class Analytics : MonoBehaviour
         foreach (Vector3 position in deaths.Value)
         {
             Vector2 pixelPos = new Vector2(position.x + (float)tex.width / 2f, position.z + (float)tex.height / 2f);
-            tex.SetPixel((int)pixelPos.x, (int)pixelPos.y, Color.red);
-
-            for (int y = -deathMapPixelRadius; y <= deathMapPixelRadius; ++y)
-            {
-                for (int x = -deathMapPixelRadius; x <= deathMapPixelRadius; ++x)
-                {
-                    if (x * x + y * y <= deathMapPixelRadius * deathMapPixelRadius)
-                    {
-                        if (PixelWithinLimits(tex.width, tex.height, (int)pixelPos.x + x, (int)pixelPos.y + y))
-                        {
-                            tex.SetPixel((int)pixelPos.x + x, (int)pixelPos.y + y, Color.red);
-                        }
-                    }
-                }
-            }    
+            DrawCircle(tex, Color.red, pixelRadius, pixelPos);
         }
-
-        tex.Apply();
 
         SaveTexture(tex, "/ " + deaths.Key.name + "_deathmap.png");
 
@@ -304,6 +328,22 @@ public class Analytics : MonoBehaviour
 
 
         SaveTexture(tex, "/ " + positions.Key.name + "_heatmap.png");
+    }
+
+    void GeneratePickupMap()
+    {
+        Texture2D tex = GenerateMapTexture();
+        InitializeTexture(tex, Color.black);
+
+        foreach (var element in pickups)
+        {
+            Vector3 position = element.Key.transform.position;
+            Vector2 pixelPos = new Vector2(position.x + (float)tex.width / 2f, position.z + (float)tex.height / 2f);
+            Pickup.Type type = element.Key.GetComponent<Pickup>().pickupType;
+            DrawCircle(tex, (type == Pickup.Type.HEALTH) ? Color.red : Color.yellow, element.Value * pixelRadius, pixelPos);
+        }
+
+        SaveTexture(tex, "/Pickup Map.png");
     }
 
     bool PixelWithinLimits (float width, float height, int x, int y)

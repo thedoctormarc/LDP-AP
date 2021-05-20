@@ -27,6 +27,7 @@ public class HealthPickup : Pickup
         {
             h.UpdateHealthBar();
         }
-        mRenderer.enabled = false;
+
+        base.Disappear(player);
     }
 }

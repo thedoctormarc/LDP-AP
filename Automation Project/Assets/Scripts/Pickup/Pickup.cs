@@ -47,6 +47,7 @@ public class Pickup : MonoBehaviour
     public virtual void Disappear (GameObject player)
     {
         mRenderer.enabled = false;
+        Analytics.instance.OnPickup(gameObject);
     }
 
     void OnTriggerEnter(Collider other)
