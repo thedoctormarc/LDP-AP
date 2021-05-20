@@ -47,20 +47,20 @@ public class T_WanderPriorities : ActionTask
 
             case AIParameters.Player_Type.killer:
                 {
-                    priorities.Add(taskType.POINTS, 4);
-                    priorities.Add(taskType.HEALTH, 2);
-                    priorities.Add(taskType.FIGHT, 1);
-                    priorities.Add(taskType.TEAMMATE, 3);
+                    priorities.Add(taskType.POINTS, 3);
+                    priorities.Add(taskType.HEALTH, 1);
+                    priorities.Add(taskType.FIGHT, 0);
+                    priorities.Add(taskType.TEAMMATE, 2);
                     break;
                 }
 
 
             case AIParameters.Player_Type.socializer:
                 {
-                    priorities.Add(taskType.POINTS, 4);
-                    priorities.Add(taskType.HEALTH, 2);
-                    priorities.Add(taskType.FIGHT, 3);
-                    priorities.Add(taskType.TEAMMATE, 1);
+                    priorities.Add(taskType.POINTS, 3);
+                    priorities.Add(taskType.HEALTH, 1);
+                    priorities.Add(taskType.FIGHT, 2);
+                    priorities.Add(taskType.TEAMMATE, 0);
                     break;
                 }
         }
@@ -80,12 +80,12 @@ public class T_WanderPriorities : ActionTask
         aILogic.RelocateWeapon();
 
         Vector3 lastTarget = bb.GetValue<Vector3>("lastTarget");
-        
+
         if (lastTarget.x == float.MaxValue) // If i died, reset all targets
         {
             currentTarget = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
             currentPriority = int.MaxValue;
-            targetStack.Clear(); 
+            targetStack.Clear();
         }
 
         SearchNewTarget();
@@ -94,7 +94,7 @@ public class T_WanderPriorities : ActionTask
 
     protected override void OnUpdate()
     {
-        if (targetStack.Count > 4)
+        if (targetStack.Count > 5)
         {
             Debug.LogError("AI target stack surpassed the maximum");
         }
@@ -123,7 +123,15 @@ public class T_WanderPriorities : ActionTask
             {
                 PickupSpeed();
             }
-           
+
+        }
+
+        if (aIParameters.NeedHealth())
+        {
+            if (currentPriority != priorities[taskType.HEALTH])
+            {
+                SearchRandomHealth();
+            }
         }
 
         aIPerception.VisualDetection(true, true);
@@ -152,7 +160,32 @@ public class T_WanderPriorities : ActionTask
         }
     }
 
-   
+
+    void SearchRandomHealth()
+    {
+        GameObject pickups = AppManager.instance._pickups();
+        List<GameObject> active = new List<GameObject>();
+
+        for (int i = 0; i < pickups.transform.childCount; ++i)
+        {
+            GameObject child = pickups.transform.GetChild(i).gameObject;
+
+            Pickup p = child.GetComponent<Pickup>();
+            if (p.pickupType == Pickup.Type.HEALTH && p.Active())
+            {
+                active.Add(child);
+            }
+        }
+
+        int j = Random.Range(0, active.Count - 1);
+        Vector3 targetPos = active[j].transform.position;
+
+        System.Tuple<int, Vector3> target = new System.Tuple<int, Vector3>(-1, targetPos); // special priority, when low on health: prioritize above all!!
+        InsertTarget(target);
+
+        // Refresh new target
+        SearchNewTarget();
+    }
 
     void RemoveLastTarget()
     {
