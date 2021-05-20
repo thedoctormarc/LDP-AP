@@ -12,6 +12,9 @@ public class Analytics : MonoBehaviour
     [SerializeField]
     int pixelRadius = 1;
 
+    [SerializeField]
+    Texture2D mapTexture;
+
     public static Analytics instance;
 
     Dictionary<GameObject, List<Vector3>> deaths;
@@ -225,7 +228,7 @@ public class Analytics : MonoBehaviour
 
     void SaveTexture (Texture2D tex, string name)
     {
-        TextureScale.Bilinear(tex, tex.width * 5, tex.height * 5);
+        TextureScale.Point(tex, tex.width * 10, tex.height * 10);
 
         // Encode texture into PNG
         byte[] bytes = tex.EncodeToPNG();
@@ -245,16 +248,13 @@ public class Analytics : MonoBehaviour
         File.WriteAllBytes(path + name, bytes);
     }
 
-    void InitializeTexture (Texture2D tex, Color c)
+    void InitializeTexture (Texture2D tex)
     {
-        Color[] colors = new Color[tex.width * tex.height];
-
-        for (int i = 0; i < tex.width; ++i)
-        {
-            colors[i] = c;
-        }
-
-        tex.SetPixels(colors);
+        Texture2D source = new Texture2D(mapTexture.width, mapTexture.height);
+        source.SetPixels(mapTexture.GetPixels());
+        TextureScale.Point(source, tex.width, tex.height);
+        tex.SetPixels(source.GetPixels());
+        tex.Apply();
     }
 
 
@@ -263,7 +263,7 @@ public class Analytics : MonoBehaviour
     void GenerateDeathmap(KeyValuePair<GameObject, List<Vector3>> deaths) // https://docs.unity3d.com/ScriptReference/ImageConversion.EncodeToPNG.html
     {
         Texture2D tex = GenerateMapTexture();
-        InitializeTexture(tex, Color.black);
+        InitializeTexture(tex);
 
         foreach (Vector3 position in deaths.Value)
         {
@@ -278,7 +278,7 @@ public class Analytics : MonoBehaviour
     void GenerateHeatmap(KeyValuePair<GameObject, List<Vector3>> positions)
     {
         Texture2D tex = GenerateMapTexture();
-        InitializeTexture(tex, Color.black);
+        InitializeTexture(tex);
 
         Dictionary<Vector2, int> pixelPosRepetitions = new Dictionary<Vector2, int>();
 
@@ -333,7 +333,7 @@ public class Analytics : MonoBehaviour
     void GeneratePickupMap()
     {
         Texture2D tex = GenerateMapTexture();
-        InitializeTexture(tex, Color.black);
+        InitializeTexture(tex);
 
         foreach (var element in pickups)
         {
