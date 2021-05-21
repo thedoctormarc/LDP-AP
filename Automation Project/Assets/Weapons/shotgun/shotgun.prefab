@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b34eb8802e67c4d949103122429428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireTime: 2
+  fireTime: 1.8
   damage: 100
   damageFallOff:
     serializedVersion: 2
@@ -321,6 +321,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxEffectiveDistance: 30
+  capacity: 10
+  reloadTime: 5
+  spread: 1
 --- !u!82 &-7428550815158508620
 AudioSource:
   m_ObjectHideFlags: 0

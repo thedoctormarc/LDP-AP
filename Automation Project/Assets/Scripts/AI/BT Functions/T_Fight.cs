@@ -104,7 +104,7 @@ public class T_Fight : ActionTask
         {
             currentFireTime = 0f;
 
-            float signedAimSpread = AIParameters._aimSpread() / 2f;
+            float signedAimSpread = weaponParameters._spread() / 2f;
             float xOffset = Random.Range(-signedAimSpread, signedAimSpread);
             float yOffset = Random.Range(-signedAimSpread, signedAimSpread);
             float zOffset = Random.Range(-signedAimSpread, signedAimSpread);

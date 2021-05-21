@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Parameters : MonoBehaviour
 {
+
     [SerializeField]
     [Range(0.3f, 1.5f)]
     float runningSpread = 0.8f;
 
-    [SerializeField]
     [Range(0, 2)]
-    protected int team;
+    public int team;
 
     [SerializeField]
     [Range(50f, 100f)]

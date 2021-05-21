@@ -11,14 +11,23 @@ public class WeaponParameters : MonoBehaviour
     [Range(10f, 100f)]
     float damage = 25f;
     public float _damage() => damage;
-
     [SerializeField]
     AnimationCurve damageFallOff;
-
-
     [SerializeField]
     [Range(10f, 200f)]
     float maxEffectiveDistance = 200f;
+    [SerializeField]
+    [Range(5, 30)]
+    int capacity = 10;
+    public int _capacity() => capacity;
+    [SerializeField]
+    float reloadTime = 2f;
+    public float _reloadTime() => reloadTime;
+
+    [SerializeField]
+    [Range(0f, 1f)]
+    float spread = 0.5f;
+    public float _spread() => spread;
 
     public float GetDamageAtDistance (float distance)
     {

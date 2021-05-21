@@ -1232,6 +1232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99577629f1be755489fa6cb46b01be82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  runningSpread: 0.8
   team: 0
   maxHealth: 75
   respawnTime: 5
@@ -1241,10 +1242,10 @@ MonoBehaviour:
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
   pType: 0
-  aimSpread: 0.8
-  aimSpeed: 1
+  aimSpread: 0.3
+  aimSpeed: 1.5
   aimSpeedMultiAudio: 1.5
-  maxViewAngle: 90
+  maxViewAngle: 120
   visualRefreshTime: 0.25
   auditiveRefreshTime: 0.25
   searchPickupHealth: 20

@@ -9,11 +9,6 @@ public class HumanController : MonoBehaviour
     [SerializeField]
     float aimSpeed = 3f;
     [SerializeField]
-    [Range(5, 30)]
-    int magazine = 15;
-    [SerializeField]
-    float reloadTime = 2f;
-    [SerializeField]
     Image healthBar;
     [SerializeField]
     Image crosshair;
@@ -22,7 +17,7 @@ public class HumanController : MonoBehaviour
     [SerializeField]
     Text magazineText;
 
-    private int currentMagazine;
+    private int bullets;
     private float xRot = 0.0f;
     private float yRot = 0.0f;
     private Camera camera;
@@ -31,7 +26,7 @@ public class HumanController : MonoBehaviour
     private Parameters parameters;
     private float currentFireTime = 0f;
     private AILogic aILogic;
-    private AudioSource aS;
+    private AudioSource weaponAudio;
     private float currentVel = 0f;
     private float currentRespawnTime = 0f;
     private Animator animator;
@@ -46,16 +41,35 @@ public class HumanController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         parameters = GetComponent<Parameters>();
         aILogic = GetComponent<AILogic>();
-        aS = transform.Find("Weapon Slot").GetChild(0).GetComponent<AudioSource>();
-        wParameters = aILogic._weaponSlot().transform.GetChild(0).GetComponent<WeaponParameters>();
-        currentMagazine = magazine;
-        magazineText.text = magazine.ToString() + "/" + magazine.ToString();
+        GameObject weapon = GetActiveWeapon();
+        weaponAudio = weapon.GetComponent<AudioSource>();
+        wParameters = weapon.GetComponent<WeaponParameters>();
+        bullets = wParameters._capacity();
+        magazineText.text = bullets.ToString() + "/" + bullets.ToString();
 
+    }
+
+    GameObject GetActiveWeapon()
+    {
+        for (int i = 0; i < aILogic._weaponSlot().transform.childCount; ++i)
+        {
+            GameObject weapon = aILogic._weaponSlot().transform.GetChild(i).gameObject;
+            if (weapon.activeSelf)
+            {
+                return weapon;
+            }
+        }
+        return null;
     }
 
     void Update()
     {
         Debug.DrawRay(camera.transform.position, camera.transform.forward * 100f, Color.white);
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            ChangeTeam();
+        }
 
         switch(aILogic.currentState)
         {
@@ -121,10 +135,10 @@ public class HumanController : MonoBehaviour
         {
             if ((currentFireTime += Time.deltaTime) >= wParameters._fireTime())
             {
-                if (currentMagazine == 0)
+                if (bullets == 0)
                 {
-                    currentMagazine = magazine;
-                    magazineText.text = currentMagazine.ToString() + "/" + magazine.ToString();
+                    bullets = wParameters._capacity();
+                    magazineText.text = bullets.ToString() + "/" + wParameters._capacity().ToString();
                 }
                 currentFireTime = 0f;
                 fireReady = true;
@@ -136,7 +150,7 @@ public class HumanController : MonoBehaviour
         {
             if (fireReady)
             {
-                aS.Play();
+                weaponAudio.Play();
                 RaycastHit hit;
 
                 Vector3 offset = new Vector3();
@@ -173,13 +187,13 @@ public class HumanController : MonoBehaviour
                     }
                 }
 
-                if ((--currentMagazine) == 0)
+                if ((--bullets) == 0)
                 {
                     audioSource.Play();
-                    currentFireTime = -reloadTime + wParameters._fireTime();
+                    currentFireTime = -wParameters._reloadTime() + wParameters._fireTime();
                 }
 
-                magazineText.text = currentMagazine.ToString() + "/" + magazine.ToString();
+                magazineText.text = bullets.ToString() + "/" + wParameters._capacity().ToString();
                
                 fireReady = false;
             }
@@ -220,5 +234,23 @@ public class HumanController : MonoBehaviour
     public void UpdateHealthBar()
     {
         healthBar.transform.localScale = new Vector3(parameters._currentHealth() / parameters._maxHealth(), 1f, 1f);
+    }
+
+    void ChangeTeam()
+    {
+        aILogic._weaponSlot().transform.GetChild(parameters.team).gameObject.SetActive(false);
+        if ((++parameters.team) > 2)
+        {
+            parameters.team = 0;
+        }
+
+        GameObject weapon = aILogic._weaponSlot().transform.GetChild(parameters.team).gameObject;
+        weapon.SetActive(true);
+        weaponAudio = weapon.GetComponent<AudioSource>();
+        wParameters = weapon.GetComponent<WeaponParameters>();
+        currentFireTime = 0f;
+        bullets = wParameters._capacity();
+        magazineText.text = bullets.ToString() + "/" + wParameters._capacity().ToString();
+
     }
 }

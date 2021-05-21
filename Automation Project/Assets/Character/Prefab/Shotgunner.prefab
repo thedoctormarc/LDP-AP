@@ -434,7 +434,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1474262976624217542}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1474262975857493108
 Camera:
@@ -645,7 +645,7 @@ Transform:
   m_Children:
   - {fileID: 3065379096605595266}
   m_Father: {fileID: 1474262976624217542}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1474262976050400062
 GameObject:
@@ -1502,7 +1502,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1474262977514434879}
   - {fileID: 1474262976802086586}
   - {fileID: 1474262975857493110}
   - {fileID: 1474262976029006160}
@@ -1632,6 +1631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99577629f1be755489fa6cb46b01be82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  runningSpread: 0.8
   team: 1
   maxHealth: 75
   respawnTime: 5
@@ -1641,16 +1641,16 @@ MonoBehaviour:
   headPositionOffset: 1.65
   waistPositionOffset: 0.9
   pType: 0
-  aimSpread: 0.8
-  aimSpeed: 1
+  aimSpread: 0.3
+  aimSpeed: 1.5
   aimSpeedMultiAudio: 1.5
-  maxViewAngle: 90
+  maxViewAngle: 120
   visualRefreshTime: 0.25
   auditiveRefreshTime: 0.25
   searchPickupHealth: 20
   audioPerceptionRadius: 15
   timeUntilDeAggro: 8
-  shotgunTargetFightDist: 10
+  shotgunTargetFightDist: 12
   rifleCoverMinTriggerDist: 15
   rifleCoverMaxDist: 8
   killerInspectTime: 2
@@ -2027,7 +2027,7 @@ Transform:
   - {fileID: 1474262976413922344}
   - {fileID: 1474262975657837290}
   m_Father: {fileID: 1474262976624217542}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1474262976802086585
 CapsuleCollider:
@@ -2778,84 +2778,6 @@ Transform:
   m_Father: {fileID: 1474262976418326274}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1474262977514434864
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1474262977514434879}
-  - component: {fileID: 1474262977514434877}
-  - component: {fileID: 1474262977514434878}
-  m_Layer: 9
-  m_Name: GUS
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1474262977514434879
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474262977514434864}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1474262976624217542}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1474262977514434877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474262977514434864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efee954c69f0d421086729bb8df1137f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  uniqueID: 2893811487503319264
-  points:
-  - {x: 1, y: 0, z: 1}
-  - {x: 1, y: 0, z: -1}
-  - {x: -1, y: 0, z: 1}
-  - {x: -1, y: 0, z: -1}
-  convex: 1
-  minBoundsHeight: 2
-  penaltyDelta: 0
-  modifyWalkability: 0
-  setWalkability: 1
-  applyOnStart: 1
-  applyOnScan: 1
-  updatePhysics: 0
-  resetPenaltyOnPhysics: 1
-  updateErosion: 1
-  modifyTag: 1
-  setTag: 5
-  legacyMode: 0
-  serializedVersion: 1
-  legacyUseWorldSpace: 0
---- !u!114 &1474262977514434878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474262977514434864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a20d230abde8fb04c91e3b8f16961785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1474262977519491276
 GameObject:
   m_ObjectHideFlags: 0

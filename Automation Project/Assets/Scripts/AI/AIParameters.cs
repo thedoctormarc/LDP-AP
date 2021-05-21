@@ -11,12 +11,8 @@ public class AIParameters : Parameters
     Player_Type pType;
 
     [SerializeField]
-    [Range(0f, 1f)]
-    float aimSpread = 0.8f;
-
-    [SerializeField]
-    [Range(0f, 1f)]
-    float aimSpeed = 0.5f;
+    [Range(0.3f, 2f)]
+    float aimSpeed = 1.5f;
 
     [SerializeField]
     [Range(1.1f, 2f)]
@@ -47,8 +43,8 @@ public class AIParameters : Parameters
     float timeUntilDeAggro = 8f;
 
     [SerializeField]
-    [Range(3f, 10f)]
-    float shotgunTargetFightDist = 5f;
+    [Range(5f, 15f)]
+    float shotgunTargetFightDist = 12f;
 
     [SerializeField]
     [Range(10f, 20f)]
@@ -64,7 +60,6 @@ public class AIParameters : Parameters
 
 
     public Player_Type _pType() => pType;
-    public float _aimSpread() => aimSpread;
     public float _aimSpeed() => aimSpeed;
     public float _maxViewAngle() => maxViewAngle;
     public float _visualRefreshTime() => visualRefreshTime;
@@ -85,7 +80,6 @@ public class AIParameters : Parameters
 
     void OnConfigFetched(GameSimConfigResponse config)
     {
-        aimSpread = config.GetFloat("aimSpread");
         respawnTime = config.GetFloat("respawnTime");
         maxViewAngle = config.GetFloat("maxViewAngle");
     }
