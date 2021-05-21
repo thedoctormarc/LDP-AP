@@ -70,6 +70,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.settings-manager": {
+      "version": "1.0.3",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.simulation.core": {
       "version": "0.0.10-preview.18",
       "depth": 1,
@@ -78,12 +85,13 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.simulation.games": {
-      "version": "0.4.4-preview.4",
+      "version": "0.4.7-preview.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.remote-config": "1.4.0-preview.1",
-        "com.unity.simulation.core": "0.0.10-preview.18"
+        "com.unity.simulation.core": "0.0.10-preview.18",
+        "com.unity.settings-manager": "1.0.3"
       },
       "url": "https://packages.unity.com"
     },

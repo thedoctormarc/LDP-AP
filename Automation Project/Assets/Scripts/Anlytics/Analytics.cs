@@ -235,7 +235,7 @@ public class Analytics : MonoBehaviour
         Destroy(tex);
 
         // Save as an image file
-        string folderName = DateTime.Now.ToString() + "_" + AppManager.instance._gMode().ToString();
+        string folderName =  DateTime.UtcNow.ToString("yyyy - MM - dd HH: mm") + "_" + AppManager.instance._gMode().ToString();
         string folderNameFormated = folderName.Replace("/", " ");
         string folderNameFormated2 = folderNameFormated.Replace(":", " ");
         string path = Application.dataPath + "/../" + "Analytics/" + folderNameFormated2;

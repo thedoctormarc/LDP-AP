@@ -302,12 +302,21 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: -3.0900302
-      outSlope: -3.0900302
+      inSlope: -0.1309488
+      outSlope: -0.1309488
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.0783474
+      outWeight: 0.33087838
+    - serializedVersion: 3
+      time: 0.21775278
+      value: 0.8304047
+      inSlope: -2.5928676
+      outSlope: -2.5928676
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14998493
+      outWeight: 0.03184495
     - serializedVersion: 3
       time: 1
       value: 0
@@ -323,7 +332,7 @@ MonoBehaviour:
   maxEffectiveDistance: 30
   capacity: 10
   reloadTime: 5
-  spread: 1
+  spread: 0.5
 --- !u!82 &-7428550815158508620
 AudioSource:
   m_ObjectHideFlags: 0

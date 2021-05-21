@@ -3356,6 +3356,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: shotgun
       objectReference: {fileID: 0}
+    - target: {fileID: 5120194996455966909, guid: bd1ff08d66d86ec46b672fab2032839d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5495876522597011975, guid: bd1ff08d66d86ec46b672fab2032839d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3489,7 +3494,7 @@ PrefabInstance:
     - target: {fileID: 7804379326222539127, guid: 1bc54fdb82322e74e9fac78a3eb7fdf8,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bc54fdb82322e74e9fac78a3eb7fdf8, type: 3}
