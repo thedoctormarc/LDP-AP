@@ -1,0 +1,31 @@
+
+* K/D, deathmap, heatmap, ttk suficientes analíticas para iterar el level?
+
+- spawn map relative deathmap
+- routes, most and less frequent, expected??
+
+* Se puede puntuar realmente el nivel? (con la data actual, numéricamente)
+
+- 
+
+* Al ser un modo de juego por equipos, cómo fomentar la cooperación entre bots a través del nivel?
+
+-
+
+* Le falta algún elemento de interés al mapa para poder evaluarlo y que sea más interesante? Elemento de estrategia?
+
+- Comunicación bots
+- Coneixement mapa
+
+
+* Comportamientos actuales de la IA son fieles a Bartle Type reales? Cómo alterar el level para satisfacer a todos los tipos?
+
+* Qué hace un buen nivel de shooter para ti?
+
+- Risk-rewards, camins
+
+* Qué cambiarias del nivel? (covertura, posición pickups, ...)
+
+* Cómo introducir el elemento de la altura?
+
+- Kills by height, compare with expected
