@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireTime: 2.3
-  damage: 100
+  damage: 70
   damageFallOff:
     serializedVersion: 2
     m_Curve:
