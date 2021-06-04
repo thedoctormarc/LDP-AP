@@ -351,7 +351,7 @@ MonoBehaviour:
   maxEffectiveDistance: 200
   capacity: 30
   reloadTime: 2.5
-  spread: 0.3
+  spread: 0.5
 --- !u!82 &737388791017644931
 AudioSource:
   m_ObjectHideFlags: 0
