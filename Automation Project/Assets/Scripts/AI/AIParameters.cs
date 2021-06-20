@@ -39,10 +39,6 @@ public class AIParameters : Parameters
     float audioPerceptionRadius = 15f;
 
     [SerializeField]
-    [Range(0f, 10f)]
-    float timeUntilDeAggro = 8f;
-
-    [SerializeField]
     [Range(5f, 15f)]
     float shotgunTargetFightDist = 12f;
 
@@ -54,10 +50,6 @@ public class AIParameters : Parameters
     [Range(5f, 10f)]
     float rifleCoverMaxDist = 8f;
 
-    [SerializeField]
-    [Range(0f, 5f)]
-    float killerInspectTime = 2f;
-
 
     public Player_Type _pType() => pType;
     public float _aimSpeed() => aimSpeed;
@@ -65,12 +57,10 @@ public class AIParameters : Parameters
     public float _visualRefreshTime() => visualRefreshTime;
     public float _auditiveRefreshTime() => auditiveRefreshTime;
     public float _audioPerceptionRadius() => audioPerceptionRadius;
-    public float _timeUntilDeAggro() => timeUntilDeAggro;
     public float _shotgunTargetFightDist() => shotgunTargetFightDist;
     public float _aimSpeedMultiAudio() => aimSpeedMultiAudio;
     public float _rifleCoverMinTriggerDist() => rifleCoverMinTriggerDist;
     public float _rifleCoverMaxDist() => rifleCoverMaxDist;
-    public float _killerInspectTime() => killerInspectTime;
 
     private void Start()
     {

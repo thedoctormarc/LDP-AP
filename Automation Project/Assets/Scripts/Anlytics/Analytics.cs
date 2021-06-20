@@ -24,6 +24,9 @@ public class Analytics : MonoBehaviour
 
     public float positionIntervalSec = 0f;
 
+    [SerializeField]
+    Vector2 offset;
+
     private void Awake()
     {
         instance = this;
@@ -88,6 +91,12 @@ public class Analytics : MonoBehaviour
 
     public void OnAppShutdown()
     {
+
+        if (AppManager.instance._gameSimulation())
+        {
+            return;
+        }
+
         foreach (KeyValuePair<GameObject, List<Vector3>> element in deaths)
         {
             GenerateDeathmap(element);
@@ -268,6 +277,7 @@ public class Analytics : MonoBehaviour
         foreach (Vector3 position in deaths.Value)
         {
             Vector2 pixelPos = new Vector2(position.x + (float)tex.width / 2f, position.z + (float)tex.height / 2f);
+            pixelPos += offset;
             DrawCircle(tex, Color.red, pixelRadius, pixelPos);
         }
 
@@ -286,6 +296,7 @@ public class Analytics : MonoBehaviour
         {
             Vector3 nodePos = (Vector3)AstarPath.active.data.gridGraph.GetNearest(position).node.position;
             Vector2 pixelPos = new Vector2(nodePos.x + (float)tex.width / 2f, nodePos.z + (float)tex.height / 2f);
+            pixelPos += offset;
 
             if (pixelPosRepetitions.ContainsKey(pixelPos) == false)
             {
@@ -339,6 +350,7 @@ public class Analytics : MonoBehaviour
         {
             Vector3 position = element.Key.transform.position;
             Vector2 pixelPos = new Vector2(position.x + (float)tex.width / 2f, position.z + (float)tex.height / 2f);
+            pixelPos += offset;
             Pickup.Type type = element.Key.GetComponent<Pickup>().pickupType;
             DrawCircle(tex, (type == Pickup.Type.HEALTH) ? Color.red : Color.yellow, element.Value * pixelRadius, pixelPos);
         }

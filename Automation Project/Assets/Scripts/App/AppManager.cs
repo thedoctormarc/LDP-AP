@@ -21,6 +21,8 @@ public class AppManager : MonoBehaviour
     [SerializeField]
     bool gameSimulation = false;
 
+    public bool _gameSimulation() => gameSimulation;
+
     public GameObject _pickups () => pickups;
     public gameMode _gMode() => gMode;
 
@@ -37,23 +39,11 @@ public class AppManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameSimulation == false)
+        if (Time.realtimeSinceStartup >= simulationSeconds)
         {
-            if (Time.realtimeSinceStartup >= simulationSeconds)
-            {
-
-#if UNITY_EDITOR
-                Analytics.instance.OnAppShutdown();
-                UnityEditor.EditorApplication.isPlaying = false;
-#else
-                Analytics.instance.OnAppShutdown();
-                Application.Quit();
-              
-#endif
-            }
-
+            Analytics.instance.OnAppShutdown();
+            Application.Quit();
         }
 
     }
-
 }

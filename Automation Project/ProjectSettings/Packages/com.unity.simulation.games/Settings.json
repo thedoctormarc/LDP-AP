@@ -6,7 +6,7 @@
             {
                 "type": "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "metricNames",
-                "value": "{\"m_Value\":[\"T0 kills\",\"T0 deaths\",\"T1 kills\",\"T1 deaths\"]}"
+                "value": "{\"m_Value\":[\"T0 kills\",\"T0 deaths\",\"T1 kills\",\"T1 deaths\",\"T2 kills\",\"T2 deaths\",\"T0 points\",\"T1 points\",\"T2 points\"]}"
             }
         ]
     }
